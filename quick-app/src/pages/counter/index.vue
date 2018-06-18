@@ -1,96 +1,83 @@
 <template>
-  <div class="mvpue-picker">
-    <div class="page-hd">
-      <div class="page-title">mvpue-picker 示例</div>
-      <div class="page__desc">选中的值:</div>
-      <div class="picker-text">{{pickerText}}</div>
+  <div class="container" >
+    <div class="title">
+      <p>选择院校</p>
     </div>
-    <div class="page-bd">
-      <button type="default" @click="showMulLinkageTwoPicker">二级联动选择</button>
+    <div class="userinfo" @click="bindViewTap">
+      <p class="iconfont universityIcon" >&#xe603;</p>
+      <div class="userinfo-nickname">
+        <p class="university">{{university}}</p>
+      </div>
     </div>
-    <mpvue-picker ref="mpvuePicker" :mode="mode" :deepLength=deepLength :pickerValueDefault="pickerValueDefault" @onChange="onChange" @onConfirm="onConfirm" @pickerCancel="pickerCancel" :pickerValueArray="pickerValueArray"></mpvue-picker>
+    <div class="search">
+      <input type="text" placeholder="搜索" class="search-input">
+    </div>
+    <div>
+
+    </div>
+    <a  class="counter">完成</a>
   </div>
 </template>
 
 <script>
-  import mpvuePicker from 'mpvue-picker'
+  import card from '@/components/card'
+
   export default {
-    components: {
-      mpvuePicker
-    },
     data () {
       return {
-        mode: 'selector',
-        deepLength: 0, // 几级联动
-        pickerValueDefault: [], // 初始化值
-        pickerValueArray: [], // picker 数组值
-        pickerText: '',
-        mulLinkageTwoPicker: [
-          {
-            label: '上海',
-            value: 0,
-            children: [{
-              label: '上海',
-              value: 1
-            }
-            ]
-          },
-          {
-            label: '安徽',
-            value: 1,
-            children: [{
-              label: '阜阳',
-              value: 1
-            }, {label: '安庆', value: 2}, {label: '合肥', value: 3}
-            ]
-          },
-          {
-            label: '江苏',
-            value: 3,
-            children: [{
-              label: '镇江',
-              value: 1
-            }, {label: '无锡', value: 2}
-            ]
-          }
-        ]
+        university: '复旦大学'
       }
     },
+
+    components: {
+      card
+    },
+
     methods: {
-      onChange (e) {
-        console.log(e)
-      },
-      // 二级联动选择
-      showMulLinkageTwoPicker () {
-        this.pickerValueArray = this.mulLinkageTwoPicker
-        this.mode = 'multiLinkageSelector'
-        this.deepLength = 2
-        this.pickerValueDefault = [1, 0]
-        this.$refs.mpvuePicker.show()
-      },
-      showPickerView () {
-        this.$refs.mpvuePicker.show()
-      },
-      onConfirm (e) {
-        this.pickerText = `${this.pickerValueArray[e[0]].label} - ${this.pickerValueArray[e[0]].children[e[1]].label}`
-        console.log(e)
-      }
+
+    },
+    created () {
+
     }
   }
 </script>
 
-<style>
-  .page-hd {
-    padding: 40px
+<style scoped>
+  .universityIcon{
+    margin-top: 70px;
+    font-size: 100px;
+    color: #000000;
   }
-  .page-bd {
-    padding: 15px
+  .userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .picker-text,
-  .page__desc {
-    margin-top: 10px
+  .university{
+    margin-top: 20px;
+    font-size: 20px;
+    letter-spacing: 3px;
   }
-  button {
-    margin-top: 15px
+  .userinfo-nickname {
+    color: #aaa;
+  }
+  .counter {
+    display: inline-block;
+    margin: 50px auto;
+    padding: 5px 10px;
+    color: black;
+    border: 1px solid #FF9800;
+    border-radius: 5px;
+  }
+  .search{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .search-input{
+    margin-top: 20px;
+    border: 1px solid #000000;
+    padding: 4px 10px;
+    border-radius: 5px;
   }
 </style>
