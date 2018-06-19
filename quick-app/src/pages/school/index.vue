@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="search">
-      <input type="text" placeholder="搜索" class="search-input">
+      <input type="text" disabled placeholder="搜索" class="search-input" @click="toSearch">
     </div>
     <div>
 
@@ -34,7 +34,11 @@
     },
 
     methods: {
-
+      toSearch: function () {
+        wx.navigateTo({
+          url: '../search/main'
+        })
+      }
     },
     created () {
 

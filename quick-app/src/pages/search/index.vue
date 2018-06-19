@@ -3,23 +3,23 @@
     <div class="search_top">
       <form action="" class="search_form" >
         <div class="search_com">
-          <div>
+          <a href="/pages/school/main">
             <i class="iconfont search_back">&#xe609;</i>
-          </div>
+          </a>
           <div class="search_com_input">
             <div>
-              <input class="search_input" placeholder="搜索"   autofocus="true" name="universityName">
+              <input class="search_input" placeholder="搜索" v-model.trim="searchValue"   autofocus="true" name="universityName">
             </div>
-            <div v-show="searchClearBtn">
+            <div v-if="searchClearBtn&&searchValue!==''" @click="clearSearch">
               <i class="iconfont search_voice">&#xe62b;</i>
             </div>
           </div>
         </div>
       </form>
     </div>
-    <div class="panel" v-show="searchClearBtn">
+    <div class="panel" v-if="searchClearBtn&&searchValue!==''">
       <div class="panel_bg">
-        <div class="universityItem" v-for="(item, index) in universityList" v-bind:style="{ backgroundColor: backgroundColor }" @touchstart="bindTap" @touchend="tapOver">
+        <div class="universityItem" v-for="(item, index) in universityList" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver">
           <div class="universityItem_icon"><i class="iconfont search_btn">&#xe627;</i></div>
           <div class="universityItem_name">{{item.name}}</div>
         </div>
@@ -31,13 +31,20 @@
 
 <script>
   import card from '@/components/card'
-
+  const delay = (function () {
+    let timer = 0
+    return function (callback, ms) {
+      clearTimeout(timer)
+      timer = setTimeout(callback, ms)
+    }
+  })()
   export default {
     data () {
       return {
+        chooseIndex: '',
         backgroundColor: '',
         searchValue: '',
-        searchClearBtn: true,
+        searchClearBtn: false,
         university: '复旦大学',
         universityList: [ {pid: '2', name: '上海师范'}, {pid: '3', name: '合肥师范'} ]
       }
@@ -48,17 +55,36 @@
     },
 
     methods: {
-      bindTap () {
-        this.backgroundColor = '#999999'
-        console.log('tap')
+      bindTap (val) {
+        this.chooseIndex = val
       },
       tapOver () {
-        this.backgroundColor = '#ffffff'
-        console.log('tapover')
+        this.chooseIndex = ''
+      },
+      clearSearch () {
+        this.searchValue = ''
+        this.searchClearBtn = false
+      },
+      fetchData (val) {
+        wx.request({
+          url: 'http://www.baidu.com',
+          data: {},
+          header: {},
+          success: function (res) {
+            this.universityList = [ {pid: '2', name: '上海师范大学'}, {pid: '3', name: '合肥师范学院'} ]
+          }
+        })
+      }
+    },
+    watch: {
+      searchValue () {
+        this.searchClearBtn = true
+        delay(() => {
+          this.fetchData()
+        }, 300)
       }
     },
     created () {
-
     }
   }
 </script>
