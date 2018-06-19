@@ -1,40 +1,24 @@
 <template>
   <div class="container" >
-
+    <div class="title">
+      <p>您所在城市</p>
+    </div>
     <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
+      <p class="iconfont location" >&#xe64c;</p>
       <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
+        <p class="locationCity">{{locationCity}}</p>
       </div>
     </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-    <div>
-      <button  @click = "getWeixinInfo(code)">获取微信信息</button>
-      <card :text = "code"></card>
-    </div>
-    <div >hello:{{weiXinInfo}}</div>
-    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
-
     <div>
       <view class="section">
-        <view class="section__title">省市区选择器</view>
         <picker mode="region" @change="bindRegionChange" :value="region" :custom-item="customItem">
-          <view class="picker">
-            当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}
+          <view class="picker reLocation">
+            定位错误，重新选择
           </view>
         </picker>
       </view>
     </div>
+    <a href="/pages/counter/main" class="counter">下一步</a>
   </div>
 </template>
 
@@ -49,7 +33,8 @@ export default {
       motto: 'Hello World',
       code: '',
       weiXinInfo: 0,
-      userInfo: {}
+      userInfo: {},
+      locationCity: ''
     }
   },
 
@@ -65,8 +50,10 @@ export default {
     bindRegionChange: function (e) {
       console.log('picker发送选择改变，携带值为', e.target.value)
       this.region = e.target.value
+      this.locationCity = this.region[1]
     },
     getUserInfo () {
+      var _this = this
       // 调用登录接口
       wx.login({
         success: (resCode) => {
@@ -74,6 +61,23 @@ export default {
           wx.getUserInfo({
             success: (res) => {
               this.userInfo = res.userInfo
+            }
+          })
+          wx.getLocation({
+            success: (res) => {
+              console.log(res)
+              var locationString = res.latitude + ',' + res.longitude
+              var tecentKey = 'KLABZ-JL7K5-MI6IN-QFCK4-UHF5H-TKF7H'
+              wx.request({
+                url: 'http://apis.map.qq.com/ws/geocoder/v1/?location=' + locationString + '&key=' + tecentKey + '&get_poi=1',
+                data: {},
+                header: {
+                  'content-type': 'json'
+                },
+                success: function (res) {
+                  _this.locationCity = res.data.result.address_component.city
+                }
+              })
             }
           })
         }
@@ -109,12 +113,25 @@ export default {
 </script>
 
 <style scoped>
-.userinfo {
+  .location{
+    font-size: 120px;
+    color: #d4237a;
+  }
+  .userinfo {
   display: flex;
   flex-direction: column;
   align-items: center;
+  }
+  .reLocation{
+    margin-top: 10px;
+    font-size: 13px;
+    color: #FF9800;
+  }
+.locationCity{
+  margin-top: 20px;
+  font-size: 40px;
+  letter-spacing: 10px;
 }
-
 .userinfo-avatar {
   width: 128rpx;
   height: 128rpx;
@@ -139,9 +156,10 @@ export default {
 
 .counter {
   display: inline-block;
-  margin: 10px auto;
+  margin: 50px auto;
   padding: 5px 10px;
-  color: blue;
-  border: 1px solid blue;
+  color: black;
+  border: 1px solid #FF9800;
+  border-radius: 5px;
 }
 </style>
