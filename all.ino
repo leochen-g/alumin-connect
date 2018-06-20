@@ -1,10 +1,14 @@
 #include <Arduino.h>
 #include "algorithm.h"
 #include "max30102.h"
-
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include "Adafruit_TMP006.h"
 //if Adafruit Flora development board is chosen, include NeoPixel library and define an NeoPixel object
 
 #include "Adafruit_NeoPixel.h"
+
+Adafruit_TMP006 tmp006;
 #define BRIGHTNESS_DIVISOR 8  //to lower the max brightness of the neopixel LED
 Adafruit_NeoPixel LED = Adafruit_NeoPixel(1, 8, NEO_GRB + NEO_KHZ800);
 
@@ -28,12 +32,13 @@ void setup() {
   LED.begin();
   LED.show();
   #endif
-  
+ 
   maxim_max30102_reset(); //resets the MAX30102
   // initialize serial communication at 115200 bits per second:
   Serial.begin(115200);
   pinMode(10, INPUT);  //pin D10 connects to the interrupt output pin of the MAX30102
   delay(1000);
+  tmp006.begin();
   maxim_max30102_read_reg(REG_INTR_STATUS_1,&uch_dummy);  //Reads/clears the interrupt status register
   while(Serial.available()==0)  //wait until user presses a key
   {
@@ -50,8 +55,11 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
+  float objt = tmp006.readObjTempC();
+  float diet = tmp006.readDieTempC();
   uint32_t un_min, un_max, un_prev_data, un_brightness;  //variables to calculate the on-board LED brightness that reflects the heartbeats
   int32_t i;
+  
   float f_temp;
   
   un_brightness=0;
@@ -78,7 +86,9 @@ void loop() {
   un_prev_data=aun_red_buffer[i];
   //calculate heart rate and SpO2 after first 100 samples (first 4 seconds of samples)
   maxim_heart_rate_and_oxygen_saturation(aun_ir_buffer, n_ir_buffer_length, aun_red_buffer, &n_spo2, &ch_spo2_valid, &n_heart_rate, &ch_hr_valid); 
-
+  Serial.print("Object Temperature: "); Serial.print(objt); Serial.print("*C");
+  Serial.print("Die Temperature: "); Serial.print(diet); Serial.println("*C");
+  delay(4000);
   //Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 1 second
   while(1)
   {
@@ -134,22 +144,22 @@ void loop() {
       #endif
 
       //send samples and calculation result to terminal program through UART
-      Serial.print(F("red="));
-      Serial.print(aun_red_buffer[i], DEC);
-      Serial.print(F(", ir="));
-      Serial.print(aun_ir_buffer[i], DEC);
+//      Serial.print(F("red="));
+//      Serial.print(aun_red_buffer[i], DEC);
+//      Serial.print(F(", ir="));
+//      Serial.print(aun_ir_buffer[i], DEC);
       
-      Serial.print(F(", HR="));
+      Serial.print(F("HR="));
       Serial.print(n_heart_rate, DEC);
       
       Serial.print(F(", HRvalid="));
-      Serial.print(ch_hr_valid, DEC);
-      
-      Serial.print(F(", SPO2="));
-      Serial.print(n_spo2, DEC);
-
-      Serial.print(F(", SPO2Valid="));
-      Serial.println(ch_spo2_valid, DEC);
+      Serial.println(ch_hr_valid, DEC);
+     
+//      Serial.print(F(", SPO2="));
+//      Serial.print(n_spo2, DEC);
+//
+//      Serial.print(F(", SPO2Valid="));
+//      Serial.println(ch_spo2_valid, DEC);
     }
     maxim_heart_rate_and_oxygen_saturation(aun_ir_buffer, n_ir_buffer_length, aun_red_buffer, &n_spo2, &ch_spo2_valid, &n_heart_rate, &ch_hr_valid); 
   }
