@@ -15,7 +15,7 @@
     <div>
 
     </div>
-    <a  class="counter">完成</a>
+    <a  class="counter" href="">完成</a>
   </div>
 </template>
 
