@@ -1,7 +1,15 @@
 <template>
-  <div class="echarts-wrap">
+  <div class="container">
+
+    <div class="title">
+      <p>{{schoolName}}</p>
+    </div>
+    <div class="echarts-wrap">
     <mpvue-echarts :echarts="echarts" :onInit="onInit" canvasId="demo-canvas" />
+    </div>
+
   </div>
+
 </template>
 
 <script>
@@ -16,10 +24,10 @@
       height: height
     })
     canvas.setChart(chart)
-    var nameTitle = '复旦大学校友分布图'
-    var nameColor = '#000'
-    var nameFontFamily = '等线'
-    var nameFontSize = 18
+    // var nameTitle = '复旦大学校友分布图'
+    // var nameColor = '#000'
+    // var nameFontFamily = '等线'
+    // var nameFontSize = 18
     var mapName = 'china'
     var data = [
       {name: '北京', value: 77},
@@ -73,15 +81,15 @@
       return res
     }
     var option = {
-      title: {
-        text: nameTitle,
-        x: 'center',
-        textStyle: {
-          color: nameColor,
-          fontFamily: nameFontFamily,
-          fontSize: nameFontSize
-        }
-      },
+      // title: {
+      //   text: nameTitle,
+      //   x: 'center',
+      //   textStyle: {
+      //     color: nameColor,
+      //     fontFamily: nameFontFamily,
+      //     fontSize: nameFontSize
+      //   }
+      // },
       visualMap: {
         show: true,
         min: 0,
@@ -186,8 +194,14 @@
     data () {
       return {
         echarts,
-        onInit: initChart
+        onInit: initChart,
+        schoolName: '复旦大学'
       }
+    },
+    method: {
+
+    },
+    created () {
     }
   }
 </script>

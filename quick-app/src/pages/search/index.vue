@@ -19,7 +19,7 @@
     </div>
     <div class="panel" v-if="searchClearBtn&&searchValue!==''">
       <div class="panel_bg">
-        <div class="universityItem" v-for="(item, index) in universityList" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver">
+        <div class="universityItem" v-for="(item, index) in universityList" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver" @click="choose(item.name)">
           <div class="universityItem_icon"><i class="iconfont search_btn">&#xe627;</i></div>
           <div class="universityItem_name">{{item.name}}</div>
         </div>
@@ -46,7 +46,7 @@
         searchValue: '',
         searchClearBtn: false,
         university: '复旦大学',
-        universityList: [ {pid: '2', name: '上海师范'}, {pid: '3', name: '合肥师范'} ]
+        universityList: []
       }
     },
 
@@ -65,13 +65,25 @@
         this.searchValue = ''
         this.searchClearBtn = false
       },
+      choose (val) {
+        this.searchValue = val
+        wx.setStorageSync('university', val)
+        const url = '../school/main'
+        wx.navigateTo({ url })
+      },
       fetchData (val) {
+        var _this = this
         wx.request({
-          url: 'http://www.baidu.com',
-          data: {},
-          header: {},
+          url: this.GLOBAL.serverPath + '/api/user/getUniversity',
+          method: 'GET',
+          data: {
+            wd: val
+          },
+          header: {
+            'content-type': 'application/json'
+          },
           success: function (res) {
-            this.universityList = [ {pid: '2', name: '上海师范大学'}, {pid: '3', name: '合肥师范学院'} ]
+            _this.universityList = res.data.data
           }
         })
       }
@@ -80,7 +92,7 @@
       searchValue () {
         this.searchClearBtn = true
         delay(() => {
-          this.fetchData()
+          this.fetchData(this.searchValue)
         }, 300)
       }
     },

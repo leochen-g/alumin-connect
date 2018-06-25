@@ -3,7 +3,7 @@
     <div class="title">
       <p>您所在城市</p>
     </div>
-    <div class="userinfo" @click="bindViewTap">
+    <div class="userinfo">
       <p class="iconfont location" >&#xe64c;</p>
       <div class="userinfo-nickname">
         <p class="locationCity">{{locationCity}}</p>
@@ -18,23 +18,23 @@
         </picker>
       </view>
     </div>
-    <a href="/pages/counter/main" class="counter">下一步</a>
+    <!--<a href="/pages/counter/main" class="counter" @click="saveLocation">下一步</a>-->
+    <a  class="counter" @click="saveLocation">下一步</a>
   </div>
 </template>
 
 <script>
 import card from '@/components/card'
-
 export default {
   data () {
     return {
       customItem: '全部',
-      region: ['广东省', '广州市', '海珠区'],
+      region: ['', '', ''],
       motto: 'Hello World',
       code: '',
-      weiXinInfo: 0,
+      openId: '',
       userInfo: {},
-      locationCity: ''
+      locationCity: '定位中'
     }
   },
 
@@ -48,57 +48,115 @@ export default {
       wx.navigateTo({ url })
     },
     bindRegionChange: function (e) {
-      console.log('picker发送选择改变，携带值为', e.target.value)
       this.region = e.target.value
       this.locationCity = this.region[1]
     },
+    // 获取用户基本信息
     getUserInfo () {
       var _this = this
       // 调用登录接口
       wx.login({
         success: (resCode) => {
           this.code = resCode.code
+          this.getOpenId(resCode.code)
           wx.getUserInfo({
             success: (res) => {
               this.userInfo = res.userInfo
+              console.log(res)
             }
           })
           wx.getLocation({
             success: (res) => {
-              console.log(res)
-              var locationString = res.latitude + ',' + res.longitude
-              var tecentKey = 'KLABZ-JL7K5-MI6IN-QFCK4-UHF5H-TKF7H'
-              wx.request({
-                url: 'http://apis.map.qq.com/ws/geocoder/v1/?location=' + locationString + '&key=' + tecentKey + '&get_poi=1',
-                data: {},
-                header: {
-                  'content-type': 'json'
-                },
-                success: function (res) {
-                  _this.locationCity = res.data.result.address_component.city
-                }
-              })
+              var location = res.latitude + ',' + res.longitude
+              _this.getUserLocation(location)
             }
           })
         }
       })
     },
-    getWeixinInfo (val) {
+    // 获取用户openid
+    getOpenId (val) {
       var _this = this
-      var code = val
-      var appId = 'wxa6dca46d80b640ab'
-      var secret = 'e6fb338fcfbea033c40b0730a3c0fecf'
       wx.request({
-        url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appId + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code',
-        data: {},
+        url: this.GLOBAL.serverPath + '/api/user/openid',
+        method: 'POST',
+        data: {
+          code: val
+        },
         header: {
-          'content-type': 'json'
+          'content-type': 'application/x-www-form-urlencoded '
         },
         success: function (res) {
-          _this.weiXinInfo = res.data.openid
-          console.log('openid为' + res.data.openid)
+          console.log('openid为', res.data)
+          _this.openId = res.data.data.openid
+          wx.setStorageSync('openId', _this.openId)
+          _this.saveUserInfo(_this.userInfo, res.data.data.openid)
         }
       })
+    },
+    // 根据经纬度获取用户位置
+    getUserLocation (val) {
+      var _this = this
+      wx.request({
+        url: this.GLOBAL.serverPath + '/api/user/getLocation',
+        method: 'GET',
+        data: {
+          location: val
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
+          console.log(res)
+          _this.region = res.data.data
+          _this.locationCity = res.data.data[1]
+        }
+      })
+    },
+    // 保存用户基本信息
+    saveUserInfo (obj, oid) {
+      wx.request({
+        url: this.GLOBAL.serverPath + '/api/user/save',
+        method: 'POST',
+        data: {
+          nickName: obj.nickName,
+          avatarUrl: obj.avatarUrl,
+          country: obj.country,
+          gender: obj.gender,
+          openid: oid
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded '
+        },
+        success: function (res) {
+          console.log('保存成功')
+        }
+      })
+    },
+    // 保存用户位置和省份
+    saveLocation () {
+      var _this = this
+      wx.request({
+        url: this.GLOBAL.serverPath + '/api/user/update',
+        method: 'POST',
+        data: {
+          oid: _this.openId,
+          location: _this.locationCity,
+          pid: _this.getPid(_this.region[0]),
+          university: ''
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded '
+        },
+        success: function (res) {
+          const url = '../school/main'
+          wx.navigateTo({ url })
+          console.log('保存成功')
+        }
+      })
+    },
+    getPid (val) {
+      return this.GLOBAL.provinceMap[val]
     },
     clickHandle (msg, ev) {
       console.log('clickHandle:', msg, ev)

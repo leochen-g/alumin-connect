@@ -1,10 +1,6 @@
-var mysql      = require('mysql');
-var pool = mysql.createPool({
-	host     : 'localhost',
-	user     : 'root',
-	password : '1210441033',
-	database : 'alumni'
-});
+var mysql = require('mysql');
+var global = require('../config/Global')
+var pool = mysql.createPool(global.sql);
 
 exports.query = function(sql, arr, callback){
 	//建立链接

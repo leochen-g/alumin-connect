@@ -10,12 +10,12 @@
       </div>
     </div>
     <div class="search">
-      <input type="text" disabled placeholder="搜索" class="search-input" @click="toSearch">
+      <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
     </div>
     <div>
 
     </div>
-    <a  class="counter" href="">完成</a>
+    <a  class="counter" href="" @click="saveUniversity">完成</a>
   </div>
 </template>
 
@@ -25,10 +25,9 @@
   export default {
     data () {
       return {
-        university: '复旦大学'
+        university: ''
       }
     },
-
     components: {
       card
     },
@@ -38,10 +37,43 @@
         wx.navigateTo({
           url: '../search/main'
         })
+      },
+      getUniversityName () {
+        var value = wx.getStorageSync('university')
+        console.log(value)
+        if (value) {
+          this.university = value
+        } else {
+          this.university = '请选择'
+        }
+      },
+      saveUniversity () {
+        var _this = this
+        var oid = wx.getStorageSync('openId')
+        wx.request({
+          url: this.GLOBAL.serverPath + '/api/user/update',
+          method: 'POST',
+          data: {
+            oid: oid,
+            location: '',
+            pid: '',
+            university: _this.university
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded '
+          },
+          success: function (res) {
+            // const url = '../charts/main'
+            // wx.navigateTo({ url })
+            console.log('保存成功')
+          }
+        })
       }
     },
+    mounted () {
+      this.getUniversityName()
+    },
     created () {
-
     }
   }
 </script>

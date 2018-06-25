@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
     "mysql": "^2.15.0",
     "superagent": "^3.8.3"
   }
