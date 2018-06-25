@@ -13,7 +13,8 @@ var sqlMap = {
   	user:{
 	  	insert:"insert ignore into user(openid,nickName,avataUrl,country,gender) values (?,?,?,?,?); ",
 	  	select:"select * from user where openid in (?)",
-	  	update:"update user set university =?,pid=?,location=?  where openid=?;"
+	  	update:"update user set university =?,pid=?,location=?  where openid=?;",
+	  	updateUniversity:"update user set university =? where openid=?;"
 	}
 }
 module.exports = sqlMap

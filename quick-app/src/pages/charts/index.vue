@@ -24,34 +24,9 @@
       height: height
     })
     canvas.setChart(chart)
-    // var nameTitle = '复旦大学校友分布图'
-    // var nameColor = '#000'
-    // var nameFontFamily = '等线'
-    // var nameFontSize = 18
     var mapName = 'china'
     var data = [
-      {name: '北京', value: 77},
-      {name: '上海', value: 42},
-      {name: '安徽', value: 109},
-      {name: '福建', value: 116},
-      {name: '江西', value: 91},
-      {name: '山东', value: 119},
-      {name: '河南', value: 137},
-      {name: '湖北', value: 116},
-      {name: '湖南', value: 114},
-      {name: '重庆', value: 91},
-      {name: '四川', value: 125},
-      {name: '贵州', value: 62},
-      {name: '云南', value: 83},
-      {name: '西藏', value: 9},
-      {name: '陕西', value: 80},
-      {name: '甘肃', value: 56},
-      {name: '青海', value: 10},
-      {name: '宁夏', value: 18},
-      {name: '新疆', value: 67},
-      {name: '广东', value: 123},
-      {name: '广西', value: 59},
-      {name: '海南', value: 14}
+      {name: '北京', value: 77}
     ]
 
     var geoCoordMap = {}
@@ -81,15 +56,6 @@
       return res
     }
     var option = {
-      // title: {
-      //   text: nameTitle,
-      //   x: 'center',
-      //   textStyle: {
-      //     color: nameColor,
-      //     fontFamily: nameFontFamily,
-      //     fontSize: nameFontSize
-      //   }
-      // },
       visualMap: {
         show: true,
         min: 0,

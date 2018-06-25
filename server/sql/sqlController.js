@@ -29,6 +29,10 @@ module.exports = {
   updateUserInfo:function (req,res,next) {
 	db.query(sqlMap.user.update, req, res)
   },
+//  更新用户学校信息
+  updateUserUniversityInfo:function (req,res,next) {
+    db.query(sqlMap.user.updateUniversity, req, res)
+  },
 //  获取用户基础信息
   getUserInfo:function (req,res,next) {
 	db.query(sqlMap.university.insert, req, function(results,fields){

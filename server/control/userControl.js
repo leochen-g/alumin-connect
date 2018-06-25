@@ -56,6 +56,24 @@ module.exports  = {
 	  })
 	}
   },
+  //  保存用户学校信息
+  updateUserUniversity:function (req, res,next) {
+    var param = req.body
+    console.log(param);
+    if(!param){
+      res.json({head:{code:10000, msg:'没有选择院校'},data:{}})
+    }else {
+      var arr = [param.university,param.oid]
+      console.log(arr);
+      sqlControl.updateUserUniversityInfo(arr,function(results,fields){
+        if(results.affectedRows){
+          res.json({head:{code:0, msg:'更新成功'},data:{}})
+        }else {
+          res.json({head:{code:1000, msg:'更新失败'},data:{}})
+        }
+      })
+    }
+  },
   // 更新用户基础信息
   updateUserInfo: function (req,res,next) {
 	var param = req.body

@@ -10,9 +10,13 @@ router.post('/user/openid',function (req,res,next) {
 router.post('/user/save',function (req, res, next) {
   control.saveUserInfo(req,res,next)
 })
-//更新用户基本信息接口(保存用户位置，保存学校)
+//更新用户基本信息接口保存用户位置
 router.post('/user/update',function (req, res, next) {
   control.updateUserInfo(req,res,next)
+})
+//更新用户学校
+router.post('/user/updateUniversity',function (req, res, next) {
+    control.updateUserUniversity(req,res,next)
 })
 //获取用户信息
 router.get('/user/info',function (req,res,next) {

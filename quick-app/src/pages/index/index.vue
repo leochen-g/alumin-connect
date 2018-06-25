@@ -19,7 +19,7 @@
       </view>
     </div>
     <!--<a href="/pages/counter/main" class="counter" @click="saveLocation">下一步</a>-->
-    <a  class="counter" @click="saveLocation">下一步</a>
+    <a  class="counter" @bindTap="saveLocation">下一步</a>
   </div>
 </template>
 

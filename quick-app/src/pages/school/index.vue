@@ -51,12 +51,10 @@
         var _this = this
         var oid = wx.getStorageSync('openId')
         wx.request({
-          url: this.GLOBAL.serverPath + '/api/user/update',
+          url: this.GLOBAL.serverPath + '/api/user/updateUniversity',
           method: 'POST',
           data: {
             oid: oid,
-            location: '',
-            pid: '',
             university: _this.university
           },
           header: {
