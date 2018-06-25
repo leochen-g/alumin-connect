@@ -11,7 +11,7 @@
  Target Server Version : 50721
  File Encoding         : 65001
 
- Date: 14/06/2018 19:23:58
+ Date: 25/06/2018 19:27:50
 */
 
 SET NAMES utf8mb4;
@@ -3460,6 +3460,31 @@ INSERT INTO `university` VALUES (9216, '台湾德明财经科技大学', 34, NUL
 INSERT INTO `university` VALUES (9217, '台湾中华科技大学', 34, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `university` VALUES (9218, '台湾台北城市科技大学', 34, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `university` VALUES (9219, '台湾台北海洋技术学院', 34, NULL, NULL, NULL, NULL, NULL);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int(255) NOT NULL AUTO_INCREMENT,
+  `nickName` char(100) NOT NULL,
+  `openid` char(100) NOT NULL,
+  `location` char(50) DEFAULT NULL,
+  `university` char(100) DEFAULT NULL,
+  `pid` int(50) DEFAULT NULL,
+  `gender` int(10) DEFAULT NULL,
+  `avataUrl` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci DEFAULT NULL,
+  `country` char(100) DEFAULT NULL,
+  PRIMARY KEY (`id`,`openid`) USING BTREE,
+  UNIQUE KEY `oid` (`openid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+BEGIN;
+INSERT INTO `user` VALUES (5, 'Leo_chen', 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ', '上海市', '', 9, 1, 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKBHKT3OOZULMasVy7qYDMXE9ib1WogqsxwhRiborP8ibcTuibMIdvpBHGHt0c4V8N6AbCibU6X4p3VZwg/132', 'China');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
