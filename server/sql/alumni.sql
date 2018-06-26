@@ -11,7 +11,7 @@
  Target Server Version : 50721
  File Encoding         : 65001
 
- Date: 25/06/2018 19:27:50
+ Date: 26/06/2018 20:31:45
 */
 
 SET NAMES utf8mb4;
@@ -3478,13 +3478,17 @@ CREATE TABLE `user` (
   `country` char(100) DEFAULT NULL,
   PRIMARY KEY (`id`,`openid`) USING BTREE,
   UNIQUE KEY `oid` (`openid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (5, 'Leo_chen', 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ', '上海市', '', 9, 1, 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKBHKT3OOZULMasVy7qYDMXE9ib1WogqsxwhRiborP8ibcTuibMIdvpBHGHt0c4V8N6AbCibU6X4p3VZwg/132', 'China');
+INSERT INTO `user` VALUES (5, 'Leo_chen', 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ', '上海市', '复旦大学', 9, 1, 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKBHKT3OOZULMasVy7qYDMXE9ib1WogqsxwhRiborP8ibcTuibMIdvpBHGHt0c4V8N6AbCibU6X4p3VZwg/132', 'China');
+INSERT INTO `user` VALUES (6, 'ed', 'ewwewew', '北京', '上海中医药大学', 11, 0, NULL, NULL);
+INSERT INTO `user` VALUES (158, 'wewe', 'eqwe', '天津', '复旦大学', 9, 1, NULL, NULL);
+INSERT INTO `user` VALUES (159, 'wewe', 'eqwewewe', '天津', '复旦大学', 11, 1, NULL, NULL);
+INSERT INTO `user` VALUES (160, 'wewere', 'eqw1231ewewe', '天津', '复旦大学', 9, 1, NULL, NULL);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
