@@ -45,8 +45,6 @@ module.exports = {
   },
 //  获取学校数据地图
   getMapData:function (req,res,next) {
-	db.query(sqlMap.university.insert, req, function(results,fields){
-	  console.log(results);
-	})
+	db.query(sqlMap.university.groupBy, req, res)
   },
 }

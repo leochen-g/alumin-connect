@@ -15,7 +15,7 @@
     <div>
 
     </div>
-    <a  class="counter" href="" @click="saveUniversity">完成</a>
+    <a  class="counter" href="" @tap="saveUniversity">完成</a>
   </div>
 </template>
 
@@ -61,8 +61,8 @@
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            // const url = '../charts/main'
-            // wx.navigateTo({ url })
+            const url = '../charts/main'
+            wx.navigateTo({ url })
             console.log('保存成功')
           }
         })

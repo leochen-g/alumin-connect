@@ -117,7 +117,20 @@ module.exports  = {
   },
 //  获取学校数据地图
   getMapData: function (req,res,next) {
-	
+	var param = req.query.university
+	if(!param){
+	  res.json({head:{code:10000, msg:'请输入学校'}, data:{}})
+	}else {
+	  var arr = [param]
+	  console.log(arr);
+	  sqlControl.getMapData(arr,function(results,fields){
+	    console.log('university',results);
+		res.json({head:{code:0, msg:'ok'},data:{
+		  university:param,
+		  list:results
+		}})
+	  })
+	}
   },
 //  模糊搜索院校
   getUniversity: function (req,res,next) {
@@ -132,5 +145,4 @@ module.exports  = {
 	  })
 	}
   }
-
 }

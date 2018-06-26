@@ -31,7 +31,7 @@ router.get('/user/getUniversity',function (req,res,next) {
   control.getUniversity(req,res,next)
 })
 //获取学校分布数据
-router.post('/user/getMapData',function (req,res,next) {
+router.get('/user/getMapData',function (req,res,next) {
   control.getMapData(req,res,next)
 })
 module.exports = router
