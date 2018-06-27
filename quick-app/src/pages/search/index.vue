@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="searchMain">
     <div class="search_top">
       <form action="" class="search_form" >
         <div class="search_com">
@@ -102,9 +102,10 @@
 </script>
 
 <style scoped>
-  .main{
+  .searchMain{
     background-color:#E5E5E5 ;
-    min-height: 1000px;
+    height: 1334rpx;
+    width: 750rpx;
   }
   .search_com{
     display: flex;
@@ -114,10 +115,10 @@
     align-items: center;
   }
   .search_back{
-    font-size: 20px;
+    font-size: 40rpx;
   }
   .search_voice{
-    font-size: 20px;
+    font-size: 40rpx;
     color: #bfbfbf;
   }
   .search_com_input{
@@ -127,11 +128,12 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #1FD927;
+    border-bottom: 2rpx solid #1FD927;
   }
   .search_input{
-    padding:5px 10px ;
+    padding:10rpx 20rpx ;
     color:#888888 ;
+    font-size: 30rpx;
   }
   .universityItem{
     display: flex;
@@ -140,22 +142,22 @@
     align-items: center;
   }
   .search_btn{
-    font-size: 20px;
+    font-size: 40rpx;
     color: #BfBfBf;
   }
   .panel{
     background-color: #ffffff;
-    min-height: 150px;
+    min-height: 300rpx;
   }
   .universityItem{
-    padding: 10px 15px;
-    border-bottom: 1px solid #BBBBBB;
+    padding: 20rpx 30rpx;
+    border-bottom: 2rpx solid #BBBBBB;
   }
   .universityItem_icon{
 
   }
   .universityItem_name{
     color: #888888;
-    font-size: 16px;
+    font-size: 32rpx;
   }
 </style>

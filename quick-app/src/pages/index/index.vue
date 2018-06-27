@@ -1,25 +1,25 @@
 <template>
   <div class="container" >
-    <div class="title">
-      <p>您所在城市</p>
-    </div>
-    <div class="userinfo">
-      <p class="iconfont location" >&#xe64c;</p>
-      <div class="userinfo-nickname">
-        <p class="locationCity">{{locationCity}}</p>
+    <div class="cityMain">
+      <div class="city-info">
+        <div class="title">
+          <p>您所在城市</p>
+        </div>
+        <p class="iconfont location" >&#xe64c;</p>
+        <div class="userinfo-nickname">
+          <p class="locationCity">{{locationCity}}</p>
+        </div>
+        <view class="section">
+          <picker mode="region" @change="bindRegionChange" :value="region" :custom-item="customItem">
+            <view class="picker reLocation">
+              定位错误，重新选择
+            </view>
+          </picker>
+        </view>
+        <a  class="counter" @click="saveLocation">下一步</a>
       </div>
-    </div>
-    <div>
-      <view class="section">
-        <picker mode="region" @change="bindRegionChange" :value="region" :custom-item="customItem">
-          <view class="picker reLocation">
-            定位错误，重新选择
-          </view>
-        </picker>
-      </view>
-    </div>
     <!--<a href="/pages/counter/main" class="counter" @click="saveLocation">下一步</a>-->
-    <a  class="counter" @click="saveLocation">下一步</a>
+    </div>
   </div>
 </template>
 
@@ -171,53 +171,51 @@ export default {
 </script>
 
 <style scoped>
+  .cityMain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 750rpx;
+    height: 1334rpx;
+    padding: 20rpx 0;
+    box-sizing: border-box;
+    background-image: url('https://i.niupic.com/images/2018/06/27/5xPG.jpeg');
+    background-size: 100%;
+  }
   .location{
-    font-size: 120px;
-    color: #d4237a;
-  }
-  .userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  }
-  .reLocation{
-    margin-top: 10px;
-    font-size: 13px;
+    font-size: 240rpx;
     color: #FF9800;
   }
-.locationCity{
-  margin-top: 20px;
-  font-size: 40px;
-  letter-spacing: 10px;
-}
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-
-.counter {
-  display: inline-block;
-  margin: 50px auto;
-  padding: 5px 10px;
-  color: black;
-  border: 1px solid #FF9800;
-  border-radius: 5px;
-}
+  .title{
+    color: #aaa;
+  }
+  .city-info {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .reLocation{
+    margin-top: 20rpx;
+    font-size: 24rpx;
+    color: #FF9800;
+  }
+  .locationCity{
+    margin-top: 40rpx;
+    font-size: 80rpx;
+    letter-spacing: 20rpx;
+  }
+  .userinfo-nickname {
+    color: #aaa;
+  }
+  .counter {
+    display: inline-block;
+    margin: 100rpx auto;
+    padding: 10rpx 20rpx;
+    color: #FF9800;
+    border: 2rpx solid #FF9800;
+    border-radius: 10rpx;
+  }
 </style>

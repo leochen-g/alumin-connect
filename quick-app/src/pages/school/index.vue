@@ -1,21 +1,30 @@
 <template>
   <div class="container" >
-    <div class="title">
-      <p>选择院校</p>
-    </div>
-    <div class="userinfo" @click="bindViewTap">
-      <p class="iconfont universityIcon" >&#xe603;</p>
-      <div class="userinfo-nickname">
-        <p class="university">{{university}}</p>
+    <div class="schoolMain">
+      <div class="school-info" @click="bindViewTap">
+        <div class="header-nav">
+          <div>
+            <a href="/pages/index/main">
+              <i class="iconfont search_back">&#xe609;</i>
+            </a>
+          </div>
+          <div>
+            <p class="title">选择院校</p>
+          </div>
+          <div></div>
+        </div>
+        <p class="iconfont universityIcon" >&#xe603;</p>
+        <div class="userinfo-nickname">
+          <p class="university">{{university}}</p>
+        </div>
+        <div class="university-input">
+          <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
+        </div>
+        <div class="button-finish">
+          <a  class="finish" href="" @tap="saveUniversity">完成</a>
+        </div>
       </div>
     </div>
-    <div class="search">
-      <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
-    </div>
-    <div>
-
-    </div>
-    <a  class="counter" href="" @tap="saveUniversity">完成</a>
   </div>
 </template>
 
@@ -77,41 +86,69 @@
 </script>
 
 <style scoped>
-  .universityIcon{
-    margin-top: 70px;
-    font-size: 100px;
-    color: #000000;
+  .schoolMain{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 750rpx;
+    height: 1334rpx;
+    padding: 20rpx 0;
+    box-sizing: border-box;
+    background-image: url('https://i.niupic.com/images/2018/06/27/5xPG.jpeg');
+    background-size: 100%;
   }
-  .userinfo {
+  .header-nav{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .search_back{
+    font-size: 40rpx;
+  }
+  .title{
+    color: #aaa;
+  }
+  .universityIcon{
+    margin-top: 100rpx;
+    font-size: 200rpx;
+    color: #FF9800;
+  }
+  .school-info {
+    width: 90%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
   .university{
-    margin-top: 20px;
-    font-size: 20px;
-    letter-spacing: 3px;
+    margin-top: 40rpx;
+    font-size: 40rpx;
+    letter-spacing: 6rpx;
   }
   .userinfo-nickname {
     color: #aaa;
   }
-  .counter {
-    display: inline-block;
-    margin: 50px auto;
-    padding: 5px 10px;
-    color: black;
-    border: 1px solid #FF9800;
-    border-radius: 5px;
+  .university-input{
+    margin: 40rpx auto;
   }
-  .search{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .button-finish{
+    margin-top:80rpx ;
+  }
+  .finish {
+    padding: 10rpx 20rpx;
+    color: #FF9800;
+    border: 2rpx solid #FF9800;
+    border-radius: 10rpx;
   }
   .search-input{
-    margin-top: 20px;
-    border: 1px solid #000000;
-    padding: 4px 10px;
-    border-radius: 5px;
+    width: 500rpx ;
+    border: 2rpx solid #FF9800;
+    padding: 8rpx 20rpx;
+    border-radius: 10rpx;
+    color: #aaa;
   }
 </style>

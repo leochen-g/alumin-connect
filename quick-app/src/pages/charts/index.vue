@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="title">
-      <p>{{schoolName}}</p>
+      <p class="school-name">{{schoolName}}</p>
+      <p>校友分布图</p>
     </div>
     <div class="echarts-wrap">
     <mpvue-echarts lazyLoad :echarts="echarts" :onInit="handleInitChart" ref="echarts" canvasId="demo-canvas" />
@@ -23,7 +24,7 @@
         echarts,
         option: null,
         map: [],
-        schoolName: '复旦大学'
+        schoolName: ''
       }
     },
     methods: {
@@ -177,6 +178,7 @@
       }
     },
     mounted () {
+      this.schoolName = wx.getStorageSync('university')
       this.getUniversityMap()
     },
     created () {
@@ -188,5 +190,9 @@
   .echarts-wrap {
     width: 100%;
     height: 300px
+  }
+  .title{
+    text-align: center;
+    color:#FF9800
   }
 </style>
