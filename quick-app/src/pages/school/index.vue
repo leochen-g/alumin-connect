@@ -2,18 +2,21 @@
   <div class="container" >
     <div class="schoolMain">
       <div class="school-info" @click="bindViewTap">
-        <div class="header-nav">
-          <div>
-            <a href="/pages/index/main">
-              <i class="iconfont search_back">&#xe609;</i>
-            </a>
-          </div>
-          <div>
-            <p class="title">选择院校</p>
-          </div>
-          <div></div>
+        <!--<div class="header-nav">-->
+          <!--<div>-->
+            <!--<a href="/pages/index/main">-->
+              <!--<i class="iconfont search_back">&#xe609;</i>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div>-->
+            <!--<p class="title">选择院校</p>-->
+          <!--</div>-->
+          <!--<div></div>-->
+        <!--</div>-->
+        <div >
+          <p class="title">选 择 院 校</p>
         </div>
-        <p class="iconfont universityIcon" >&#xe603;</p>
+        <p class="iconfont universityIcon" >&#xe955;</p>
         <div class="userinfo-nickname">
           <p class="university">{{university}}</p>
         </div>
@@ -91,11 +94,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 750rpx;
+    width: 100%;
     height: 1334rpx;
-    padding: 20rpx 0;
     box-sizing: border-box;
-    background-image: url('https://i.niupic.com/images/2018/06/27/5xPG.jpeg');
+    background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg2.jpg');
     background-size: 100%;
   }
   .header-nav{
@@ -110,43 +112,52 @@
     font-size: 40rpx;
   }
   .title{
-    color: #aaa;
+    margin-top: 80rpx ;
+    font-size: 28rpx;
+    color: #ffffff;
   }
   .universityIcon{
-    margin-top: 100rpx;
+    margin-top: 94rpx;
     font-size: 200rpx;
-    color: #FF9800;
+    color: #FFFFFF;
   }
   .school-info {
-    width: 90%;
+    background-color: rgba(0,0,0,0.85);
+    height: 1334rpx;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
   .university{
-    margin-top: 40rpx;
-    font-size: 40rpx;
+    margin-top: 85rpx;
+    font-size: 36rpx;
     letter-spacing: 6rpx;
   }
   .userinfo-nickname {
-    color: #aaa;
+    color: #ffffff;
   }
   .university-input{
-    margin: 40rpx auto;
+    margin: 48rpx auto;
   }
   .button-finish{
-    margin-top:80rpx ;
+    margin-top:210rpx ;
   }
   .finish {
+    width: 164rpx;
     padding: 10rpx 20rpx;
-    color: #FF9800;
-    border: 2rpx solid #FF9800;
-    border-radius: 10rpx;
+    color: #FFFFFF;
+    background-color: #5687e7 ;
+    border-radius: 15rpx;
+    font-size: 28rpx ;
+    text-align: center;
   }
   .search-input{
-    width: 500rpx ;
-    border: 2rpx solid #FF9800;
+    width: 400rpx ;
+    border: 2rpx solid #5687e7;
+    font-size: 22rpx;
+    text-align: center;
     padding: 8rpx 20rpx;
     border-radius: 10rpx;
     color: #aaa;

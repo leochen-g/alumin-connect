@@ -2,21 +2,18 @@
   <div class="container" >
     <div class="cityMain">
       <div class="city-info">
-        <div class="title">
-          <p>您所在城市</p>
-        </div>
-        <p class="iconfont location" >&#xe64c;</p>
+        <p class="iconfont location" >&#xe60a;</p>
         <div class="userinfo-nickname">
           <p class="locationCity">{{locationCity}}</p>
         </div>
         <view class="section">
           <picker mode="region" @change="bindRegionChange" :value="region" :custom-item="customItem">
             <view class="picker reLocation">
-              定位错误，重新选择
+              定位错误？
             </view>
           </picker>
         </view>
-        <a  class="counter" @click="saveLocation">下一步</a>
+        <a  class="counter" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tap=1" @touchend="tap=0">下一步</a>
       </div>
     <!--<a href="/pages/counter/main" class="counter" @click="saveLocation">下一步</a>-->
     </div>
@@ -176,46 +173,50 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 750rpx;
+    width: 100%;
     height: 1334rpx;
-    padding: 20rpx 0;
     box-sizing: border-box;
-    background-image: url('https://i.niupic.com/images/2018/06/27/5xPG.jpeg');
+    background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg1.jpg');
     background-size: 100%;
   }
   .location{
+    margin-top: 200rpx;
     font-size: 240rpx;
-    color: #FF9800;
-  }
-  .title{
-    color: #aaa;
+    color: #ffffff;
   }
   .city-info {
-    width: 90%;
+    background-color: rgba(0,0,0,0.85);
+    height: 1334rpx;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
   .reLocation{
-    margin-top: 20rpx;
-    font-size: 24rpx;
-    color: #FF9800;
+    margin-top: 45rpx;
+    font-size: 18rpx;
+    color: #c5c5c5;
+    text-decoration: underline;
   }
   .locationCity{
-    margin-top: 40rpx;
-    font-size: 80rpx;
+    margin-top: 67rpx;
+    font-size: 56rpx;
+    color: #ffffff;
     letter-spacing: 20rpx;
   }
   .userinfo-nickname {
     color: #aaa;
   }
   .counter {
+    width: 166rpx;
+    font-size: 28rpx;
+    text-align: center;
     display: inline-block;
-    margin: 100rpx auto;
+    margin-top: 287rpx;
     padding: 10rpx 20rpx;
-    color: #FF9800;
-    border: 2rpx solid #FF9800;
-    border-radius: 10rpx;
+    color: #ffffff;
+    background-color: #5f95ff;
+    border-radius: 15rpx;
   }
 </style>

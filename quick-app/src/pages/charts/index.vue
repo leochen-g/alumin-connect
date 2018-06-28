@@ -201,7 +201,8 @@
     height: 300px
   }
   .title{
+    margin-top: 80rpx;
     text-align: center;
-    color:#FF9800
+    color: #5687e7;
   }
 </style>
