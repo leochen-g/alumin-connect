@@ -103,9 +103,10 @@
 
 <style scoped>
   .searchMain{
+    position: fixed;
     background-color:#E5E5E5 ;
-    height: 1334rpx;
-    width: 750rpx;
+    height: 100%;
+    width: 100%;
   }
   .search_com{
     display: flex;

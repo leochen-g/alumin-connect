@@ -5,7 +5,7 @@
       <p>校友分布图</p>
     </div>
     <div class="echarts-wrap">
-    <mpvue-echarts lazyLoad :echarts="echarts" :onInit="handleInitChart" ref="echarts" canvasId="demo-canvas" />
+    <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" ref="echarts" canvasId="demo-canvas" />
     </div>
   </div>
 </template>
@@ -96,7 +96,7 @@
                 show: false
               }
             },
-            roam: true,
+            roam: false,
             itemStyle: {
               normal: {
                 areaColor: '#031525',

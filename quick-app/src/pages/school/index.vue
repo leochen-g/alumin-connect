@@ -91,11 +91,12 @@
 <style scoped>
   .schoolMain{
     display: flex;
+    position: fixed;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 1334rpx;
+    height: 100%;
     box-sizing: border-box;
     background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg2.jpg');
     background-size: 100%;

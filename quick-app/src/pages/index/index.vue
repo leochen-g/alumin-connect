@@ -9,11 +9,12 @@
         <view class="section">
           <picker mode="region" @change="bindRegionChange" :value="region" :custom-item="customItem">
             <view class="picker reLocation">
-              定位错误？
+              <span class="err">定位错误</span>？
             </view>
           </picker>
         </view>
-        <a  class="counter" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tap=1" @touchend="tap=0">下一步</a>
+        <a  class="counter" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd">下一步</a>
+        <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" lang="zh_CN">授权登录</button>
       </div>
     <!--<a href="/pages/counter/main" class="counter" @click="saveLocation">下一步</a>-->
     </div>
@@ -31,14 +32,55 @@ export default {
       code: '',
       openId: '',
       userInfo: {},
-      locationCity: '定位中'
+      locationCity: '定位中',
+      screenWidth: 0,
+      screenHeight: 0,
+      tap: false
     }
   },
-
+  onLoad: function (options) {
+    var _this = this
+    wx.getSetting({
+      success: function (res) {
+        if (res.authSetting['scope.userInfo']) {
+          wx.getUserInfo({
+            success: function (res) {
+              console.log('userInfo', res)
+              this.userInfo = res.userInfo
+            }
+          })
+        }
+      }
+    })
+    wx.getSystemInfo({
+      success: function (res) {
+        console.log('device', res)
+        _this.screenHeight = res.windowHeight
+        _this.screenWidth = res.windowWith
+      }
+    })
+  },
+  bindGetUserInfo (e) {
+    console.log('loginfo', e.detail.userInfo)
+  },
+  onShareAppMessage (options) {
+    return {
+      title: '快来看看你的校友在哪里？',
+      path: '',
+      success: function (res) {
+      }
+    }
+  },
   components: {
     card
   },
   methods: {
+    tapStart () {
+      this.tap = true
+    },
+    tapEnd () {
+      this.tap = false
+    },
     bindViewTap () {
       const url = '../logs/main'
       wx.navigateTo({ url })
@@ -47,20 +89,23 @@ export default {
       this.region = e.target.value
       this.locationCity = this.region[1]
     },
+    onGotUsrInfo () {
+
+    },
     // 获取用户基本信息
     getUserInfo () {
       var _this = this
       // 调用登录接口
       wx.login({
         success: (resCode) => {
-          this.code = resCode.code
-          this.getOpenId(resCode.code)
           wx.getUserInfo({
             success: (res) => {
+              console.log('userInfo', res)
               this.userInfo = res.userInfo
-              console.log(res)
             }
           })
+          this.code = resCode.code
+          this.getOpenId(resCode.code)
           wx.getLocation({
             success: (res) => {
               var location = res.latitude + ',' + res.longitude
@@ -83,7 +128,6 @@ export default {
           'content-type': 'application/x-www-form-urlencoded '
         },
         success: function (res) {
-          console.log('openid为', res.data)
           _this.openId = res.data.data.openid
           wx.setStorageSync('openId', _this.openId)
           _this.saveUserInfo(_this.userInfo, res.data.data.openid)
@@ -169,12 +213,13 @@ export default {
 
 <style scoped>
   .cityMain {
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 1334rpx;
+    height: 100%;
     box-sizing: border-box;
     background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg1.jpg');
     background-size: 100%;
@@ -183,6 +228,9 @@ export default {
     margin-top: 200rpx;
     font-size: 240rpx;
     color: #ffffff;
+  }
+  .err{
+    text-decoration: underline;
   }
   .city-info {
     background-color: rgba(0,0,0,0.85);
@@ -197,7 +245,6 @@ export default {
     margin-top: 45rpx;
     font-size: 18rpx;
     color: #c5c5c5;
-    text-decoration: underline;
   }
   .locationCity{
     margin-top: 67rpx;
@@ -218,5 +265,45 @@ export default {
     color: #ffffff;
     background-color: #5f95ff;
     border-radius: 15rpx;
+  }
+  .loading{
+    display: inline-block;
+    margin-top: 6rpx;
+    width: 20rpx;
+    height: 20rpx;
+    border: .2em solid currentColor;
+    border-radius: 50%;
+    -webkit-animation: load 1s ease-out infinite;
+    animation: load 1s ease-out infinite;
+  }
+  @-webkit-keyframes load {
+    0% {
+      -webkit-transform: scale(0);
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+  @keyframes load {
+    0% {
+      -webkit-transform: scale(0);
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+      opacity: 0;
+    }
   }
 </style>
