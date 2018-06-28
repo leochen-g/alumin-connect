@@ -1,5 +1,5 @@
 <script>
-  const serverPath = 'https://wechat.xkboke.com:4000'
+  const serverPath = 'https://wechat.xkboke.com'
   var citys = {
     '北京市': ['市辖区'],
     '天津市': ['市辖区'],

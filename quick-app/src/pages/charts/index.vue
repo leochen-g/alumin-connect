@@ -27,6 +27,15 @@
         schoolName: ''
       }
     },
+    onShareAppMessage (options) {
+      console.log(options)
+      return {
+        title: '快来看看你的校友在哪里？',
+        path: '',
+        success: function (res) {
+        }
+      }
+    },
     methods: {
       handleInitChart (canvas, width, height) {
         chart = echarts.init(canvas, null, {
