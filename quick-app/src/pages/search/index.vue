@@ -30,7 +30,6 @@
 </template>
 
 <script>
-  import card from '@/components/card'
   const delay = (function () {
     let timer = 0
     return function (callback, ms) {
@@ -49,11 +48,6 @@
         universityList: []
       }
     },
-
-    components: {
-      card
-    },
-
     methods: {
       bindTap (val) {
         this.chooseIndex = val

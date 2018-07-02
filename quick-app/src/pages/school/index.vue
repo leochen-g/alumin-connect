@@ -24,7 +24,7 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <a  class="finish" href="" @tap="saveUniversity">完成</a>
+          <a  class="finish" href="" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity">完成</a>
         </div>
       </div>
     </div>
@@ -32,19 +32,20 @@
 </template>
 
 <script>
-  import card from '@/components/card'
-
   export default {
     data () {
       return {
-        university: ''
+        university: '',
+        tap: false
       }
     },
-    components: {
-      card
-    },
-
     methods: {
+      tapStart () {
+        this.tap = true
+      },
+      tapEnd () {
+        this.tap = false
+      },
       toSearch: function () {
         wx.navigateTo({
           url: '../search/main'

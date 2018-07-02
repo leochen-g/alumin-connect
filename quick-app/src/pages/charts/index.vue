@@ -1,11 +1,16 @@
 <template>
   <div class="container">
-    <div class="title">
-      <p class="school-name">{{schoolName}}</p>
-      <p>校友分布图</p>
-    </div>
-    <div class="echarts-wrap">
-    <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" ref="echarts" canvasId="demo-canvas" />
+    <div class="chartMain">
+      <div class="title">
+        <p class="school-name">{{schoolName}}</p>
+        <p class="detail">(你的校友遍布全国12个省份)</p>
+      </div>
+      <div class="echarts-wrap">
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" ref="echarts" canvasId="demo-canvas" />
+      </div>
+      <div class="echarts-bar">
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" ref="echartsBar" canvasId="canvas-bar" />
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +20,7 @@
   import mpvueEcharts from 'mpvue-echarts'
   require('echarts/map/js/china')
   let chart = null
+  let chartBar = null
   export default {
     components: {
       mpvueEcharts
@@ -23,6 +29,7 @@
       return {
         echarts,
         option: null,
+        optionBar: null,
         map: [],
         schoolName: ''
       }
@@ -45,6 +52,59 @@
         canvas.setChart(chart)
         chart.setOption(this.option)
         return chart // 返回 chart 后可以自动绑定触摸操作
+      },
+      handleInitBarChart (canvas, width, height) {
+        chartBar = echarts.init(canvas, null, {
+          width: width,
+          height: height
+        })
+        canvas.setChart(chartBar)
+        chartBar.setOption(this.optionBar)
+        return chartBar // 返回 chart 后可以自动绑定触摸操作
+      },
+      initChartBar () {
+        this.optionBar = {
+          title: {
+            text: 'TOP5 省份'
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            data: ['安徽', '上海', '北京', '杭州', '深圳']
+          },
+          yAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+          },
+          series: [
+            {
+              type: 'bar',
+              label: {
+                show: true,
+                position: 'insideTop'
+              },
+              barWidth: 20,
+              itemStyle: {
+                normal: {
+                  color: new echarts.graphic.LinearGradient(
+                    0, 0, 0, 1,
+                    [
+                      {offset: 0, color: '#66a6ff'},
+                      {offset: 1, color: '#89f7fe'}
+                    ]
+                  )
+                }
+              },
+              data: [800, 500, 200, 192, 121]
+            }
+          ]
+        }
+        this.$refs.echartsBar.init()
       },
       initChart () {
         var mapName = 'china'
@@ -82,7 +142,7 @@
             calculable: true,
             seriesIndex: [1],
             inRange: {
-              color: ['#FFE53B', '#FF2525']
+              color: ['#89f7fe', '#66a6ff']
             }
           },
           geo: {
@@ -127,7 +187,7 @@
             },
             itemStyle: {
               normal: {
-                color: '#05C3F9'
+                color: 'blue'
               }
             }
           },
@@ -148,7 +208,7 @@
                 }
               }
             },
-            roam: true,
+            roam: 'scale',
             itemStyle: {
               normal: {
                 areaColor: '#031525',
@@ -181,6 +241,7 @@
             console.log(res)
             _this.map = res.data.data.list
             _this.initChart()
+            _this.initChartBar()
             // _this.locationCity = res.data.data[1]
           }
         })
@@ -196,13 +257,32 @@
 </script>
 
 <style scoped>
+  .chartMain{
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
   .echarts-wrap {
     width: 100%;
-    height: 300px
+    height: 500rpx
+  }
+  .echarts-bar{
+    width: 100%;
+    height: 600rpx;
   }
   .title{
-    margin-top: 80rpx;
+    margin-top: 20rpx;
     text-align: center;
     color: #5687e7;
+  }
+  .detail{
+    text-align: center;
+    font-size: 20rpx;
+    color: #66a6ff;
   }
 </style>

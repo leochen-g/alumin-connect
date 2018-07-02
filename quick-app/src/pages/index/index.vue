@@ -14,7 +14,6 @@
           </picker>
         </view>
         <a  class="counter" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd">下一步</a>
-        <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" lang="zh_CN">授权登录</button>
       </div>
     <!--<a href="/pages/counter/main" class="counter" @click="saveLocation">下一步</a>-->
     </div>
@@ -22,7 +21,6 @@
 </template>
 
 <script>
-import card from '@/components/card'
 export default {
   data () {
     return {
@@ -40,18 +38,6 @@ export default {
   },
   onLoad: function (options) {
     var _this = this
-    wx.getSetting({
-      success: function (res) {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            success: function (res) {
-              console.log('userInfo', res)
-              this.userInfo = res.userInfo
-            }
-          })
-        }
-      }
-    })
     wx.getSystemInfo({
       success: function (res) {
         console.log('device', res)
@@ -60,9 +46,6 @@ export default {
       }
     })
   },
-  bindGetUserInfo (e) {
-    console.log('loginfo', e.detail.userInfo)
-  },
   onShareAppMessage (options) {
     return {
       title: '快来看看你的校友在哪里？',
@@ -70,9 +53,6 @@ export default {
       success: function (res) {
       }
     }
-  },
-  components: {
-    card
   },
   methods: {
     tapStart () {
