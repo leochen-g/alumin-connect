@@ -13,6 +13,7 @@ var sqlMap = {
 	    groupBy:"select name,count(name) as value from user join provinces on user.pid=provinces.pid  where university=? GROUP BY name ORDER BY count(name) desc"
 	},
   	user:{
+	  	updateBase:'update user set nickName = ?,avataUrl = ?, country = ?, gender = ?  where openid = ?;',
 	  	insert:"insert ignore into user(openid,nickName,avataUrl,country,gender) values (?,?,?,?,?); ",
 	  	select:"select * from user where openid in (?)",
 	  	update:"update user set university =?,pid=?,location=?  where openid=?;",

@@ -41,8 +41,9 @@
       console.log(options)
       return {
         title: '快来看看你的校友在哪里？',
-        path: '',
+        path: '/pages/index/main',
         success: function (res) {
+          console.log('分享成功')
         }
       }
     },
@@ -231,6 +232,8 @@
       getUniversityMap () {
         var val = wx.getStorageSync('university')
         var _this = this
+        _this.topName = []
+        _this.topVal = []
         wx.request({
           url: this.GLOBAL.serverPath + '/api/user/getMapData',
           method: 'GET',

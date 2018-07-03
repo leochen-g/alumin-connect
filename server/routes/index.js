@@ -6,9 +6,12 @@ var control = require('../control/userControl')
 router.post('/user/openid',function (req,res,next) {
   control.getUserOpenid(req,res,next)
 })
-//保存用户基本信息
+//保存用户基本信息（昵称，头像）
 router.post('/user/save',function (req, res, next) {
   control.saveUserInfo(req,res,next)
+})
+router.post('/user/updateUserBase',function (req, res, next) {
+  control.updateUserBaseInfo(req,res,next)
 })
 //更新用户基本信息接口保存用户位置
 router.post('/user/update',function (req, res, next) {

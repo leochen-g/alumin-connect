@@ -40,7 +40,7 @@ module.exports  = {
 		  });
 	}
   },
-//  保存用户基本信息
+  //  保存用户名头像
   saveUserInfo:function (req, res,next) {
 	var param = req.body
 	if(!param.openid){
@@ -48,6 +48,22 @@ module.exports  = {
 	}else {
 	  var arr = [param.openid,param.nickName,param.avatarUrl,param.country,param.gender]
 	  sqlControl.saveUser(arr,function(results,fields){
+		if(results.insertId){
+		  res.json({head:{code:0, msg:'ok'},data:{id:results.insertId}})
+		}else {
+		  res.json({head:{code:0, msg:'数据重复'},data:{}})
+		}
+	  })
+	}
+  },
+  // 更新用户名称头像
+  updateUserBaseInfo:function (req, res, next) {
+	var param = req.body
+	if(!param.openid){
+	  res.json({head:{code:10000, msg:'数据不存在'},data:{}})
+	}else {
+	  var arr = [param.nickName,param.avatarUrl,param.country,param.gender,param.openid]
+	  sqlControl.updateUserBase(arr,function(results,fields){
 		if(results.insertId){
 		  res.json({head:{code:0, msg:'ok'},data:{id:results.insertId}})
 		}else {

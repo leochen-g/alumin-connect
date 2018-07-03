@@ -21,10 +21,14 @@ module.exports = {
 			console.log(results);
 		})
 	},
-//  保存用户基础信息
-  saveUser:function (req,res,next) {
-	db.query(sqlMap.user.insert, req, res)
-  },
+//  保存用户昵称头像
+	saveUser:function (req,res,next) {
+	  db.query(sqlMap.user.insert, req, res)
+	},
+//  更新用户昵称头像
+  	updateUserBase:function (req,res,next) {
+	  db.query(sqlMap.user.updateBase, req, res)
+	},
 //  更新用户基础信息
   updateUserInfo:function (req,res,next) {
 	db.query(sqlMap.user.update, req, res)

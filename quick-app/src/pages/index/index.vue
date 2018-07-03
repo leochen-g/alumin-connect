@@ -13,9 +13,8 @@
             </view>
           </picker>
         </view>
-        <a  class="counter" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd">下一步</a>
+        <button  class="counter" open-type="getUserInfo" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" bindgetuserinfo="bindGetUserInfo">下一步</button>
       </div>
-    <!--<a href="/pages/counter/main" class="counter" @click="saveLocation">下一步</a>-->
     </div>
   </div>
 </template>
@@ -38,19 +37,39 @@ export default {
   },
   onLoad: function (options) {
     var _this = this
-    wx.getSystemInfo({
+    wx.getSetting({
       success: function (res) {
-        console.log('device', res)
-        _this.screenHeight = res.windowHeight
-        _this.screenWidth = res.windowWith
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+          _this.hasAuth = true
+          wx.getUserInfo({
+            success: (res) => {
+              console.log('userInfo', res)
+              _this.userInfo = res.userInfo
+            }
+          })
+        } else {
+          _this.hasAuth = false
+          _this.userInfo = {
+            nickName: '',
+            avatarUrl: '',
+            country: '',
+            gender: ''}
+        }
       }
     })
   },
+  bindGetUserInfo: function (e) {
+    console.log(e.detail.userInfo)
+  },
   onShareAppMessage (options) {
+    console.log(options)
     return {
       title: '快来看看你的校友在哪里？',
-      path: '',
+      path: '/pages/index/main',
+      imageUrl: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg.jpeg',
       success: function (res) {
+        console.log('分享成功')
       }
     }
   },
@@ -69,21 +88,12 @@ export default {
       this.region = e.target.value
       this.locationCity = this.region[1]
     },
-    onGotUsrInfo () {
-
-    },
     // 获取用户基本信息
     getUserInfo () {
       var _this = this
       // 调用登录接口
       wx.login({
         success: (resCode) => {
-          wx.getUserInfo({
-            success: (res) => {
-              console.log('userInfo', res)
-              this.userInfo = res.userInfo
-            }
-          })
           this.code = resCode.code
           this.getOpenId(resCode.code)
           wx.getLocation({
@@ -237,11 +247,12 @@ export default {
   }
   .counter {
     width: 166rpx;
+    height: 60rpx;
     font-size: 28rpx;
     text-align: center;
-    display: inline-block;
     margin-top: 287rpx;
-    padding: 10rpx 20rpx;
+    vertical-align: center;
+    /*padding: 10rpx 20rpx;*/
     color: #ffffff;
     background-color: #5f95ff;
     border-radius: 15rpx;

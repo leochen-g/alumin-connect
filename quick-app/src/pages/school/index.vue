@@ -28,6 +28,50 @@
         tap: false
       }
     },
+    onShareAppMessage (options) {
+      console.log(options)
+      return {
+        title: '快来看看你的校友在哪里？',
+        path: '/pages/index/main',
+        imageUrl: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg.jpeg',
+        success: function (res) {
+          console.log('分享成功')
+        }
+      }
+    },
+    onLoad: function (options) {
+      wx.getSetting({
+        success: function (res) {
+          if (res.authSetting['scope.userInfo']) {
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            wx.getUserInfo({
+              success: (res) => {
+                console.log('userInfo', res)
+                var obj = res.userInfo
+                var oid = wx.getStorageSync('openId')
+                wx.request({
+                  url: this.GLOBAL.serverPath + '/api/user/updateUserBase',
+                  method: 'POST',
+                  data: {
+                    nickName: obj.nickName,
+                    avatarUrl: obj.avatarUrl,
+                    country: obj.country,
+                    gender: obj.gender,
+                    openid: oid
+                  },
+                  header: {
+                    'content-type': 'application/x-www-form-urlencoded '
+                  },
+                  success: function (res) {
+                    console.log('保存成功')
+                  }
+                })
+              }
+            })
+          }
+        }
+      })
+    },
     methods: {
       tapStart () {
         this.tap = true
