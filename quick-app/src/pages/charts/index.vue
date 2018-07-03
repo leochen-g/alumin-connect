@@ -3,14 +3,14 @@
     <div class="chartMain">
       <div class="title">
         <p class="school-name">{{schoolName}}</p>
-        <p class="detail">(你的校友遍布全国12个省份)</p>
+        <p class="detail">(你的校友遍布全国{{pCount}}个省份)</p>
       </div>
       <div class="echarts-wrap">
         <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" ref="echarts" canvasId="demo-canvas" />
       </div>
       <div class="echarts-bar">
-        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" ref="echartsBar" canvasId="canvas-bar" />
-      </div>
+      <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" ref="echartsBar" throttleTouch canvasId="canvas-bar" />
+    </div>
     </div>
   </div>
 </template>
@@ -31,7 +31,10 @@
         option: null,
         optionBar: null,
         map: [],
-        schoolName: ''
+        schoolName: '',
+        pCount: 0,
+        topName: [],
+        topVal: []
       }
     },
     onShareAppMessage (options) {
@@ -75,7 +78,7 @@
           },
           xAxis: {
             type: 'category',
-            data: ['安徽', '上海', '北京', '杭州', '深圳']
+            data: this.topName
           },
           yAxis: {
             type: 'value',
@@ -100,7 +103,7 @@
                   )
                 }
               },
-              data: [800, 500, 200, 192, 121]
+              data: this.topVal
             }
           ]
         }
@@ -156,7 +159,7 @@
                 show: false
               }
             },
-            roam: false,
+            roam: true,
             itemStyle: {
               normal: {
                 areaColor: '#031525',
@@ -208,7 +211,7 @@
                 }
               }
             },
-            roam: 'scale',
+            roam: true,
             itemStyle: {
               normal: {
                 areaColor: '#031525',
@@ -240,6 +243,20 @@
           success: function (res) {
             console.log(res)
             _this.map = res.data.data.list
+            _this.pCount = res.data.data.list.length
+            if (_this.pCount >= 5) {
+              for (var i = 0; i < 5; i++) {
+                _this.topName.push(_this.map[i].name)
+                _this.topVal.push(_this.map[i].value)
+              }
+            } else {
+              for (var j = 0; j < _this.pCount; j++) {
+                _this.topName.push(_this.map[j].name)
+                _this.topVal.push(_this.map[j].value)
+              }
+            }
+            console.log(_this.topName)
+            console.log(_this.topVal)
             _this.initChart()
             _this.initChartBar()
             // _this.locationCity = res.data.data[1]

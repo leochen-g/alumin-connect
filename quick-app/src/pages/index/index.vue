@@ -156,6 +156,8 @@ export default {
     // 保存用户位置和省份
     saveLocation () {
       var _this = this
+      const url = '../school/main'
+      wx.navigateTo({ url })
       wx.request({
         url: this.GLOBAL.serverPath + '/api/user/update',
         method: 'POST',
@@ -169,8 +171,6 @@ export default {
           'content-type': 'application/x-www-form-urlencoded '
         },
         success: function (res) {
-          const url = '../school/main'
-          wx.navigateTo({ url })
           console.log('保存成功')
         }
       })

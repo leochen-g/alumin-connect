@@ -2,17 +2,6 @@
   <div class="container" >
     <div class="schoolMain">
       <div class="school-info" @click="bindViewTap">
-        <!--<div class="header-nav">-->
-          <!--<div>-->
-            <!--<a href="/pages/index/main">-->
-              <!--<i class="iconfont search_back">&#xe609;</i>-->
-            <!--</a>-->
-          <!--</div>-->
-          <!--<div>-->
-            <!--<p class="title">选择院校</p>-->
-          <!--</div>-->
-          <!--<div></div>-->
-        <!--</div>-->
         <div >
           <p class="title">选 择 院 校</p>
         </div>
@@ -62,6 +51,8 @@
       },
       saveUniversity () {
         var _this = this
+        console.log('保存成功')
+        const url = '../charts/main'
         var oid = wx.getStorageSync('openId')
         wx.request({
           url: this.GLOBAL.serverPath + '/api/user/updateUniversity',
@@ -74,9 +65,7 @@
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            const url = '../charts/main'
             wx.navigateTo({ url })
-            console.log('保存成功')
           }
         })
       }
@@ -101,17 +90,6 @@
     box-sizing: border-box;
     background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg2.jpg');
     background-size: 100%;
-  }
-  .header-nav{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .search_back{
-    font-size: 40rpx;
   }
   .title{
     margin-top: 80rpx ;
