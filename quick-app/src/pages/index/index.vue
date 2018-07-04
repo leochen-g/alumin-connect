@@ -54,7 +54,8 @@ export default {
             nickName: '',
             avatarUrl: '',
             country: '',
-            gender: ''}
+            gender: ''
+          }
         }
       }
     })
