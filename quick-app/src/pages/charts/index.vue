@@ -6,11 +6,14 @@
         <p class="detail">(你的校友遍布全国{{pCount}}个省份)</p>
       </div>
       <div class="echarts-wrap">
-        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" ref="echarts" canvasId="demo-canvas" />
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" throttleTouch="true" ref="echarts" canvasId="demo-canvas" />
       </div>
       <div class="echarts-bar">
-      <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" ref="echartsBar" throttleTouch canvasId="canvas-bar" />
-    </div>
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" throttleTouch="true" ref="echartsBar" canvasId="canvas-bar" />
+      </div>
+      <div class="floatBtn">
+        <button open-type="share" size="30" class="shareBtn"><i class="iconfont shareIcon">&#xe607;</i></button>
+      </div>
     </div>
   </div>
 </template>
@@ -69,7 +72,10 @@
       initChartBar () {
         this.optionBar = {
           title: {
-            text: 'TOP5 省份'
+            text: 'TOP5 省份',
+            textStyle: {
+              fontSize: 13
+            }
           },
           grid: {
             left: '3%',
@@ -183,7 +189,8 @@
               normal: {
                 formatter: '{b}',
                 position: 'right',
-                show: true
+                show: true,
+                color: '#f6d365'
               },
               emphasis: {
                 show: true
@@ -305,4 +312,21 @@
     font-size: 20rpx;
     color: #66a6ff;
   }
+  .floatBtn{
+    position: fixed;
+    bottom: 45%;
+    right: 10%;
+    border-radius: 80rpx;
+  }
+  .shareBtn{
+    color: #ffffff;
+    font-size:18rpx;
+    height:80rpx ;
+    width: 80rpx;
+    background-color: #f9d423;
+    border-radius: 80rpx;
+    box-shadow: 0 0 22rpx #2F330A;
+    opacity: 0.7;
+  }
 </style>
+r

@@ -13,7 +13,7 @@
             </view>
           </picker>
         </view>
-        <button  class="counter" open-type="getUserInfo" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" bindgetuserinfo="bindGetUserInfo">下一步</button>
+        <button  class="counter" open-type="getUserInfo" @click="saveLocation" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @getuserinfo="bindGetUserInfo">下一步</button>
       </div>
     </div>
   </div>
@@ -60,9 +60,6 @@ export default {
       }
     })
   },
-  bindGetUserInfo: function (e) {
-    console.log(e.detail.userInfo)
-  },
   onShareAppMessage (options) {
     console.log(options)
     return {
@@ -75,6 +72,37 @@ export default {
     }
   },
   methods: {
+    bindGetUserInfo: function (e) {
+      var _this = this
+      if (e.mp.detail.userInfo) {
+        _this.userInfo = e.mp.detail.userInfo
+        _this.saveUserInfo(_this.userInfo, _this.openId)
+        const url = '../school/main'
+        wx.navigateTo({ url })
+        console.log('允许')
+      } else {
+        wx.showModal({
+          title: '温馨提示',
+          showCancel: true,
+          content: '为了您更好的体验,请先同意授权',
+          success: function (res) {
+            if (res.confirm) {
+              wx.openSetting({
+                success: function (res) {
+                  if (res.authSetting['scope.userInfo']) {
+                    console.log('谢谢授权')
+                  } else {
+                    console.log('还是没有授权')
+                  }
+                }
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+      }
+    },
     tapStart () {
       this.tap = true
     },
@@ -121,7 +149,6 @@ export default {
         success: function (res) {
           _this.openId = res.data.data.openid
           wx.setStorageSync('openId', _this.openId)
-          _this.saveUserInfo(_this.userInfo, res.data.data.openid)
         }
       })
     },
@@ -167,8 +194,6 @@ export default {
     // 保存用户位置和省份
     saveLocation () {
       var _this = this
-      const url = '../school/main'
-      wx.navigateTo({ url })
       wx.request({
         url: this.GLOBAL.serverPath + '/api/user/update',
         method: 'POST',
@@ -247,16 +272,18 @@ export default {
     color: #aaa;
   }
   .counter {
-    width: 166rpx;
+    width: 180rpx;
     height: 60rpx;
     font-size: 28rpx;
-    text-align: center;
     margin-top: 287rpx;
     vertical-align: center;
-    /*padding: 10rpx 20rpx;*/
+    line-height: 2;
     color: #ffffff;
     background-color: #5f95ff;
     border-radius: 15rpx;
+  }
+  .auth{
+    opacity: 0;
   }
   .loading{
     display: inline-block;

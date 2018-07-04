@@ -79,48 +79,10 @@
             wx.navigateTo({ url })
           }
         })
-      },
-      getHasAuth () {
-        var _this = this
-        wx.getSetting({
-          success: function (res) {
-            if (res.authSetting['scope.userInfo']) {
-              // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-              console.log('has auth', res)
-              wx.getUserInfo({
-                success: (res) => {
-                  console.log('userInfo', res)
-                  var obj = res.userInfo
-                  var oid = wx.getStorageSync('openId')
-                  wx.request({
-                    url: _this.GLOBAL.serverPath + '/api/user/updateUserBase',
-                    method: 'POST',
-                    data: {
-                      nickName: obj.nickName,
-                      avatarUrl: obj.avatarUrl,
-                      country: obj.country,
-                      gender: obj.gender,
-                      openid: oid
-                    },
-                    header: {
-                      'content-type': 'application/x-www-form-urlencoded '
-                    },
-                    success: function (res) {
-                      console.log('保存成功')
-                    }
-                  })
-                }
-              })
-            } else {
-              console.log('no auth', res)
-            }
-          }
-        })
       }
     },
     mounted () {
       this.getUniversityName()
-      this.getHasAuth()
     },
     created () {
     }
