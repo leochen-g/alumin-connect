@@ -76,7 +76,7 @@ export default {
       var _this = this
       if (e.mp.detail.userInfo) {
         _this.userInfo = e.mp.detail.userInfo
-        _this.saveUserInfo(_this.userInfo, _this.openId)
+        _this.updateUserBaseInfo(_this.userInfo)
         const url = '../school/main'
         wx.navigateTo({ url })
         console.log('允许')
@@ -149,6 +149,7 @@ export default {
         success: function (res) {
           _this.openId = res.data.data.openid
           wx.setStorageSync('openId', _this.openId)
+          _this.saveUserInfo(_this.userInfo, _this.openId)
         }
       })
     },
@@ -175,6 +176,27 @@ export default {
     saveUserInfo (obj, oid) {
       wx.request({
         url: this.GLOBAL.serverPath + '/api/user/save',
+        method: 'POST',
+        data: {
+          nickName: obj.nickName,
+          avatarUrl: obj.avatarUrl,
+          country: obj.country,
+          gender: obj.gender,
+          openid: oid
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded '
+        },
+        success: function (res) {
+          console.log('保存成功')
+        }
+      })
+    },
+    updateUserBaseInfo (obj) {
+      var _this = this
+      var oid = wx.getStorageSync('openId')
+      wx.request({
+        url: _this.GLOBAL.serverPath + '/api/user/updateUserBase',
         method: 'POST',
         data: {
           nickName: obj.nickName,
