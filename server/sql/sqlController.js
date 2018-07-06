@@ -21,6 +21,7 @@ module.exports = {
 			console.log(results);
 		})
 	},
+
 //  保存用户昵称头像
 	saveUser:function (req,res,next) {
 	  db.query(sqlMap.user.insert, req, res)
@@ -28,6 +29,10 @@ module.exports = {
 //  更新用户昵称头像
   	updateUserBase:function (req,res,next) {
 	  db.query(sqlMap.user.updateBase, req, res)
+	},
+//  保存用户位置
+  	saveUserLocation:function (req,res,next) {
+	  db.query(sqlMap.user.saveUsrLocation, req, res)
 	},
 //  更新用户基础信息
   updateUserInfo:function (req,res,next) {
@@ -37,7 +42,7 @@ module.exports = {
   updateUserUniversityInfo:function (req,res,next) {
     db.query(sqlMap.user.updateUniversity, req, res)
   },
-//  获取用户基础信息
+//  获取用户基础信息(未启用)
   getUserInfo:function (req,res,next) {
 	db.query(sqlMap.university.insert, req, function(results,fields){
 	  console.log(results);

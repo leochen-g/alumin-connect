@@ -16,8 +16,8 @@ var sqlMap = {
 	  	updateBase:'update user set nickName = ?,avataUrl = ?, country = ?, gender = ?  where openid = ?;',
 	  	insert:"insert ignore into user(openid,nickName,avataUrl,country,gender) values (?,?,?,?,?); ",
 	  	select:"select * from user where openid in (?)",
-	  	update:"update user set university =?,pid=?,location=?  where openid=?;",
-	  	updateUniversity:"update user set university =? where openid=?;"
+	  	updateUniversity:"update user set university =? where openid=?;",
+	  	saveUsrLocation:"update user set pid=?,location=? where openid=?"
 	}
 }
 module.exports = sqlMap
