@@ -24,7 +24,7 @@
   export default {
     data () {
       return {
-        university: '',
+        university: wx.getStorageSync('university'),
         tap: false,
         userInfo: {},
         city: '',
@@ -55,6 +55,9 @@
           }
         }
       })
+    },
+    onShow () {
+      this.getUniversityName()
     },
     onShareAppMessage (options) {
       console.log(options)
@@ -197,8 +200,6 @@
       },
       saveUniversity () {
         var _this = this
-        console.log('保存成功')
-        const url = '../charts/main'
         var oid = wx.getStorageSync('openId')
         wx.request({
           url: this.GLOBAL.serverPath + '/api/user/updateUniversity',
@@ -211,7 +212,7 @@
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            wx.navigateTo({ url })
+            console.log('保存成功')
           }
         })
       }

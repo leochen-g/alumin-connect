@@ -3,9 +3,10 @@
     <div class="search_top">
       <form action="" class="search_form" >
         <div class="search_com">
-          <a href="/pages/school/main">
-            <i class="iconfont search_back">&#xe609;</i>
-          </a>
+          <!--<a @click ="backToIndex">-->
+
+          <!--<i class="iconfont search_back">&#xe609;</i>-->
+          <!--</a>-->
           <div class="search_com_input">
             <div>
               <input class="search_input" placeholder="搜索" v-model.trim="searchValue"   autofocus="true" name="universityName">
@@ -62,8 +63,10 @@
       choose (val) {
         this.searchValue = val
         wx.setStorageSync('university', val)
-        const url = '../school/main'
-        wx.navigateTo({ url })
+        // wx.reLaunch({url: '../index/main'})
+        wx.navigateBack({
+          delta: 1
+        })
       },
       fetchData (val) {
         var _this = this
@@ -117,7 +120,8 @@
     color: #bfbfbf;
   }
   .search_com_input{
-    width: 100%;
+    margin-left: 2%;
+    width: 96%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
