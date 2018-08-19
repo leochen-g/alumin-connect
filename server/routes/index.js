@@ -31,5 +31,8 @@ router.get('/user/getUniversity',function (req,res,next) {
 router.get('/user/getMapData',function (req,res,next) {
   control.getMapData(req,res,next)
 })
+router.get('/user/getUserAndLocation',function (req,res,next) {
+  control.getUserAndLocationCount(req,res,next)
+})
 module.exports = router
 

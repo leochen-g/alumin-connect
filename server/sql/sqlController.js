@@ -56,4 +56,7 @@ module.exports = {
   getMapData:function (req,res,next) {
 	db.query(sqlMap.university.groupBy, req, res)
   },
+  getLocationCount:function (req,res,next) {
+	db.query(sqlMap.university.locationCount,req,res)
+  }
 }

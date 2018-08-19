@@ -3,7 +3,7 @@
     <div class="chartMain">
       <div class="title">
         <p class="school-name">{{schoolName}}</p>
-        <p class="detail">(你的校友遍布全国{{pCount}}个省份)</p>
+        <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="echarts-wrap">
         <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" throttleTouch="true" ref="echarts" canvasId="demo-canvas" />
@@ -37,7 +37,9 @@
         schoolName: '',
         pCount: 0,
         topName: [],
-        topVal: []
+        topVal: [],
+        locationCount: '',
+        userCount: ''
       }
     },
     onShareAppMessage (options) {
@@ -190,7 +192,8 @@
                 formatter: '{b}',
                 position: 'right',
                 show: true,
-                color: '#f6d365'
+                color: '#FF6800',
+                fontSize: 8
               },
               emphasis: {
                 show: true
@@ -198,7 +201,7 @@
             },
             itemStyle: {
               normal: {
-                color: 'blue'
+                color: '#89f7fe'
               }
             }
           },
@@ -272,11 +275,31 @@
             // _this.locationCity = res.data.data[1]
           }
         })
+      },
+      getStudentCount () {
+        var val = wx.getStorageSync('university')
+        var _this = this
+        wx.request({
+          url: this.GLOBAL.serverPath + '/api/user/getUserAndLocation',
+          method: 'GET',
+          data: {
+            university: val
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
+            console.log(res)
+            _this.userCount = res.data.data.userCount
+            _this.locationCount = res.data.data.locationCount
+          }
+        })
       }
     },
     mounted () {
       this.schoolName = wx.getStorageSync('university')
       this.getUniversityMap()
+      this.getStudentCount()
     },
     created () {
     }
@@ -284,6 +307,12 @@
 </script>
 
 <style scoped>
+  .school-name{
+    color: #edb621;
+  }
+  .city-count{
+    color: #edb621;
+  }
   .chartMain{
     display: flex;
     position: fixed;

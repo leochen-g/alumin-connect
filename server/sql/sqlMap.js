@@ -10,7 +10,8 @@ var sqlMap = {
 		insert:"insert into university(pid,name,website,city,level,usercount,abbreviation) values (?,?,?,?,?,?,?)",
 	  	search:"select id,name from university where name like concat('%',?,'%') limit 0,10;",
 	  	// groupBy:"select pid,count(pid) as value from user WHERE university=? GROUP BY university,pid"
-	    groupBy:"select name,count(name) as value from user join provinces on user.pid=provinces.pid  where university=? GROUP BY name ORDER BY count(name) desc"
+	    groupBy:"select name,count(name) as value from user join provinces on user.pid=provinces.pid  where university=? GROUP BY name ORDER BY count(name) desc",
+	  	locationCount:"select count(DISTINCT location) as locationCount,count(openid) as userCount from user where university = ? ;"
 	},
   	user:{
 	  	updateBase:'update user set nickName = ?,avataUrl = ?, country = ?, gender = ?  where openid = ?;',

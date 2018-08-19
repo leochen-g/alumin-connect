@@ -124,14 +124,27 @@ module.exports = {
 	  res.json({head: {code: 10000, msg: '请输入学校'}, data: {}})
 	} else {
 	  var arr = [param]
-	  console.log(arr);
 	  sqlControl.getMapData(arr, function (results, fields) {
-		console.log('university', results);
 		res.json({
 		  head: {code: 0, msg: 'ok'}, data: {
 			university: param,
-			list: results
+			list: results,
 		  }
+		})
+	  })
+	}
+  },
+//  获取校友人数和城市数
+  getUserAndLocationCount:function (req,res,next) {
+	var param = req.query.university
+	if (!param) {
+	  res.json({head: {code: 10000, msg: '请输入学校'}, data: {}})
+	} else {
+	  var arr = [param]
+	  sqlControl.getLocationCount(arr, function (results, fields) {
+	    console.log(results);
+		res.json({
+		  head: {code: 0, msg: 'ok'}, data: results[0]
 		})
 	  })
 	}

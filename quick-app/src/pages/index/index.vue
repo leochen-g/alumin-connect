@@ -13,7 +13,8 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button  class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">完成</button>
+          <button v-if="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">完成</button>
+          <button v-else="university==='请选择'" class="finish"  @click="saveTips" >完成</button>
         </div>
       </div>
     </div>
@@ -155,6 +156,20 @@
             }
           })
         }
+      },
+      saveTips () {
+        wx.showModal({
+          title: '温馨提示',
+          showCancel: false,
+          content: '请先选择你的院校',
+          success: function (res) {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '../search/main'
+              })
+            }
+          }
+        })
       },
       // 更新用户基本信息
       updateUserBaseInfo (obj) {
