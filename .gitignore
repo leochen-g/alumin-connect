@@ -12,4 +12,4 @@
 /bin/
 */node_modules
 */log
-*/server/.env
+.env
