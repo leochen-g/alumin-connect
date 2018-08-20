@@ -106,8 +106,8 @@
                   color: new echarts.graphic.LinearGradient(
                     0, 0, 0, 1,
                     [
-                      {offset: 0, color: '#66a6ff'},
-                      {offset: 1, color: '#89f7fe'}
+                      {offset: 0, color: '#89f7fe'},
+                      {offset: 1, color: '#66a6ff'}
                     ]
                   )
                 }
@@ -171,8 +171,8 @@
             roam: true,
             itemStyle: {
               normal: {
-                areaColor: '#031525',
-                borderColor: '#3B5077'
+                areaColor: '#FFFFFF',
+                borderColor: '#BFBFBF'
               },
               emphasis: {
                 areaColor: '#2B91B7'
@@ -308,7 +308,7 @@
 
 <style scoped>
   .school-name{
-    color: #edb621;
+    color: #5687e7;
   }
   .city-count{
     color: #edb621;
@@ -322,6 +322,8 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+    /*background-image: linear-gradient( #66a6ff 0%, #89f7fe 100%);*/
+    background-size: 100%;
   }
   .echarts-wrap {
     width: 100%;
@@ -352,7 +354,7 @@
     font-size:18rpx;
     height:80rpx ;
     width: 80rpx;
-    background-color: #f9d423;
+    background-color: #5687e7;
     border-radius: 80rpx;
     box-shadow: 0 0 22rpx #2F330A;
     opacity: 0.7;

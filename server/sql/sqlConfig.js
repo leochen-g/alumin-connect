@@ -1,6 +1,7 @@
 var mysql = require('mysql');
-var global = require('../config/Global')
-var pool = mysql.createPool(global.sql);
+var config = require('../config/config')
+
+var pool = mysql.createPool(config.develop);
 
 exports.query = function(sql, arr, callback){
 	//建立链接

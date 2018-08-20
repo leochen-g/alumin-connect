@@ -1,7 +1,23 @@
 var express = require('express')
 var router = express.Router()
 var control = require('../control/userControl')
+var User = require('../models/').User
 
+
+// 使用sequelize查询数据
+router.post('/user',function (req,res) {
+  console.log(req.body.university);
+  var university = req.body.university
+  User.findAll({where: {university: university}})
+	  .then( su => {
+			res.send({code: 0, message: 'ok', data: su})
+		  }
+	  )
+	  .catch( ex => {
+			res.send({code: 500, message: '服务器异常'})
+		  }
+	  )
+})
 //获取用户openid
 router.post('/user/openid',function (req,res,next) {
   control.getUserOpenid(req,res,next)

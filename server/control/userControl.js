@@ -1,7 +1,6 @@
 var sqlControl = require('../sql/sqlController')
 var superagent = require('superagent')
-var global = require('../config/Global')
-
+const config = require('../config')
 // json格式化
 var jsonWrite = function (res, ret) {
   if (typeof ret === 'undefined') {
@@ -22,7 +21,7 @@ module.exports = {
 	if (!code) {
 	  res.json({head: {code: 10000, msg: '认证码不存在'}, data: {}})
 	} else {
-	  var URL = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + global.weixin.appId + '&secret=' + global.weixin.secret + '&js_code=' + code + '&grant_type=authorization_code'
+	  var URL = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + config.MINI_APPID + '&secret=' + config.MINI_SECRET + '&js_code=' + code + '&grant_type=authorization_code'
 	  superagent
 		  .get(URL)
 		  .end(function (err, response) {
@@ -58,7 +57,7 @@ module.exports = {
 	if (!param) {
 	  res.json({head: {code: 10000, msg: '请输入参数'}, data: {}})
 	} else {
-	  var URL = 'http://apis.map.qq.com/ws/geocoder/v1/?location=' + param + '&key=' + global.qqMapKey + '&get_poi=1';
+	  var URL = 'http://apis.map.qq.com/ws/geocoder/v1/?location=' + param + '&key=' + config.TENCENT_MAP_KEY + '&get_poi=1';
 	  superagent
 		  .get(URL)
 		  .end(function (err, response) {
@@ -67,7 +66,7 @@ module.exports = {
 			}
 			var location = response.body.result.address_component
 			var city = location.city
-			var pid = global.provinceMap[location.province]
+			var pid = config.PROVINCEMAP[location.province]
 			var arr = [pid, city, oid]
 			sqlControl.saveUserLocation(arr, function (results, fields) {
 			  if (results.affectedRows) {
@@ -119,6 +118,7 @@ module.exports = {
   },
 //  获取学校数据地图
   getMapData: function (req, res, next) {
+    console.log('获取院校',req);
 	var param = req.query.university
 	if (!param) {
 	  res.json({head: {code: 10000, msg: '请输入学校'}, data: {}})

@@ -14,7 +14,7 @@
         </div>
         <div class="button-finish">
           <button v-if="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">完成</button>
-          <button v-else="university==='请选择'" class="finish"  @click="saveTips" >完成</button>
+          <button v-else="university==='请选择'" class="finish"  @click="saveTips" >完 成</button>
         </div>
       </div>
     </div>
@@ -288,13 +288,13 @@
     margin-top:210rpx ;
   }
   .finish {
-    width: 164rpx;
-    padding: 10rpx 20rpx;
+    width: 328rpx;
+    height: 64rpx;
+    vertical-align: middle;
+    text-align: center;
     color: #FFFFFF;
-    line-height: 2;
-    vertical-align: center;
     background-color: #5687e7 ;
-    border-radius: 15rpx;
+    border-radius: 32rpx;
     font-size: 28rpx ;
   }
   .search-input{
