@@ -3,7 +3,6 @@ var sqlMap = require('./sqlMap')
 
 
 module.exports = {
-
 //  保存用户昵称头像
 	saveUser:function (req,res,next) {
 	  db.query(sqlMap.user.insert, req, res)
