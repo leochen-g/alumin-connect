@@ -84,7 +84,6 @@
     },
     watch: {
       searchValue () {
-        var _this = this
         _this.searchClearBtn = true
         delay(() => {
           _this.fetchData(_this.searchValue)
