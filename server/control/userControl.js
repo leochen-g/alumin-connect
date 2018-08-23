@@ -17,7 +17,6 @@ module.exports = {
 //  获取用户openid并保存
   getUserOpenid: function (req, res, next) {
 	var code = req.body.code;
-	console.log(code);
 	if (!code) {
 	  res.json({head: {code: 10000, msg: '认证码不存在'}, data: {}})
 	} else {
@@ -29,7 +28,6 @@ module.exports = {
 			  return err;
 			}
 			var resp = JSON.parse(response.text)
-			console.log(resp);
 			var openId = resp.openid
 			var session_key = resp.session_key
 			var arr = [openId, '', '', '', '']
@@ -51,7 +49,6 @@ module.exports = {
   },
   //  获取用户位置信息并保存
   getUserLocation: function (req, res, next) {
-	console.log('body', req.query);
 	var param = req.body.location
 	var oid = req.body.oid
 	if (!param) {
@@ -97,12 +94,10 @@ module.exports = {
   //  更新用户学校信息
   updateUserUniversity: function (req, res, next) {
 	var param = req.body
-	console.log(param);
 	if (!param) {
 	  res.json({head: {code: 10000, msg: '没有选择院校'}, data: {}})
 	} else {
 	  var arr = [param.university, param.oid]
-	  console.log(arr);
 	  sqlControl.updateUserUniversityInfo(arr, function (results, fields) {
 		if (results.affectedRows) {
 		  res.json({head: {code: 0, msg: '更新成功'}, data: {}})
@@ -118,7 +113,7 @@ module.exports = {
   },
 //  获取学校数据地图
   getMapData: function (req, res, next) {
-    console.log('获取院校',req);
+    console.log('获取院校',req.query.university);
 	var param = req.query.university
 	if (!param) {
 	  res.json({head: {code: 10000, msg: '请输入学校'}, data: {}})

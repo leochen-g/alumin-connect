@@ -1,1 +1,1 @@
-# alumin-connect
+# alumni-connect

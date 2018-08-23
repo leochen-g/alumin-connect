@@ -211,7 +211,6 @@
       getUniversityName () {
         var _this = this
         var value = wx.getStorageSync('university')
-        console.log(value)
         if (value) {
           _this.university = value
         } else {

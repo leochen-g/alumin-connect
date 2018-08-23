@@ -3,13 +3,9 @@
     <div class="search_top">
       <form action="" class="search_form" >
         <div class="search_com">
-          <!--<a @click ="backToIndex">-->
-
-          <!--<i class="iconfont search_back">&#xe609;</i>-->
-          <!--</a>-->
           <div class="search_com_input">
             <div>
-              <input class="search_input" placeholder="搜索" v-model.trim="searchValue"   autofocus="true" name="universityName">
+              <input class="search_input" placeholder="搜索" v-model.trim="searchValue"   name="universityName">
             </div>
             <div v-if="searchClearBtn&&searchValue!==''" @click="clearSearch">
               <i class="iconfont search_voice">&#xe62b;</i>
@@ -72,7 +68,7 @@
       fetchData (val) {
         var _this = this
         wx.request({
-          url: this.GLOBAL.serverPath + '/api/user/getUniversity',
+          url: _this.GLOBAL.serverPath + '/api/user/getUniversity',
           method: 'GET',
           data: {
             wd: val
@@ -88,9 +84,10 @@
     },
     watch: {
       searchValue () {
-        this.searchClearBtn = true
+        var _this = this
+        _this.searchClearBtn = true
         delay(() => {
-          this.fetchData(this.searchValue)
+          _this.fetchData(_this.searchValue)
         }, 300)
       }
     },

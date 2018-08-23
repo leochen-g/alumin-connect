@@ -6,10 +6,10 @@
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="echarts-wrap">
-        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" throttleTouch="true" ref="echarts" canvasId="demo-canvas" />
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" disableTouch="true" ref="echarts" canvasId="demo-canvas" />
       </div>
       <div class="echarts-bar">
-        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" throttleTouch="true" ref="echartsBar" canvasId="canvas-bar" />
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" disableTouch="true" ref="echartsBar" canvasId="canvas-bar" />
       </div>
       <div class="floatBtn">
         <button open-type="share" size="30" class="shareBtn"><i class="iconfont shareIcon">&#xe607;</i></button>
