@@ -142,7 +142,6 @@ module.exports = {
 	} else {
 	  var arr = [param]
 	  sqlControl.getLocationCount(arr, function (results, fields) {
-	    console.log(results);
 		res.json({
 		  head: {code: 0, msg: 'ok'}, data: results[0]
 		})

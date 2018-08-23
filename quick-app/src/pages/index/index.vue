@@ -13,8 +13,8 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button v-if="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">完成</button>
-          <button v-else="university==='请选择'" class="finish"  @click="saveTips" >完 成</button>
+          <button v-show="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">完成</button>
+          <button v-show="university==='请选择'" class="finish"  @click="saveTips" >完 成</button>
         </div>
       </div>
     </div>
@@ -57,8 +57,12 @@
         }
       })
     },
+    onUnload () {
+      console.log('卸载页面')
+    },
     onShow () {
-      this.getUniversityName()
+      var _this = this
+      _this.getUniversityName()
     },
     onShareAppMessage (options) {
       console.log(options)
@@ -205,19 +209,20 @@
         })
       },
       getUniversityName () {
+        var _this = this
         var value = wx.getStorageSync('university')
         console.log(value)
         if (value) {
-          this.university = value
+          _this.university = value
         } else {
-          this.university = '请选择'
+          _this.university = '请选择'
         }
       },
       saveUniversity () {
         var _this = this
         var oid = wx.getStorageSync('openId')
         wx.request({
-          url: this.GLOBAL.serverPath + '/api/user/updateUniversity',
+          url: _this.GLOBAL.serverPath + '/api/user/updateUniversity',
           method: 'POST',
           data: {
             oid: oid,

@@ -245,7 +245,7 @@
         _this.topName = []
         _this.topVal = []
         wx.request({
-          url: this.GLOBAL.serverPath + '/api/user/getMapData',
+          url: _this.GLOBAL.serverPath + '/api/user/getMapData',
           method: 'GET',
           data: {
             university: val
@@ -268,8 +268,6 @@
                 _this.topVal.push(_this.map[j].value)
               }
             }
-            console.log(_this.topName)
-            console.log(_this.topVal)
             _this.initChart()
             _this.initChartBar()
             // _this.locationCity = res.data.data[1]
@@ -280,7 +278,7 @@
         var val = wx.getStorageSync('university')
         var _this = this
         wx.request({
-          url: this.GLOBAL.serverPath + '/api/user/getUserAndLocation',
+          url: _this.GLOBAL.serverPath + '/api/user/getUserAndLocation',
           method: 'GET',
           data: {
             university: val
@@ -326,12 +324,14 @@
     background-size: 100%;
   }
   .echarts-wrap {
+    pointer-events: none;
     width: 100%;
-    height: 500rpx
+    height: 500rpx;
   }
   .echarts-bar{
+    pointer-events: none;
     width: 100%;
-    height: 600rpx;
+    height: 500rpx;
   }
   .title{
     margin-top: 20rpx;
@@ -360,4 +360,3 @@
     opacity: 0.7;
   }
 </style>
-r

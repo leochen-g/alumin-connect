@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "base64-url": "^2.2.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "env2": "^2.2.2",

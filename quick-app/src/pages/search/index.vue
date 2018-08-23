@@ -67,6 +67,7 @@
         wx.navigateBack({
           delta: 1
         })
+        // wx.redirectTo({url: '../index/main'})
       },
       fetchData (val) {
         var _this = this
