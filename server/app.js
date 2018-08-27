@@ -16,7 +16,7 @@ app.all('*',function (req,res,next) {
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Access-Control-Allow-Methods","POST,GET");
   res.header("X-Powered-By",' 3.2.1')
-  res.header("Content-Type", "application/json;charset=utf-8");
+  // res.header("Content-Type", "application/json;charset=utf-8");
   next();
 })
 
@@ -27,6 +27,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //引用路由
 app.use('/api', index)
+//静态文件处理
+app.use('/static', express.static('static'));
 
 // catch 404 and forward to error handler 处理404错误 并向下传递错误
 app.use(function(req, res, next) {

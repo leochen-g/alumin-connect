@@ -2,18 +2,22 @@
   <div class="container">
     <div class="chartMain">
       <div class="title">
-        <p class="school-name">{{schoolName}}</p>
+        <p class="school-name">{{university}}</p>
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="echarts-wrap">
-        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitChart" disableTouch="true" ref="echarts" canvasId="demo-canvas" />
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initMap" disableTouch=true ref="echarts" canvasId="demo-canvas" />
       </div>
       <div class="echarts-bar">
-        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="handleInitBarChart" disableTouch="true" ref="echartsBar" canvasId="canvas-bar" />
+        <mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />
       </div>
       <div class="floatBtn">
-        <button open-type="share" size="30" class="shareBtn"><i class="iconfont shareIcon">&#xe607;</i></button>
+        <button open-type="share" size="40" class="shareBtn"><i class="iconfont shareIcon">&#xe607;</i></button>
+        <button @click ='saveImg' class="shareBtn"><i class="iconfont shareIcon">&#xe607;</i></button>
       </div>
+    </div>
+    <div class="shareImg">
+      <canvas canvas-id="shareCanvas" style="width:600px;height:900px"></canvas>
     </div>
   </div>
 </template>
@@ -21,26 +25,66 @@
 <script>
   import echarts from 'echarts'
   import mpvueEcharts from 'mpvue-echarts'
+  import globalStore from '../../store/global-store'
   require('echarts/map/js/china')
   let chart = null
   let chartBar = null
+  let option = null
+  let optionBar = null
+  function handleInitChart (canvas, width, height) {
+    chart = echarts.init(canvas, null, {
+      width: width,
+      height: height
+    })
+    canvas.setChart(chart)
+    chart.setOption(option)
+    return chart // 返回 chart 后可以自动绑定触摸操作
+  }
+  function promisify (f) {
+    return function () {
+      let args = Array.prototype.slice.call(arguments)
+      return new Promise(function (resolve, reject) {
+        args.push(function (err, result) {
+          if (err) reject(err)
+          else resolve(result)
+        })
+        f.apply(null, args)
+      })
+    }
+  }
+  function handleInitBarChart (canvas, width, height) {
+    chartBar = echarts.init(canvas, null, {
+      width: width,
+      height: height
+    })
+    canvas.setChart(chartBar)
+    chartBar.setOption(optionBar)
+    return chartBar // 返回 chart 后可以自动绑定触摸操作
+  }
   export default {
+    computed: {
+      university () {
+        return globalStore.state.university
+      }
+    },
     components: {
       mpvueEcharts
     },
     data () {
       return {
         echarts,
-        option: null,
-        optionBar: null,
+        initMap: handleInitChart,
+        initBar: handleInitBarChart,
         map: [],
-        schoolName: '',
         pCount: 0,
         topName: [],
         topVal: [],
         locationCount: '',
         userCount: ''
       }
+    },
+    onReady () {
+      console.log('准备完成')
     },
     onShareAppMessage (options) {
       console.log(options)
@@ -52,31 +96,19 @@
         }
       }
     },
+    mounted () {
+      this.getUniversityMap()
+      this.getStudentCount()
+    },
     methods: {
-      handleInitChart (canvas, width, height) {
-        chart = echarts.init(canvas, null, {
-          width: width,
-          height: height
-        })
-        canvas.setChart(chart)
-        chart.setOption(this.option)
-        return chart // 返回 chart 后可以自动绑定触摸操作
-      },
-      handleInitBarChart (canvas, width, height) {
-        chartBar = echarts.init(canvas, null, {
-          width: width,
-          height: height
-        })
-        canvas.setChart(chartBar)
-        chartBar.setOption(this.optionBar)
-        return chartBar // 返回 chart 后可以自动绑定触摸操作
-      },
       initChartBar () {
-        this.optionBar = {
+        var _this = this
+        optionBar = {
           title: {
             text: 'TOP5 省份',
             textStyle: {
-              fontSize: 13
+              fontSize: 13,
+              color: '#ffffff'
             }
           },
           grid: {
@@ -87,11 +119,26 @@
           },
           xAxis: {
             type: 'category',
-            data: this.topName
+            data: this.topName,
+            axisLine: {
+              lineStyle: {
+                color: '#ffffff',
+                width: 1
+              }
+            }
           },
           yAxis: {
             type: 'value',
-            boundaryGap: [0, 0.01]
+            boundaryGap: [0, 0.01],
+            splitLine: false,
+            nameTextStyle: {
+              color: ['#ffffff']
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#ffffff'
+              }
+            }
           },
           series: [
             {
@@ -116,9 +163,9 @@
             }
           ]
         }
-        this.$refs.echartsBar.init()
+        _this.$refs.echartsBar.init()
       },
-      initChart () {
+      convertData (data) {
         var mapName = 'china'
         var geoCoordMap = {}
         // chart.showLoading()
@@ -130,33 +177,38 @@
           // 地区经纬度
           geoCoordMap[name] = v.properties.cp
         })
-        var convertData = function (data) {
-          var res = []
-          for (var i = 0; i < data.length; i++) {
-            var geoCoord = geoCoordMap[data[i].name]
-            if (geoCoord !== '') {
-              res.push({
-                name: data[i].name,
-                value: geoCoord.concat(data[i].value)
-              })
-            }
+        var res = []
+        for (var i = 0; i < data.length; i++) {
+          var geoCoord = geoCoordMap[data[i].name]
+          if (geoCoord !== '') {
+            res.push({
+              name: data[i].name,
+              value: geoCoord.concat(data[i].value)
+            })
           }
-          return res
         }
-        this.option = {
-          visualMap: {
-            show: true,
-            min: 0,
-            max: 300,
-            left: 'left',
-            top: 'bottom',
-            text: ['高', '低'],
-            calculable: true,
-            seriesIndex: [1],
-            inRange: {
-              color: ['#89f7fe', '#66a6ff']
-            }
-          },
+        return res
+      },
+      initChart () {
+        var _this = this
+        var mapName = 'china'
+        option = {
+          // visualMap: {
+          //   show: true,
+          //   min: 0,
+          //   max: 300,
+          //   left: 'left',
+          //   top: 'bottom',
+          //   text: ['高', '低'],
+          //   calculable: true,
+          //   seriesIndex: [1],
+          //   textStyle: {
+          //     color: '#ffffff'
+          //   },
+          //   inRange: {
+          //     color: ['#89f7fe', '#66a6ff']
+          //   }
+          // },
           geo: {
             show: true,
             map: mapName,
@@ -183,7 +235,7 @@
             name: '散点',
             type: 'scatter',
             coordinateSystem: 'geo',
-            data: convertData(this.map),
+            data: this.convertData(this.map),
             symbolSize: function (val) {
               return val[2] / 10
             },
@@ -192,7 +244,7 @@
                 formatter: '{b}',
                 position: 'right',
                 show: true,
-                color: '#FF6800',
+                color: '#b3de71',
                 fontSize: 8
               },
               emphasis: {
@@ -237,11 +289,11 @@
           }
           ]
         }
-        this.$refs.echarts.init()
+        _this.$refs.echarts.init()
       },
       getUniversityMap () {
-        var val = wx.getStorageSync('university')
         var _this = this
+        var val = _this.university
         _this.topName = []
         _this.topVal = []
         wx.request({
@@ -275,8 +327,8 @@
         })
       },
       getStudentCount () {
-        var val = wx.getStorageSync('university')
         var _this = this
+        var val = _this.university
         wx.request({
           url: _this.GLOBAL.serverPath + '/api/user/getUserAndLocation',
           method: 'GET',
@@ -292,24 +344,81 @@
             _this.locationCount = res.data.data.locationCount
           }
         })
+      },
+      saveImg () {
+        var _this = this
+        wx.canvasToTempFilePath({
+          x: 0,
+          y: 0,
+          width: 375,
+          height: 240,
+          destWidth: 375,
+          destHeight: 240,
+          canvasId: 'demo-canvas',
+          success: function (res) {
+            console.log(res)
+            _this.drawImg(res.tempFilePath)
+            // wx.saveImageToPhotosAlbum({
+            //   filePath: res.tempFilePath
+            // })
+          }
+        })
+      },
+      drawImg (url) {
+        var _this = this
+        const wxGetImageInfo = promisify(wx.getImageInfo)
+        Promise.all([
+          wxGetImageInfo({
+            src: url
+          }),
+          wxGetImageInfo({
+            src: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg.jpg'
+          })
+        ]).then(res => {
+          const ctx = wx.createCanvasContext('shareCanvas')
+          ctx.drawImage(res[0].path, 0, 0, 375, 736)
+          ctx.setTextAlign('center')
+          ctx.setFillStyle('#000000')
+          ctx.setFontSize(25)
+          ctx.fillText(_this.university, 736 / 2, 42)
+          ctx.setTextAlign('center')
+          ctx.setFillStyle('#000000')
+          ctx.setFontSize(25)
+          const str = '小K的' + _this.userCount + '名校友遍布全国' + _this.pCount + '个省区，' + _this.locationCount + '个城市！'
+          ctx.fillText(str, 736 / 2, 75)
+          const mapWidth = 375
+          const mapHeight = 240
+          ctx.drawImage(res[1].path, 0, 0, mapWidth, mapHeight)
+          ctx.stroke()
+          ctx.draw()
+          _this.outImg()
+        })
+      },
+      outImg () {
+        const wxCanvasToTempFilePath = promisify(wx.canvasToTempFilePath)
+        const wxSaveImageToPhotosAlbum = promisify(wx.saveImageToPhotosAlbum)
+        wxCanvasToTempFilePath({
+          canvasId: 'shareCanvas'
+        }, this).then(res => {
+          return wxSaveImageToPhotosAlbum({
+            filePath: res.tempFilePath
+          })
+        }).then(res => {
+          wx.showToast({
+            title: '已保存到相册'
+          })
+        })
       }
-    },
-    mounted () {
-      this.schoolName = wx.getStorageSync('university')
-      this.getUniversityMap()
-      this.getStudentCount()
-    },
-    created () {
     }
   }
 </script>
 
 <style scoped>
   .school-name{
-    color: #5687e7;
+    color: #ffffff;
   }
   .city-count{
-    color: #edb621;
+    color: #5687e7;
   }
   .chartMain{
     display: flex;
@@ -320,18 +429,18 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    /*background-image: linear-gradient( #66a6ff 0%, #89f7fe 100%);*/
+    background-image: linear-gradient( #041533 0%, #09275b 100%);
     background-size: 100%;
   }
   .echarts-wrap {
-    pointer-events: none;
-    width: 100%;
-    height: 500rpx;
+    width: 95%;
+    height: 480rpx;
+    padding: 4rpx 4rpx;
   }
   .echarts-bar{
-    pointer-events: none;
-    width: 100%;
-    height: 500rpx;
+    width: 95%;
+    height: 480rpx;
+    padding: 4rpx 4rpx;
   }
   .title{
     margin-top: 20rpx;
@@ -341,12 +450,12 @@
   .detail{
     text-align: center;
     font-size: 20rpx;
-    color: #66a6ff;
+    color: #ffffff;
   }
   .floatBtn{
     position: fixed;
     bottom: 45%;
-    right: 10%;
+    right: 8%;
     border-radius: 80rpx;
   }
   .shareBtn{
@@ -358,5 +467,9 @@
     border-radius: 80rpx;
     box-shadow: 0 0 22rpx #2F330A;
     opacity: 0.7;
+  }
+  .shareImg{
+    position: absolute;
+    left: -100%;
   }
 </style>

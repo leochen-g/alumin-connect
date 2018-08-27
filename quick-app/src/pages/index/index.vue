@@ -1,7 +1,7 @@
 <template>
   <div class="container" >
     <div class="schoolMain">
-      <div class="school-info" @click="bindViewTap">
+      <div class="school-info">
         <div >
           <p class="title">选 择 院 校</p>
         </div>
@@ -13,8 +13,8 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button v-show="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">完成</button>
-          <button v-show="university==='请选择'" class="finish"  @click="saveTips" >完 成</button>
+          <button v-show="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">出&nbsp;&nbsp;发</button>
+          <button v-show="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
         </div>
       </div>
     </div>
@@ -22,10 +22,15 @@
 </template>
 
 <script>
+  import globalStore from '../../store/global-store'
   export default {
+    computed: {
+      university () {
+        return globalStore.state.university
+      }
+    },
     data () {
       return {
-        university: wx.getStorageSync('university'),
         tap: false,
         userInfo: {},
         city: '',
@@ -57,13 +62,6 @@
         }
       })
     },
-    onUnload () {
-      console.log('卸载页面')
-    },
-    onShow () {
-      var _this = this
-      _this.getUniversityName()
-    },
     onShareAppMessage (options) {
       console.log(options)
       return {
@@ -81,12 +79,12 @@
         var _this = this
         wx.login({
           success: (resCode) => {
-            this.code = resCode.code
+            _this.code = resCode.code
             // 获取openid
             wx.getLocation({
               success: (res) => {
                 _this.location = res.latitude + ',' + res.longitude
-                this.getOpenId(resCode.code)
+                _this.getOpenId(resCode.code)
               }
             })
           }
@@ -96,7 +94,7 @@
       getOpenId (val) {
         var _this = this
         wx.request({
-          url: this.GLOBAL.serverPath + '/api/user/openid',
+          url: _this.GLOBAL.serverPath + '/api/user/openid',
           method: 'POST',
           data: {
             code: val
@@ -115,7 +113,7 @@
       getUserLocation (val, oid) {
         var _this = this
         wx.request({
-          url: this.GLOBAL.serverPath + '/api/user/getLocation',
+          url: _this.GLOBAL.serverPath + '/api/user/getLocation',
           method: 'POST',
           data: {
             oid: oid,
@@ -208,15 +206,6 @@
           url: '../search/main'
         })
       },
-      getUniversityName () {
-        var _this = this
-        var value = wx.getStorageSync('university')
-        if (value) {
-          _this.university = value
-        } else {
-          _this.university = '请选择'
-        }
-      },
       saveUniversity () {
         var _this = this
         var oid = wx.getStorageSync('openId')
@@ -237,10 +226,9 @@
       }
     },
     mounted () {
-      this.getUserInfo()
-      this.getUniversityName()
     },
     created () {
+      this.getUserInfo()
     }
   }
 </script>
@@ -253,9 +241,10 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 100%;
+    height: auto;
     box-sizing: border-box;
-    background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg2.jpg');
+    background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg7.jpg');
+    background-repeat: no-repeat;
     background-size: 100%;
   }
   .title{
@@ -270,13 +259,14 @@
   }
   .school-info {
     background-color: rgba(0,0,0,0.85);
-    height: 1334rpx;
+    height: 1444rpx;
     width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .university{
     margin-top: 85rpx;
     font-size: 36rpx;
@@ -289,21 +279,20 @@
     margin: 48rpx auto;
   }
   .button-finish{
-    margin-top:210rpx ;
+    margin-top:200rpx;
   }
   .finish {
-    width: 328rpx;
-    height: 64rpx;
-    vertical-align: middle;
-    text-align: center;
+    width: 360rpx;
+    height: 70rpx;
+    line-height: 70rpx;
     color: #FFFFFF;
     background-color: #5687e7 ;
-    border-radius: 32rpx;
-    font-size: 28rpx ;
+    border-radius: 16rpx;
+    font-size: 32rpx ;
   }
   .search-input{
     width: 400rpx ;
-    border: 2rpx solid #5687e7;
+    border: 2rpx solid #ffffff;
     font-size: 22rpx;
     text-align: center;
     padding: 8rpx 20rpx;
