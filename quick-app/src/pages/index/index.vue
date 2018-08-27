@@ -132,6 +132,7 @@
         var _this = this
         if (e.mp.detail.userInfo) {
           _this.userInfo = e.mp.detail.userInfo
+          wx.setStorageSync('nickName', _this.userInfo.nickName)
           _this.updateUserBaseInfo(_this.userInfo)
           const url = '../charts/main'
           wx.navigateTo({ url })

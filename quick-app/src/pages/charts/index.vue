@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="shareImg">
-      <canvas canvas-id="shareCanvas" style="width:600px;height:900px"></canvas>
+      <canvas canvas-id="shareCanvas" style="width:375px;height:736px"></canvas>
     </div>
   </div>
 </template>
@@ -39,18 +39,6 @@
     canvas.setChart(chart)
     chart.setOption(option)
     return chart // 返回 chart 后可以自动绑定触摸操作
-  }
-  function promisify (f) {
-    return function () {
-      let args = Array.prototype.slice.call(arguments)
-      return new Promise(function (resolve, reject) {
-        args.push(function (err, result) {
-          if (err) reject(err)
-          else resolve(result)
-        })
-        f.apply(null, args)
-      })
-    }
   }
   function handleInitBarChart (canvas, width, height) {
     chartBar = echarts.init(canvas, null, {
@@ -80,7 +68,8 @@
         topName: [],
         topVal: [],
         locationCount: '',
-        userCount: ''
+        userCount: '',
+        nickName: wx.getStorageSync('nickName')
       }
     },
     onReady () {
@@ -193,22 +182,23 @@
         var _this = this
         var mapName = 'china'
         option = {
-          // visualMap: {
-          //   show: true,
-          //   min: 0,
-          //   max: 300,
-          //   left: 'left',
-          //   top: 'bottom',
-          //   text: ['高', '低'],
-          //   calculable: true,
-          //   seriesIndex: [1],
-          //   textStyle: {
-          //     color: '#ffffff'
-          //   },
-          //   inRange: {
-          //     color: ['#89f7fe', '#66a6ff']
-          //   }
-          // },
+          visualMap: {
+            show: false,
+            min: 0,
+            max: 300,
+            left: 'left',
+            top: 'bottom',
+            text: ['高', '低'],
+            calculable: true,
+            seriesIndex: [1],
+            textStyle: {
+              color: '#ffffff'
+            },
+            inRange: {
+              // color: ['#89f7fe', '#66a6ff']
+              color: ['#fac829', '#fac829']
+            }
+          },
           geo: {
             show: true,
             map: mapName,
@@ -223,8 +213,8 @@
             roam: true,
             itemStyle: {
               normal: {
-                areaColor: '#FFFFFF',
-                borderColor: '#BFBFBF'
+                areaColor: '#BFBFBF',
+                borderColor: '#FFFFFF'
               },
               emphasis: {
                 areaColor: '#2B91B7'
@@ -244,7 +234,7 @@
                 formatter: '{b}',
                 position: 'right',
                 show: true,
-                color: '#b3de71',
+                color: '#ffffff',
                 fontSize: 8
               },
               emphasis: {
@@ -366,47 +356,70 @@
       },
       drawImg (url) {
         var _this = this
-        const wxGetImageInfo = promisify(wx.getImageInfo)
-        Promise.all([
-          wxGetImageInfo({
-            src: url
-          }),
-          wxGetImageInfo({
-            src: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg.jpg'
-          })
-        ]).then(res => {
-          const ctx = wx.createCanvasContext('shareCanvas')
-          ctx.drawImage(res[0].path, 0, 0, 375, 736)
-          ctx.setTextAlign('center')
-          ctx.setFillStyle('#000000')
-          ctx.setFontSize(25)
-          ctx.fillText(_this.university, 736 / 2, 42)
-          ctx.setTextAlign('center')
-          ctx.setFillStyle('#000000')
-          ctx.setFontSize(25)
-          const str = '小K的' + _this.userCount + '名校友遍布全国' + _this.pCount + '个省区，' + _this.locationCount + '个城市！'
-          ctx.fillText(str, 736 / 2, 75)
-          const mapWidth = 375
-          const mapHeight = 240
-          ctx.drawImage(res[1].path, 0, 0, mapWidth, mapHeight)
-          ctx.stroke()
-          ctx.draw()
-          _this.outImg()
+        wx.getImageInfo({
+          src: url,
+          success: function (res) {
+            _this.drawPath(res.path)
+          }
         })
       },
-      outImg () {
-        const wxCanvasToTempFilePath = promisify(wx.canvasToTempFilePath)
-        const wxSaveImageToPhotosAlbum = promisify(wx.saveImageToPhotosAlbum)
-        wxCanvasToTempFilePath({
-          canvasId: 'shareCanvas'
-        }, this).then(res => {
-          return wxSaveImageToPhotosAlbum({
-            filePath: res.tempFilePath
-          })
-        }).then(res => {
-          wx.showToast({
-            title: '已保存到相册'
-          })
+      drawPath (path) {
+        var _this = this
+        wx.getImageInfo({
+          src: 'https://alumni.xkboke.com/static/img/wechat.jpg',
+          success: function (res) {
+            const ctx = wx.createCanvasContext('shareCanvas')
+            console.log(res)
+            // 绘制背景
+            ctx.drawImage(res.path, 0, 0, 375, 736)
+            // 绘制昵称
+            ctx.setTextAlign('center')
+            ctx.setFillStyle('#fac829')
+            ctx.setFontSize(18)
+            ctx.fillText(_this.nickName, 375 / 2, 82, 120)
+            // 绘制详细信息
+            ctx.setTextAlign('center')
+            ctx.setFillStyle('#FFFFFF')
+            ctx.setFontSize(16)
+            const str = '您的校友遍布全国' + _this.pCount + '个省区，' + _this.locationCount + '个城市！'
+            ctx.fillText(str, 375 / 2, 122, 320)
+            // 绘制超过多少比例
+            ctx.setTextAlign('center')
+            ctx.setFillStyle('#FFFFFF')
+            ctx.setFontSize(16)
+            const str1 = '您的校友足迹超过 80% 的学校'
+            ctx.fillText(str1, 375 / 2, 159, 250)
+            // 绘制谚语
+            ctx.setTextAlign('center')
+            ctx.setFillStyle('#fac829')
+            ctx.setFontSize(16)
+            ctx.fillText('“四海八荒”', 375 / 2, 209, 100)
+
+            const mapWidth = 375
+            const mapHeight = 240
+            ctx.drawImage(path, 0, 236, mapWidth, mapHeight)
+            ctx.draw()
+            setTimeout(function () {
+              wx.canvasToTempFilePath({
+                canvasId: 'shareCanvas',
+                x: 0,
+                y: 0,
+                width: 375,
+                height: 736,
+                destWidth: 375,
+                destHeight: 736,
+                success: function (res) {
+                  let tempFilePath = res.tempFilePath
+                  wx.saveImageToPhotosAlbum({
+                    filePath: tempFilePath
+                  })
+                },
+                fail: function (res) {
+                  console.log('生成错误', res)
+                }
+              })
+            }, 2000)
+          }
         })
       }
     }
