@@ -13,7 +13,7 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button v-show="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#729ef6': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">出&nbsp;&nbsp;发</button>
+          <button v-show="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#49EAE5': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">出&nbsp;&nbsp;发</button>
           <button v-show="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
         </div>
       </div>
@@ -27,6 +27,9 @@
     computed: {
       university () {
         return globalStore.state.university
+      },
+      nickName () {
+        return globalStore.state.nickName
       }
     },
     data () {
@@ -48,6 +51,8 @@
               success: (res) => {
                 console.log('userInfo', res)
                 _this.userInfo = res.userInfo
+                globalStore.commit('updateNickName', _this.userInfo.nickName)
+                wx.setStorageSync('nickName', _this.userInfo.nickName)
               }
             })
           } else {
@@ -132,6 +137,7 @@
         var _this = this
         if (e.mp.detail.userInfo) {
           _this.userInfo = e.mp.detail.userInfo
+          globalStore.commit('updateNickName', _this.userInfo.nickName)
           wx.setStorageSync('nickName', _this.userInfo.nickName)
           _this.updateUserBaseInfo(_this.userInfo)
           const url = '../charts/main'

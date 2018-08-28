@@ -12,12 +12,12 @@
         <mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />
       </div>
       <div class="floatBtn">
-        <button open-type="share" size="40" class="shareBtn"><i class="iconfont shareIcon">&#xe607;</i></button>
-        <button @click ='saveImg' class="shareBtn"><i class="iconfont shareIcon">&#xe607;</i></button>
+        <div><button open-type="share"  class="btn shareBtn"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe607;</i></button></div>
+        <div><button @click ='saveImg'  class="btn downImg"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe679;</i></button></div>
       </div>
     </div>
     <div class="shareImg">
-      <canvas canvas-id="shareCanvas" style="width:375px;height:736px"></canvas>
+      <canvas canvas-id="shareCanvas" style="width:900px;height:1766px"></canvas>
     </div>
   </div>
 </template>
@@ -53,6 +53,9 @@
     computed: {
       university () {
         return globalStore.state.university
+      },
+      nickName () {
+        return globalStore.state.nickName
       }
     },
     components: {
@@ -68,8 +71,7 @@
         topName: [],
         topVal: [],
         locationCount: '',
-        userCount: '',
-        nickName: wx.getStorageSync('nickName')
+        userCount: ''
       }
     },
     onReady () {
@@ -107,8 +109,8 @@
             containLabel: true
           },
           xAxis: {
-            type: 'category',
-            data: this.topName,
+            splitLine: false,
+            type: 'value',
             axisLine: {
               lineStyle: {
                 color: '#ffffff',
@@ -117,7 +119,8 @@
             }
           },
           yAxis: {
-            type: 'value',
+            type: 'category',
+            data: this.topName,
             boundaryGap: [0, 0.01],
             splitLine: false,
             nameTextStyle: {
@@ -142,8 +145,8 @@
                   color: new echarts.graphic.LinearGradient(
                     0, 0, 0, 1,
                     [
-                      {offset: 0, color: '#89f7fe'},
-                      {offset: 1, color: '#66a6ff'}
+                      {offset: 0, color: '#49EAE5'},
+                      {offset: 1, color: '#49EAE5'}
                     ]
                   )
                 }
@@ -182,23 +185,33 @@
         var _this = this
         var mapName = 'china'
         option = {
-          visualMap: {
+          dataRange: {
             show: false,
             min: 0,
-            max: 300,
-            left: 'left',
-            top: 'bottom',
+            max: 100,
+            x: 'left',
+            y: 'bottom',
             text: ['高', '低'],
             calculable: true,
-            seriesIndex: [1],
-            textStyle: {
-              color: '#ffffff'
-            },
-            inRange: {
-              // color: ['#89f7fe', '#66a6ff']
-              color: ['#fac829', '#fac829']
-            }
+            color: ['#246E88', '#4EFFF1']
           },
+          // visualMap: {
+          //   show: false,
+          //   min: 0,
+          //   max: 300,
+          //   left: 'left',
+          //   top: 'bottom',
+          //   text: ['高', '低'],
+          //   calculable: true,
+          //   seriesIndex: [1],
+          //   textStyle: {
+          //     color: '#ffffff'
+          //   },
+          //   inRange: {
+          //     // color: ['#89f7fe', '#66a6ff']
+          //     color: ['#4EFFF1', '#246E88']
+          //   }
+          // },
           geo: {
             show: true,
             map: mapName,
@@ -213,7 +226,7 @@
             roam: true,
             itemStyle: {
               normal: {
-                areaColor: '#BFBFBF',
+                areaColor: '#09283c',
                 borderColor: '#FFFFFF'
               },
               emphasis: {
@@ -222,63 +235,47 @@
             }
           },
           series: [{
-            name: '散点',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            data: this.convertData(this.map),
-            symbolSize: function (val) {
-              return val[2] / 10
-            },
-            label: {
-              normal: {
-                formatter: '{b}',
-                position: 'right',
-                show: true,
-                color: '#ffffff',
-                fontSize: 8
-              },
-              emphasis: {
-                show: true
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: '#89f7fe'
-              }
-            }
-          },
-          {
             type: 'map',
             map: mapName,
             geoIndex: 0,
-            aspectScale: 0.75,
+            aspectScale: 0.95,
             showLegendSymbol: false,
-            label: {
-              normal: {
-                show: true
-              },
-              emphasis: {
-                show: false,
-                textStyle: {
-                  color: '#fff'
-                }
-              }
-            },
-            roam: true,
+            roam: false,
             itemStyle: {
               normal: {
                 areaColor: '#031525',
                 borderColor: '#3B5077'
-              },
-              emphasis: {
-                areaColor: '#2B91B7'
               }
             },
             animation: false,
             data: this.map
-          }
-          ]
+          }]
         }
+        // option = {
+        //   dataRange: {
+        //     show: false,
+        //     min: 0,
+        //     max: 100,
+        //     x: 'left',
+        //     y: 'bottom',
+        //     text: ['高', '低'],
+        //     calculable: true,
+        //     color: ['#4EFFF1', '#246E88']
+        //   },
+        //   series: [
+        //     {
+        //       name: 'iphone',
+        //       type: 'map',
+        //       mapType: 'china',
+        //       itemStyle: {
+        //         normal: {label: {
+        //           show: false
+        //         }}
+        //       },
+        //       data: _this.map
+        //     }
+        //   ]
+        // }
         _this.$refs.echarts.init()
       },
       getUniversityMap () {
@@ -366,48 +363,59 @@
       drawPath (path) {
         var _this = this
         wx.getImageInfo({
-          src: 'https://alumni.xkboke.com/static/img/wechat.jpg',
+          src: 'https://alumni.xkboke.com/static/img/keji.jpg',
           success: function (res) {
+            const random = (parseInt(9 * Math.random() + 90))
             const ctx = wx.createCanvasContext('shareCanvas')
             console.log(res)
             // 绘制背景
-            ctx.drawImage(res.path, 0, 0, 375, 736)
+            ctx.drawImage(res.path, 0, 0, 900, 1766)
             // 绘制昵称
             ctx.setTextAlign('center')
-            ctx.setFillStyle('#fac829')
-            ctx.setFontSize(18)
-            ctx.fillText(_this.nickName, 375 / 2, 82, 120)
+            ctx.setFillStyle('#49EAE5')
+            ctx.setFontSize(50)
+            console.log('name', _this.nickName)
+            ctx.fillText(_this.nickName, 900 / 2, 198, 500)
             // 绘制详细信息
-            ctx.setTextAlign('center')
+            ctx.setTextAlign('left')
             ctx.setFillStyle('#FFFFFF')
-            ctx.setFontSize(16)
-            const str = '您的校友遍布全国' + _this.pCount + '个省区，' + _this.locationCount + '个城市！'
-            ctx.fillText(str, 375 / 2, 122, 320)
+            ctx.setFontSize(40)
+            ctx.fillText('您的校友遍布全国', 118, 300)
+
+            ctx.setFillStyle('#49EAE5')
+            ctx.setFontSize(40)
+            ctx.fillText(_this.pCount, 450, 300)
+
+            ctx.setFillStyle('#FFFFFF')
+            ctx.setFontSize(40)
+            ctx.fillText('个省区，', 490, 300)
+
+            ctx.setFillStyle('#49EAE5')
+            ctx.setFontSize(40)
+            ctx.fillText(_this.locationCount, 630, 300)
+
+            ctx.setFillStyle('#FFFFFF')
+            ctx.setFontSize(40)
+            ctx.fillText('个城市！', 680, 300)
             // 绘制超过多少比例
             ctx.setTextAlign('center')
             ctx.setFillStyle('#FFFFFF')
-            ctx.setFontSize(16)
-            const str1 = '您的校友足迹超过 80% 的学校'
-            ctx.fillText(str1, 375 / 2, 159, 250)
+            ctx.setFontSize(40)
+            const str1 = '校友足迹超过' + random + '%的学校'
+            ctx.fillText(str1, 900 / 2, 410)
             // 绘制谚语
             ctx.setTextAlign('center')
-            ctx.setFillStyle('#fac829')
-            ctx.setFontSize(16)
-            ctx.fillText('“四海八荒”', 375 / 2, 209, 100)
+            ctx.setFillStyle('#49EAE5')
+            ctx.setFontSize(40)
+            ctx.fillText('“四海八荒”', 900 / 2, 520)
 
-            const mapWidth = 375
-            const mapHeight = 240
-            ctx.drawImage(path, 0, 236, mapWidth, mapHeight)
+            const mapWidth = 1100
+            const mapHeight = 776
+            ctx.drawImage(path, -100, 565, mapWidth, mapHeight)
             ctx.draw()
             setTimeout(function () {
               wx.canvasToTempFilePath({
                 canvasId: 'shareCanvas',
-                x: 0,
-                y: 0,
-                width: 375,
-                height: 736,
-                destWidth: 375,
-                destHeight: 736,
                 success: function (res) {
                   let tempFilePath = res.tempFilePath
                   wx.saveImageToPhotosAlbum({
@@ -418,7 +426,7 @@
                   console.log('生成错误', res)
                 }
               })
-            }, 2000)
+            }, 500)
           }
         })
       }
@@ -428,10 +436,12 @@
 
 <style scoped>
   .school-name{
-    color: #ffffff;
+    color: #49EAE5;
+    font-weight: bold;
+    margin-bottom: 20rpx;
   }
   .city-count{
-    color: #5687e7;
+    color: #49EAE5;
   }
   .chartMain{
     display: flex;
@@ -442,7 +452,8 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-image: linear-gradient( #041533 0%, #09275b 100%);
+    background-image: url("https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg10.jpg");
+    background-repeat: no-repeat;
     background-size: 100%;
   }
   .echarts-wrap {
@@ -462,27 +473,34 @@
   }
   .detail{
     text-align: center;
-    font-size: 20rpx;
+    font-size: 28rpx;
     color: #ffffff;
   }
   .floatBtn{
-    position: fixed;
-    bottom: 45%;
-    right: 8%;
-    border-radius: 80rpx;
+    position: absolute;
+    bottom: 35%;
+    right: 5%;
+  }
+  .btn{
+    padding: 5rpx 5rpx;
+    width: 80rpx;
+    height: 80rpx;
+    display: block;
+    border-color: #ffffff;
+    float: left;
+    color: #ffffff;
+    border-radius:80rpx;
+    background-color: #2B91B7;
+    margin-bottom: 20rpx;
   }
   .shareBtn{
-    color: #ffffff;
-    font-size:18rpx;
-    height:80rpx ;
-    width: 80rpx;
-    background-color: #5687e7;
-    border-radius: 80rpx;
-    box-shadow: 0 0 22rpx #2F330A;
-    opacity: 0.7;
+
+  }
+  .downImg{
+
   }
   .shareImg{
     position: absolute;
-    left: -100%;
+    left: -500%;
   }
 </style>
