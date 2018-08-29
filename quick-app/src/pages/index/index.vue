@@ -13,8 +13,8 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button v-show="university!=='请选择'" class="finish" open-type="getUserInfo" v-bind:style="{ backgroundColor:tap ? '#49EAE5': '#5f95ff'}" @touchstart="tapStart" @touchend="tapEnd" @click="saveUniversity" @getuserinfo="bindGetUserInfo">出&nbsp;&nbsp;发</button>
-          <button v-show="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
+          <button hover-class="hover" v-show="university!=='请选择'" class="finish" open-type="getUserInfo"   @click="saveUniversity" @getuserinfo="bindGetUserInfo">出&nbsp;&nbsp;发</button>
+          <button hover-class="hover" v-show="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
         </div>
       </div>
     </div>
@@ -34,7 +34,6 @@
     },
     data () {
       return {
-        tap: false,
         userInfo: {},
         city: '',
         location: ''
@@ -49,7 +48,6 @@
             _this.hasAuth = true
             wx.getUserInfo({
               success: (res) => {
-                console.log('userInfo', res)
                 _this.userInfo = res.userInfo
                 globalStore.commit('updateNickName', _this.userInfo.nickName)
                 wx.setStorageSync('nickName', _this.userInfo.nickName)
@@ -128,7 +126,6 @@
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            console.log(res)
             _this.city = res.city
           }
         })
@@ -142,7 +139,6 @@
           _this.updateUserBaseInfo(_this.userInfo)
           const url = '../charts/main'
           wx.navigateTo({ url })
-          console.log('允许')
         } else {
           wx.showModal({
             title: '温馨提示',
@@ -201,12 +197,6 @@
             console.log('保存成功')
           }
         })
-      },
-      tapStart () {
-        this.tap = true
-      },
-      tapEnd () {
-        this.tap = false
       },
       toSearch: function () {
         wx.navigateTo({
@@ -305,5 +295,8 @@
     padding: 8rpx 20rpx;
     border-radius: 10rpx;
     color: #aaa;
+  }
+  .hover{
+    background-color: #6DA9E7;
   }
 </style>

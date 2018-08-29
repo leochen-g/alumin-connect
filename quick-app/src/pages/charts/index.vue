@@ -2,7 +2,7 @@
   <div class="container">
     <div class="chartMain">
       <div class="title">
-        <p class="school-name">{{university}}</p>
+        <p class="school-name" :animation="animationData">{{university}}</p>
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="echarts-wrap">
@@ -12,9 +12,13 @@
         <mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />
       </div>
       <div class="floatBtn">
-        <div><button open-type="share"  class="btn shareBtn"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe607;</i></button></div>
-        <div><button @click ='saveImg'  class="btn downImg"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe679;</i></button></div>
+        <div><button hover-class="hover" open-type="share"  class="btn shareBtn"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe607;</i></button></div>
+        <div><button hover-class="hover" @click ='saveImg'  class="btn downImg"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe679;</i></button></div>
+        <div><button hover-class="hover" open-type="feedback" class="btn downImg"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe631;</i></button></div>
       </div>
+    </div>
+    <div class="echarts-hide">
+      <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initHide" disableTouch=true ref="echartsHide" canvasId="hide-canvas" />
     </div>
     <div class="shareImg">
       <canvas canvas-id="shareCanvas" style="width:900px;height:1766px"></canvas>
@@ -29,8 +33,10 @@
   require('echarts/map/js/china')
   let chart = null
   let chartBar = null
+  let chartHide = null
   let option = null
   let optionBar = null
+  let optionHide = null
   function handleInitChart (canvas, width, height) {
     chart = echarts.init(canvas, null, {
       width: width,
@@ -49,6 +55,15 @@
     chartBar.setOption(optionBar)
     return chartBar // 返回 chart 后可以自动绑定触摸操作
   }
+  function handleInitHideChart (canvas, width, height) {
+    chartHide = echarts.init(canvas, null, {
+      width: 1100,
+      height: 776
+    })
+    canvas.setChart(chartHide)
+    chartHide.setOption(optionHide)
+    return chartHide // 返回 chart 后可以自动绑定触摸操作
+  }
   export default {
     computed: {
       university () {
@@ -66,6 +81,7 @@
         echarts,
         initMap: handleInitChart,
         initBar: handleInitBarChart,
+        initHide: handleInitHideChart,
         map: [],
         pCount: 0,
         topName: [],
@@ -74,11 +90,7 @@
         userCount: ''
       }
     },
-    onReady () {
-      console.log('准备完成')
-    },
     onShareAppMessage (options) {
-      console.log(options)
       return {
         title: '快来看看你的校友在哪里？',
         path: '/pages/index/main',
@@ -278,6 +290,61 @@
         // }
         _this.$refs.echarts.init()
       },
+      initHideChart () {
+        var _this = this
+        var mapName = 'china'
+        optionHide = {
+          dataRange: {
+            show: false,
+            min: 0,
+            max: 100,
+            x: 'left',
+            y: 'bottom',
+            text: ['高', '低'],
+            calculable: true,
+            color: ['#246E88', '#4EFFF1']
+          },
+          geo: {
+            show: true,
+            map: mapName,
+            label: {
+              normal: {
+                show: false
+              },
+              emphasis: {
+                show: false
+              }
+            },
+            roam: true,
+            itemStyle: {
+              normal: {
+                areaColor: '#09283c',
+                borderColor: '#FFFFFF'
+              },
+              emphasis: {
+                areaColor: '#2B91B7'
+              }
+            }
+          },
+          series: [{
+            type: 'map',
+            map: mapName,
+            geoIndex: 0,
+            aspectScale: 0.95,
+            showLegendSymbol: false,
+            roam: false,
+            itemStyle: {
+              normal: {
+                areaColor: '#031525',
+                borderColor: '#3B5077'
+              }
+            },
+            animation: false,
+            data: this.map
+          }]
+        }
+        _this.$refs.echartsHide.init()
+      },
       getUniversityMap () {
         var _this = this
         var val = _this.university
@@ -293,7 +360,6 @@
             'content-type': 'application/json'
           },
           success: function (res) {
-            console.log(res)
             _this.map = res.data.data.list
             _this.pCount = res.data.data.list.length
             if (_this.pCount >= 5) {
@@ -309,6 +375,7 @@
             }
             _this.initChart()
             _this.initChartBar()
+            _this.initHideChart()
             // _this.locationCity = res.data.data[1]
           }
         })
@@ -337,22 +404,21 @@
         wx.canvasToTempFilePath({
           x: 0,
           y: 0,
-          width: 375,
-          height: 240,
-          destWidth: 375,
-          destHeight: 240,
-          canvasId: 'demo-canvas',
+          width: 1100,
+          height: 776,
+          destWidth: 1100,
+          destHeight: 776,
+          canvasId: 'hide-canvas',
           success: function (res) {
-            console.log(res)
             _this.drawImg(res.tempFilePath)
-            // wx.saveImageToPhotosAlbum({
-            //   filePath: res.tempFilePath
-            // })
           }
         })
       },
       drawImg (url) {
         var _this = this
+        wx.showLoading({
+          title: '图片生成中'
+        })
         wx.getImageInfo({
           src: url,
           success: function (res) {
@@ -363,18 +429,16 @@
       drawPath (path) {
         var _this = this
         wx.getImageInfo({
-          src: 'https://alumni.xkboke.com/static/img/keji.jpg',
+          src: 'https://alumni.xkboke.com/static/img/wechat_bg.jpg',
           success: function (res) {
             const random = (parseInt(9 * Math.random() + 90))
             const ctx = wx.createCanvasContext('shareCanvas')
-            console.log(res)
             // 绘制背景
             ctx.drawImage(res.path, 0, 0, 900, 1766)
             // 绘制昵称
             ctx.setTextAlign('center')
             ctx.setFillStyle('#49EAE5')
             ctx.setFontSize(50)
-            console.log('name', _this.nickName)
             ctx.fillText(_this.nickName, 900 / 2, 198, 500)
             // 绘制详细信息
             ctx.setTextAlign('left')
@@ -396,7 +460,7 @@
 
             ctx.setFillStyle('#FFFFFF')
             ctx.setFontSize(40)
-            ctx.fillText('个城市！', 680, 300)
+            ctx.fillText('个城市！', 670, 300)
             // 绘制超过多少比例
             ctx.setTextAlign('center')
             ctx.setFillStyle('#FFFFFF')
@@ -406,17 +470,37 @@
             // 绘制谚语
             ctx.setTextAlign('center')
             ctx.setFillStyle('#49EAE5')
-            ctx.setFontSize(40)
-            ctx.fillText('“四海八荒”', 900 / 2, 520)
-
+            ctx.setFontSize(60)
+            let proverb = ''
+            if (_this.locationCount < 2) {
+              proverb = '寥若晨星'
+            } else if (_this.locationCount < 10) {
+              proverb = '寥寥可数'
+            } else if (_this.locationCount < 20) {
+              proverb = '风流云散'
+            } else if (_this.locationCount < 30) {
+              proverb = '百川归海'
+            } else if (_this.locationCount < 50) {
+              proverb = '星罗棋布'
+            } else if (_this.locationCount < 90) {
+              proverb = '浩如烟海'
+            } else if (_this.locationCount < 150) {
+              proverb = '不计其数'
+            } else if (_this.locationCount < 250) {
+              proverb = '人才辈出'
+            } else if (_this.locationCount < 400) {
+              proverb = '四海八荒'
+            }
+            ctx.fillText('“' + proverb + '”', 900 / 2, 520)
             const mapWidth = 1100
             const mapHeight = 776
-            ctx.drawImage(path, -100, 565, mapWidth, mapHeight)
+            ctx.drawImage(path, -100, 545, mapWidth, mapHeight)
             ctx.draw()
             setTimeout(function () {
               wx.canvasToTempFilePath({
                 canvasId: 'shareCanvas',
                 success: function (res) {
+                  wx.hideLoading()
                   let tempFilePath = res.tempFilePath
                   wx.saveImageToPhotosAlbum({
                     filePath: tempFilePath
@@ -428,6 +512,11 @@
               })
             }, 500)
           }
+        })
+      },
+      feedBack () {
+        wx.navigateTo({
+          url: '../feedback/main'
         })
       }
     }
@@ -490,7 +579,7 @@
     float: left;
     color: #ffffff;
     border-radius:80rpx;
-    background-color: #2B91B7;
+    background-color: #49EAE5;
     margin-bottom: 20rpx;
   }
   .shareBtn{
@@ -500,7 +589,18 @@
 
   }
   .shareImg{
-    position: absolute;
+    width: 900px;
+    height: 1766px;
+    position: fixed;
     left: -500%;
+  }
+  .echarts-hide{
+    width: 1100px;
+    height: 776px;
+    position: fixed;
+    right: -300%;
+  }
+  .hover{
+    background-color: #8EEAE7;
   }
 </style>
