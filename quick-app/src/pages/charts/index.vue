@@ -6,15 +6,16 @@
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="echarts-wrap">
-        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initMap" disableTouch=true ref="echarts" canvasId="demo-canvas" />
+        <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initMap" disableTouch=true ref="echarts" canvasId="demo-canvas" >
+        </mpvue-echarts>
       </div>
       <div class="echarts-bar">
         <mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />
       </div>
-      <div class="floatBtn">
-        <div><button hover-class="hover" open-type="share"  class="btn shareBtn"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe607;</i></button></div>
-        <div><button hover-class="hover" @click ='saveImg'  class="btn downImg"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe679;</i></button></div>
-        <div><button hover-class="hover" open-type="feedback" class="btn downImg"><i class="iconfont shareIcon" style="font-size: 28rpx">&#xe631;</i></button></div>
+      <div class="floatCover">
+        <button hover-class="hover" open-type="share"  class="btn shareBtn "><i class="iconfont">&#xe607;</i></button>
+        <button hover-class="hover" @click ='saveImg'  class="btn downImg "><i class="iconfont">&#xe679;</i></button>
+        <button hover-class="hover" open-type="feedback" class="btn feedback"><i class="iconfont">&#xe631;</i></button>
       </div>
     </div>
     <div class="echarts-hide">
@@ -541,7 +542,7 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-image: url("https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg10.jpg");
+    background-image: url("https://alumni.xkboke.com/static/img/chart-bg.jpg");
     background-repeat: no-repeat;
     background-size: 100%;
   }
@@ -565,28 +566,36 @@
     font-size: 28rpx;
     color: #ffffff;
   }
-  .floatBtn{
-    position: absolute;
+  .floatCover{
+    position: fixed;
     bottom: 35%;
     right: 5%;
+    z-index: 99999;
+  }
+  .share-cover{
+    height: 90rpx;
+    margin-bottom: 20rpx;
+  }
+  .down-cover{
+    height: 90rpx;
+    margin-bottom: 20rpx;
+  }
+  .feed-cover{
+    height: 90rpx;
   }
   .btn{
-    padding: 5rpx 5rpx;
     width: 80rpx;
     height: 80rpx;
     display: block;
     border-color: #ffffff;
-    float: left;
     color: #ffffff;
     border-radius:80rpx;
     background-color: #49EAE5;
+    position: relative;
+    line-height: 80rpx;
     margin-bottom: 20rpx;
-  }
-  .shareBtn{
-
-  }
-  .downImg{
-
+    text-align: center;
+    padding: 5rpx 5rpx;
   }
   .shareImg{
     width: 900px;
