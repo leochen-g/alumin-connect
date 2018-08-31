@@ -5,6 +5,9 @@
         <p class="school-name" :animation="animationData">{{university}}</p>
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
+      <div class="proverb">
+
+      </div>
       <div class="echarts-wrap">
         <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initMap" disableTouch=true ref="echarts" canvasId="demo-canvas" >
         </mpvue-echarts>
@@ -12,11 +15,11 @@
       <div class="echarts-bar">
         <mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />
       </div>
-      <div class="floatCover">
-        <button hover-class="hover" open-type="share"  class="btn shareBtn "><i class="iconfont">&#xe607;</i></button>
-        <button hover-class="hover" @click ='saveImg'  class="btn downImg "><i class="iconfont">&#xe679;</i></button>
-        <button hover-class="hover" open-type="feedback" class="btn feedback"><i class="iconfont">&#xe631;</i></button>
-      </div>
+      <cover-view class="floatCover">
+        <button hover-class="hover" open-type="share"  class="btn shareBtn ">分享</button>
+        <button hover-class="hover" @click ='saveImg'  class="btn downImg ">下载</button>
+        <button hover-class="hover" open-type="feedback" class="btn feedback">反馈</button>
+      </cover-view>
     </div>
     <div class="echarts-hide">
       <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initHide" disableTouch=true ref="echartsHide" canvasId="hide-canvas" />
@@ -569,8 +572,8 @@
   .floatCover{
     position: fixed;
     bottom: 35%;
+    width: 90rpx;
     right: 5%;
-    z-index: 99999;
   }
   .share-cover{
     height: 90rpx;
@@ -584,18 +587,20 @@
     height: 90rpx;
   }
   .btn{
-    width: 80rpx;
-    height: 80rpx;
+    width: 70rpx;
+    height: 70rpx;
     display: block;
     border-color: #ffffff;
     color: #ffffff;
-    border-radius:80rpx;
+    border-radius:70rpx;
     background-color: #49EAE5;
     position: relative;
-    line-height: 80rpx;
+    line-height: 3.5;
     margin-bottom: 20rpx;
     text-align: center;
-    padding: 5rpx 5rpx;
+    padding: 0;
+    font-size: 20rpx;
+    box-sizing: initial;
   }
   .shareImg{
     width: 900px;

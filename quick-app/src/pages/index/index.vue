@@ -198,6 +198,28 @@
           }
         })
       },
+      // 更新用户设备信息
+      updateUserDeviceInfo: function (obj) {
+        var _this = this
+        var oid = wx.getStorageSync('openId')
+        wx.request({
+          url: _this.GLOBAL.serverPath + '/api/user/updateUserDevice',
+          method: 'POST',
+          data: {
+            brand: obj.brand,
+            model: obj.model,
+            system: obj.system,
+            platform: obj.platform,
+            openid: oid
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded '
+          },
+          success: function (res) {
+            console.log('保存成功')
+          }
+        })
+      },
       toSearch: function () {
         wx.navigateTo({
           url: '../search/main'
@@ -226,6 +248,8 @@
     },
     created () {
       this.getUserInfo()
+      let device = wx.getSystemInfoSync()
+      this.updateUserDeviceInfo(device)
     }
   }
 </script>

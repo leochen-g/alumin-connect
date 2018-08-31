@@ -107,6 +107,21 @@ module.exports = {
 	  })
 	}
   },
+  updateUserDeviceInfo: function (req, res, next) {
+	var param = req.body
+	if (!param.openid) {
+	  res.json({head: {code: 10000, msg: '数据不存在'}, data: {}})
+	} else {
+	  var arr = [param.brand, param.model, param.system, param.platform, param.openid]
+	  sqlControl.updateUserDevice(arr, function (results, fields) {
+		if (results.affectedRows) {
+		  res.json({head: {code: 0, msg: 'ok'}, data: {}})
+		} else {
+		  res.json({head: {code: 0, msg: '更新失败'}, data: {}})
+		}
+	  })
+	}
+  },
 //  获取用户基础信息
   getUserBaseInfo: function (req, res, next) {
 

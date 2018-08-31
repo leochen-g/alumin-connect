@@ -11,6 +11,10 @@ module.exports = {
   	updateUserBase:function (req,res,next) {
 	  db.query(sqlMap.user.updateBase, req, res)
 	},
+//  更新用户设备信息
+	updateUserDevice:function (req,res,next) {
+	  db.query(sqlMap.user.updateDevice, req, res)
+	},
 //  保存用户位置
   	saveUserLocation:function (req,res,next) {
 	  db.query(sqlMap.user.saveUsrLocation, req, res)

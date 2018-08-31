@@ -14,6 +14,7 @@ var sqlMap = {
 	},
   	user:{
 	  	updateBase:'update user set nickName = ?,avataUrl = ?, country = ?, gender = ?  where openid = ?;',
+	  	updateDevice:'update user set brand = ?,model = ?, system = ?, platform = ?  where openid = ?;',
 	  	insert:"insert ignore into user(openid,nickName,avataUrl,country,gender) values (?,?,?,?,?); ",
 	  	select:"select * from user where openid in (?)",
 	  	updateUniversity:"update user set university =? where openid=?;",

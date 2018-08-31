@@ -14,6 +14,10 @@ router.post('/user/getLocation',function (req,res,next) {
 router.post('/user/updateUserBase',function (req, res, next) {
   control.updateUserBaseInfo(req,res,next)
 })
+//更新用户设备信息
+router.post('/user/updateUserDevice',function (req,res,next) {
+  control.updateUserDeviceInfo(req,res,next)
+})
 //更新用户学校
 router.post('/user/updateUniversity',function (req, res, next) {
     control.updateUserUniversity(req,res,next)
