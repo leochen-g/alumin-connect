@@ -6,7 +6,7 @@
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="proverb">
-
+        "{{proverb}}"
       </div>
       <div class="echarts-wrap">
         <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initMap" disableTouch=true ref="echarts" canvasId="demo-canvas" >
@@ -91,7 +91,8 @@
         topName: [],
         topVal: [],
         locationCount: '',
-        userCount: ''
+        userCount: '',
+        proverb: ''
       }
     },
     onShareAppMessage (options) {
@@ -400,6 +401,25 @@
             console.log(res)
             _this.userCount = res.data.data.userCount
             _this.locationCount = res.data.data.locationCount
+            if (_this.locationCount < 2) {
+              _this.proverb = '寥若晨星'
+            } else if (_this.locationCount < 10) {
+              _this.proverb = '寥寥可数'
+            } else if (_this.locationCount < 20) {
+              _this.proverb = '风流云散'
+            } else if (_this.locationCount < 30) {
+              _this.proverb = '百川归海'
+            } else if (_this.locationCount < 50) {
+              _this.proverb = '星罗棋布'
+            } else if (_this.locationCount < 90) {
+              _this.proverb = '浩如烟海'
+            } else if (_this.locationCount < 150) {
+              _this.proverb = '不计其数'
+            } else if (_this.locationCount < 250) {
+              _this.proverb = '人才辈出'
+            } else if (_this.locationCount < 500) {
+              _this.proverb = '四海八荒'
+            }
           }
         })
       },
@@ -475,27 +495,7 @@
             ctx.setTextAlign('center')
             ctx.setFillStyle('#49EAE5')
             ctx.setFontSize(60)
-            let proverb = ''
-            if (_this.locationCount < 2) {
-              proverb = '寥若晨星'
-            } else if (_this.locationCount < 10) {
-              proverb = '寥寥可数'
-            } else if (_this.locationCount < 20) {
-              proverb = '风流云散'
-            } else if (_this.locationCount < 30) {
-              proverb = '百川归海'
-            } else if (_this.locationCount < 50) {
-              proverb = '星罗棋布'
-            } else if (_this.locationCount < 90) {
-              proverb = '浩如烟海'
-            } else if (_this.locationCount < 150) {
-              proverb = '不计其数'
-            } else if (_this.locationCount < 250) {
-              proverb = '人才辈出'
-            } else if (_this.locationCount < 400) {
-              proverb = '四海八荒'
-            }
-            ctx.fillText('“' + proverb + '”', 900 / 2, 520)
+            ctx.fillText('“' + _this.proverb + '”', 900 / 2, 520)
             const mapWidth = 1100
             const mapHeight = 776
             ctx.drawImage(path, -100, 545, mapWidth, mapHeight)
@@ -532,6 +532,10 @@
     color: #49EAE5;
     font-weight: bold;
     margin-bottom: 20rpx;
+  }
+  .proverb{
+    color: #49EAE5;
+    font-size: 40rpx;
   }
   .city-count{
     color: #49EAE5;
@@ -587,20 +591,21 @@
     height: 90rpx;
   }
   .btn{
-    width: 70rpx;
-    height: 70rpx;
+    width: 80rpx;
+    height: 80rpx;
     display: block;
     border-color: #ffffff;
     color: #ffffff;
-    border-radius:70rpx;
+    border-radius:80rpx;
     background-color: #49EAE5;
     position: relative;
-    line-height: 3.5;
+    line-height: 4;
     margin-bottom: 20rpx;
     text-align: center;
     padding: 0;
     font-size: 20rpx;
     box-sizing: initial;
+    box-shadow: 0 0 10rpx #333333;
   }
   .shareImg{
     width: 900px;
