@@ -1,7 +1,5 @@
 <script>
-  // const serverPath = 'http://127.0.0.1:4000'
-  const serverPath = 'https://alumni.xkboke.com'
-  // const serverPath = 'https://wechat.xkboke.com'
+  const serverPath = 'http://127.0.0.1:4000'
   var provinceMap = {
     '北京市': 1,
     '天津市': 2,
