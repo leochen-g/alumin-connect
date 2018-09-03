@@ -39,6 +39,15 @@
         location: ''
       }
     },
+    onReady: function () {
+      var _this = this
+      wx.getSystemInfo({
+        success (res) {
+          console.log(res)
+          _this.updateUserDeviceInfo(res)
+        }
+      })
+    },
     onLoad: function (options) {
       var _this = this
       wx.getSetting({
@@ -248,8 +257,6 @@
     },
     created () {
       this.getUserInfo()
-      let device = wx.getSystemInfoSync()
-      this.updateUserDeviceInfo(device)
     }
   }
 </script>
