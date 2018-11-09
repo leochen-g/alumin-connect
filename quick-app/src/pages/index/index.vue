@@ -149,26 +149,28 @@
           const url = '../charts/main'
           wx.navigateTo({ url })
         } else {
-          wx.showModal({
-            title: '温馨提示',
-            showCancel: true,
-            content: '为了您更好的体验,请先同意授权',
-            success: function (res) {
-              if (res.confirm) {
-                wx.openSetting({
-                  success: function (res) {
-                    if (res.authSetting['scope.userInfo']) {
-                      console.log('谢谢授权')
-                    } else {
-                      console.log('还是没有授权')
-                    }
-                  }
-                })
-              } else if (res.cancel) {
-                console.log('用户点击取消')
-              }
-            }
-          })
+          const url = '../charts/main'
+          wx.navigateTo({ url })
+          // wx.showModal({
+          //   title: '温馨提示',
+          //   showCancel: true,
+          //   content: '为了您更好的体验,请先同意授权',
+          //   success: function (res) {
+          //     if (res.confirm) {
+          //       wx.openSetting({
+          //         success: function (res) {
+          //           if (res.authSetting['scope.userInfo']) {
+          //             console.log('谢谢授权')
+          //           } else {
+          //             console.log('还是没有授权')
+          //           }
+          //         }
+          //       })
+          //     } else if (res.cancel) {
+          //       console.log('用户点击取消')
+          //     }
+          //   }
+          // })
         }
       },
       saveTips () {
