@@ -1,8 +1,8 @@
 var express = require('express')
 var cookieParser = require('cookie-parser')
 var index = require('./routes/index')
+var group = require('./routes/group')
 var path = require('path')
-var fs = require('fs')
 var http = require('http')
 var bodyParser = require('body-parser')
 require('env2')('./.env');
@@ -25,14 +25,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//引用路由
+//分发路由到校友足迹
 app.use('/api', index)
+//分发路由到校友圈
+app.use('/api', group)
 //静态文件处理
 app.use('/static', express.static('static'));
 
 // catch 404 and forward to error handler 处理404错误 并向下传递错误
 app.use(function(req, res, next) {
-  console.log('错误',req);
   var err = new Error('一个不存在的页面');
   err.status = 404;
   next(err);
