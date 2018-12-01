@@ -26,10 +26,6 @@ router.post('/group/addTopic',function (req,res,next) {
 router.post('/group/deleteTopic',function (req,res,next) {
   filter(req,res,control.deleteTopic(req,res,next))
 })
-//更新校友圈话题
-router.post('/group/updateTopic',function (req,res,next) {
-  filter(req,res,control.updateTopic(req,res,next))
-})
 //获取校友圈话题列表
 router.post('/group/getTopicList',function (req,res,next) {
   filter(req,res,control.getTopicList(req,res,next))
@@ -52,10 +48,6 @@ router.post('/group/addComment',function (req,res,next) {
 router.post('/group/deleteComment',function (req,res,next) {
   filter(req,res,control.deleteComment(req,res,next))
 })
-//更新校评论
-router.post('/group/updateComment',function (req,res,next) {
-  filter(req,res,control.updateComment(req,res,next))
-})
 //获取话题评论列表
 router.post('/group/getCommentList',function (req,res,next) {
   filter(req,res,control.getCommentList(req,res,next))
@@ -64,6 +56,24 @@ router.post('/group/getCommentList',function (req,res,next) {
 router.post('/group/getCommentListByUserId',function (req,res,next) {
   filter(req,res,control.getCommentListByUserId(req,res,next))
 })
+
+//添加回复
+router.post('/group/addReply',function (req,res,next) {
+  filter(req,res,control.addReply(req,res,next))
+})
+//删除回复
+router.post('/group/deleteReply',function (req,res,next) {
+  filter(req,res,control.deleteReply(req,res,next))
+})
+//获取评论回复列表
+router.post('/group/getReplyList',function (req,res,next) {
+  filter(req,res,control.getReplyList(req,res,next))
+})
+//获取用户评论回复列表
+router.post('/group/getReplyListByUserId',function (req,res,next) {
+  filter(req,res,control.getReplyListByUserId(req,res,next))
+})
+
 
 //获取用户基本信息
 router.post('/group/user/getUserInfo',function (req,res,next) {

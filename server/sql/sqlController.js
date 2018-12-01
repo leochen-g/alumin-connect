@@ -48,10 +48,6 @@ module.exports = {
 	deleteTopic: function (req, res, next) {
 	  db.query(sqlMap.group.deleteTopic,req,res)
 	},
-	//更新话题
-	updateTopic: function (req, res, next) {
-	  db.query(sqlMap.group.updateTopic,req, res)
-	},
 	//获取话题列表
 	getTopicList: function (req, res, next) {
 	  db.query(sqlMap.group.getTopicList,req,res)
@@ -72,10 +68,6 @@ module.exports = {
 	deleteComment: function (req, res, next) {
 	  db.query(sqlMap.group.deleteComment,req,res)
 	},
-	//更新评论
-	updateComment: function (req, res, next) {
-	  db.query(sqlMap.group.updateComment,req, res)
-	},
 	//获取话题评论列表
 	getCommentList: function (req, res, next) {
 	  db.query(sqlMap.group.getCommentList,req,res)
@@ -87,6 +79,18 @@ module.exports = {
 	//更新评论总数
 	updateCommentCount: function (req,res,next) {
 	  db.query(sqlMap.group.updateCommentCount,req,res)
+	},
+	//添加回复
+	addReply: function (req, res, next) {
+	  db.query(sqlMap.group.addReply,req,res)
+	},
+	//删除回复
+	deleteReply: function (req, res, next) {
+	  db.query(sqlMap.group.deleteReply,req,res)
+	},
+	//获取评论回复列表
+	getReplyList: function (req, res, next) {
+	  db.query(sqlMap.group.getReplyList,req,res)
 	},
 	// 校友圈用户信息
 	user:{

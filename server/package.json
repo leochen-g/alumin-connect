@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "async": "^2.6.1",
     "base64-url": "^2.2.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
@@ -19,6 +20,7 @@
     "mysql2": "^1.6.1",
     "sequelize": "^4.38.0",
     "sequelize-auto": "^0.4.29",
-    "superagent": "^3.8.3"
+    "superagent": "^3.8.3",
+    "uuid": "^3.3.2"
   }
 }

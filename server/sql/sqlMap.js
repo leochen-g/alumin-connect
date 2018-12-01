@@ -21,17 +21,20 @@ var sqlMap = {
 	saveUsrLocation: "update user set pid=?,location=? where openid=?"
   },
   group: {
-    addTopic:'insert into topic(openId, location, university, nickName, content, createdAt) values (?,?,?,?,?,?)',
+    addTopic:'insert into topic(openId, location, university, nickName, content) values (?,?,?,?,?)',
 	deleteTopic:'update topic set flag = 0 where id = ? and openId = ?',
 	updateTopic:'',
 	getTopicListByUserId:'select a.location as userLocation,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join topic b on a.openid=b.openId where b.openId = ? and b.flag=1',
 	getTopicById:'select a.location as userLocation,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join topic b on a.openid=b.openId where b.id = ? and b.flag=1',
 	getTopicList:'select a.location as userLocation,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join topic b on a.openid=b.openId where b.university = ? and b.flag=1 and b.location= ?',
-	addComment:'insert into comment(openId, topicId,content,createdAt) values (?,?,?,?)',
+	addComment:'insert into comment(openId, cid, topicId,content) values (?,?,?,?)',
 	deleteComment:'update comment set flag = 0 where id = ? and openId = ?',
 	updateCommentCount:'update topic set commentCount=commentCount+1 where id = ?',
 	getCommentList:'select a.location,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join comment b on a.openid=b.openId where b.topicId = ? and b.flag=1',
 	getCommentListByUserId:'select a.location,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join comment b on a.openid=b.openId where b.openId = ? and b.flag=1',
+	addReply:'insert into reply(openId,cid,replyId,replyType,content,toUid,topicId) values (?,?,?,?,?,?,?)',
+	deleteReply:'update reply set flag = 0 where rid = ? and openId =?',
+	getReplyList:'select * from reply where cid=? and flag=1',
 	user:{
       getUserInfo:'select openid, nickName, location, university, gender, avataUrl, graduationTime, college, major, phone, company, job from user where openid = ?',
 	  updateUserNickName:'update user set nickName = ? where openid = ?',
