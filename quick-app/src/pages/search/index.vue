@@ -8,7 +8,7 @@
               <input class="search_input" placeholder="搜索" v-model.trim="searchValue"   name="universityName">
             </div>
             <div v-show="searchClearBtn&&searchValue!==''" @click="clearSearch">
-              <i class="iconfont search_voice">&#xe62b;</i>
+              <i class="aliiconfont search_voice">&#xe62b;</i>
             </div>
           </div>
         </div>
@@ -17,7 +17,7 @@
     <div class="panel" v-show="searchClearBtn&&searchValue!==''">
       <div class="panel_bg">
         <div class="universityItem" v-for="(item, index) in universityList" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver" @click="choose(item.name)">
-          <div class="universityItem_icon"><i class="iconfont search_btn">&#xe627;</i></div>
+          <div class="universityItem_icon"><i class="aliiconfont search_btn">&#xe627;</i></div>
           <div class="universityItem_name">{{item.name}}</div>
         </div>
       </div>

@@ -5,7 +5,7 @@
         <div >
           <p class="title">选 择 院 校</p>
         </div>
-        <p class="iconfont universityIcon" >&#xe955;</p>
+        <p class="aliiconfont universityIcon" >&#xe955;</p>
         <div class="userinfo-nickname">
           <p class="university">{{university}}</p>
         </div>

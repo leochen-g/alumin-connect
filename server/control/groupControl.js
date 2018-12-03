@@ -199,7 +199,6 @@ module.exports = {
 				})
 
 			},function (err) {
-			   console.log("内部",);
 			   return callback(null)
 			})
 			com.topComment.push(replyObj)

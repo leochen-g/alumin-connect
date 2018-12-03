@@ -13,15 +13,18 @@ export default {
 
 <style>
   @font-face {
-    font-family: 'iconfont';  /* project id 709721 */
-    src: url('//at.alicdn.com/t/font_709721_xotb8djxfo.eot');
-    src: url('//at.alicdn.com/t/font_709721_xotb8djxfo.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_709721_xotb8djxfo.woff') format('woff'),
-    url('//at.alicdn.com/t/font_709721_xotb8djxfo.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_709721_xotb8djxfo.svg#iconfont') format('svg');
+    font-family: 'aliiconfont';  /* project id 709721 */
+    src: url('//at.alicdn.com/t/font_709721_6c3aorvt6t4.eot');
+    src: url('//at.alicdn.com/t/font_709721_6c3aorvt6t4.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_709721_6c3aorvt6t4.woff') format('woff'),
+    url('//at.alicdn.com/t/font_709721_6c3aorvt6t4.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_709721_6c3aorvt6t4.svg#aliiconfont') format('svg');
   }
-  .iconfont {
-    font-family: "iconfont" !important;
+  html{
+    font-size: 24rpx;
+  }
+  .aliiconfont {
+    font-family: "aliiconfont" !important;
     font-size: 32rpx;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
@@ -42,4 +45,10 @@ export default {
   -webkit-transition: width 2s;
   -o-transition: width 2s;
 }
+  .ellipsis{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
 </style>
