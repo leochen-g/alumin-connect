@@ -37,7 +37,7 @@ module.exports = {
 	sqlControl.group.getTopicList(arr, function (results, fields) {
 	  var list = []
 	  async.eachSeries(results, function (item, callback) {
-		var obj={user:{}};
+		var obj={userInfo:{}};
 		sqlControl.group.user.getUserInfo([item.openId],function (resInfo) {
 		  obj.userInfo=resInfo[0]
 		  callback(null)

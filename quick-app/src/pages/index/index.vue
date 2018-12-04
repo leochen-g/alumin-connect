@@ -135,7 +135,9 @@
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            _this.city = res.city
+            _this.city = res.data.data.city
+            globalStore.commit('updateLocation', _this.city)
+            wx.setStorageSync('location', _this.city)
           }
         })
       },

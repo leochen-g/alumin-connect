@@ -108,6 +108,7 @@
     padding: 0!important;
     background-color: #027fff;
     height: 64rpx;
+    line-height: 64rpx;
     font-size: 30rpx;
     width: 1.44rem;
   }

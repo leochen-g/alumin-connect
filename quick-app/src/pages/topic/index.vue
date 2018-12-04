@@ -1,6 +1,8 @@
 <template>
   <div class="alumni-main">
+    <!--轮播图-->
     <topicSwiper :list="urlList"/>
+    <!--发布话题-->
     <div class="topic-edit">
       <div class="topic-edit-body">
         <div class="topic-edit-content">
@@ -18,6 +20,7 @@
         </div>
       </div>
     </div>
+    <!--话题列表-->
     <topicList/>
   </div>
 </template>
@@ -34,9 +37,10 @@
     data () {
       return {
         urlList: [{'id': '1', 'url': 'http://image.bloggeng.com/shengdan.png'}, {'id': '2', 'url': 'http://image.bloggeng.com/shengdan.png'}],
-        pushContent: '大家好',
+        pushContent: '',
         wordCount: 100,
-        hasInputCount: ''
+        hasInputCount: '',
+        placeholder: '发布话题'
       }
     },
     methods: {
@@ -44,8 +48,6 @@
         console.log('发布话题', this.pushContent)
       },
       inputEvent (e) {
-        // this.hasInputCount = e.mp.detail.cursor
-        // this.value = e.mp.detail.value
         this.hasInputCount = e.mp.detail.cursor
         // this.$emit('input', e.mp.detail.value)
         // this.throttle(this.queryData, null, 400, e.mp.detail)
@@ -119,6 +121,7 @@
     padding: 0!important;
     background-color: #027fff;
     height: 64rpx;
+    line-height: 64rpx;
     font-size: 30rpx;
     width: 1.44rem;
   }
