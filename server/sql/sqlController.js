@@ -68,6 +68,9 @@ module.exports = {
 	deleteComment: function (req, res, next) {
 	  db.query(sqlMap.group.deleteComment,req,res)
 	},
+	getCommentListCount: function (req, res, next) {
+	  db.query(sqlMap.group.getCommentListCount,req,res)
+	},
 	//获取话题评论列表
 	getCommentList: function (req, res, next) {
 	  db.query(sqlMap.group.getCommentList,req,res)
@@ -94,6 +97,10 @@ module.exports = {
 	},
 	// 校友圈用户信息
 	user:{
+	  //获取用户基本信息
+	  getReplyUserInfo:function (req,res,next) {
+		db.query(sqlMap.group.user.getReplyUserInfo,req,res)
+	  },
 	  //获取用户基本信息
 	  getUserInfo:function (req,res,next) {
 		db.query(sqlMap.group.user.getUserInfo,req,res)

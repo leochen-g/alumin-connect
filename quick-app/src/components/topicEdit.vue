@@ -2,7 +2,7 @@
   <div class="topic-edit">
     <div class="topic-edit-body">
       <div class="topic-edit-content">
-        <textarea maxlength="100" :placeholder="placeholder" class="edit-content edit" :value="value" @input="inputEvent" ></textarea>
+        <textarea maxlength="100" :placeholder="placeholder" class="edit-content edit" v-model="topicContent" @input="inputEvent" ></textarea>
         <span class="word-counter">{{wordCount-hasInputCount}}</span>
       </div>
     </div>
@@ -10,8 +10,8 @@
       <div class="edit-toolbar">
         <div class="tool"></div>
         <div class="submit">
-          <button class="submit-button" v-show="!value">发布</button>
-          <button class="submit-button active" v-show="value" @click="$emit('push')">发布</button>
+          <button class="submit-button" v-show="!topicContent">发布</button>
+          <button class="submit-button active" v-show="topicContent" @click="addTopic">发布</button>
         </div>
       </div>
     </div>
@@ -19,29 +19,24 @@
 </template>
 
 <script>
+  import Bus from '../bus'
   export default {
     name: 'topic-edit',
-    props: {
-      placeholder: {
-        default: '发表话题'
-      },
-      value: {
-        default: ''
-      },
-      wordCount: {
-        default: 100
-      },
-      hasInputCount: {
-        default: ''
+    data () {
+      return {
+        topicContent: '',
+        placeholder: '发表话题',
+        wordCount: 100,
+        hasInputCount: '',
+        nickName: wx.getStorageSync('nickName'),
+        openId: wx.getStorageSync('openId'),
+        location: wx.getStorageSync('location'),
+        university: wx.getStorageSync('university')
       }
     },
     methods: {
       inputEvent (e) {
-        // this.hasInputCount = e.mp.detail.cursor
-        // this.value = e.mp.detail.value
         this.hasInputCount = e.mp.detail.cursor
-        this.$emit('input', e.mp.detail.value)
-        // this.throttle(this.queryData, null, 400, e.mp.detail)
       },
       throttle (fn, context, delay, text) {
         clearTimeout(fn.timeoutId)
@@ -53,6 +48,29 @@
         console.log(e)
         this.hasInputCount = e.cursor
         this.$emit('input', e.value)
+      },
+      addTopic () {
+        let _this = this
+        wx.request({
+          url: _this.GLOBAL.serverPath + '/api/group/addTopic',
+          method: 'POST',
+          data: {
+            nickName: _this.nickName,
+            openId: _this.openId,
+            university: _this.university,
+            location: _this.location,
+            content: _this.topicContent
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded '
+          },
+          success: function (res) {
+            if (res.data.head.code === 0) {
+              _this.topicContent = ''
+              Bus.$emit('getTopicList')
+            }
+          }
+        })
       }
     }
   }

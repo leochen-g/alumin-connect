@@ -30,6 +30,7 @@ module.exports = {
 	host     : env.MYSQL_HOST,
 	user     : env.MYSQL_USERNAME,
 	password : env.MYSQL_PASSWORD,
-	database : env.MYSQL_DB_NAME
+	database : env.MYSQL_DB_NAME,
+	multipleStatements: true
   }
 };

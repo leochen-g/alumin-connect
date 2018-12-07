@@ -7,7 +7,6 @@
     <!--话题列表-->
     <topicItem v-for="item in list" :key="item.id" :todo="item" />
   </div>
-
 </template>
 
 <script>
@@ -40,12 +39,7 @@
         hasInputCount: '',
         placeholder: '发布话题',
         list: [],
-        commentList: '',
-        start: 0,
-        limit: 10,
-        currentPage: 1,
-        pageNumber: 1,
-        topicCount: ''
+        commentList: ''
       }
     },
     onReady: function () {
@@ -53,64 +47,29 @@
       _this.getTopicList()
       Bus.$off('getTopicList')
       Bus.$on('getTopicList', function () {
-        _this.start = 0
-        _this.limit = 10
         _this.getTopicList()
       })
     },
-    async onPullDownRefresh () { // 下拉刷新
-      this.initPage()
-      this.getTopicList()
-      wx.showToast({
-        title: '刷新成功',
-        icon: 'none',
-        duration: 1000
-      })
-      wx.stopPullDownRefresh()
-    },
-    onReachBottom () { // 上拉加载
-      this.currentPage = this.currentPage + 1
-      if (this.currentPage > this.pageNumber) {
-        wx.showToast({
-          title: '没有更多动态了',
-          icon: 'none',
-          duration: 1000
-        })
-        return false
-      }
-      this.start = (this.currentPage - 1) * this.limit
-      this.getTopicList('reach')
-    },
     methods: {
-      initPage () {
-        this.start = 0
-        this.limit = 10
-      },
-      getTopicList (type) {
+      getTopicList () {
         let _this = this
         wx.request({
           url: _this.GLOBAL.serverPath + '/api/group/getTopicList',
           method: 'POST',
           data: {
             university: _this.university,
-            location: _this.location,
-            start: _this.start,
-            limit: _this.limit
+            location: _this.location
           },
           header: {
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            _this.topicCount = res.data.data.count
-            _this.pageNumber = Math.ceil(_this.topicCount / _this.limit)
-            if (type) {
-              _this.list = _this.list.concat(res.data.data.list)
-            } else {
-              _this.currentPage = 1
-              _this.list = res.data.data.list
-            }
+            _this.list = res.data.data.list
           }
         })
+      },
+      pushTopic () {
+        console.log('发布话题', this.pushContent)
       },
       inputEvent (e) {
         this.hasInputCount = e.mp.detail.cursor

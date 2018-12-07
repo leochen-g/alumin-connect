@@ -1,6 +1,7 @@
 <template>
 <div class="activity-item shadow">
     <div class="alumni-topic-item">
+      <!--话题详情-->
       <div class="alumni-topic-header-row">
         <div class="account-group">
           <div class="user-popover-box">
@@ -49,8 +50,9 @@
         </div>
       </div>
       <!--评论列表-->
-      <div class="alumni-topic-comment-row" v-show="showCommentBox&&showCommentId==todo.id">
+      <div class="alumni-topic-comment-row" v-if="showCommentBox&&showCommentId==todo.id">
         <div class="comment-list-box">
+          <!--评论框-->
           <div class="comment-form">
             <div class="form-box">
               <div class="input-box">
@@ -58,12 +60,14 @@
               </div>
               <div class="comment-action-box">
                 <div class="comment-submit">
-                  <button class="comment-submit-btn">评论</button>
+                  <button class="comment-submit-btn" v-show="!commentContent">评论</button>
+                  <button class="comment-submit-btn active" v-show="commentContent" @click="addComment(todo.id)">评论</button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="comment-list"  v-show="commentList.targetId==todo.id">
+          <!--评论列表-->
+          <div class="comment-list"  v-if="commentList.targetId==todo.id">
             <div class="comment-item" v-for="(item,index) in commentList.comments" :key="item.id">
               <div class="comment">
                 <div class="user-popover-box">
@@ -79,14 +83,28 @@
                     {{item.content}}
                   </div>
                   <div class="comment-reply">
-                    <div class="comment-reply-action-box">
+                    <div class="comment-reply-action-box" @click="replyCommentClick(item.cid,item.cid,item.userInfo.nickName)">
                       <div class="reply-action-comment">
                         <i class="aliiconfont action-icon">&#xe620;</i>
-                        <span class="action-title" @click="$emit('reply',item.cid,item.cid)">回复</span>
+                        <span class="action-title">回复</span>
                       </div>
                     </div>
                   </div>
-                  <topicReplyForm :replyNickName="item.userInfo.nickName" :replyId="item.cid"/>
+                  <!--回复框-->
+                  <div class="reply-form reply" v-if="replyCommentShow&&replyCommentId==item.cid">
+                    <div class="form-box">
+                      <div class="input-box">
+                        <input v-model="replyContent" :placeholder="placeholder" type="text" maxlength="100" class="reply-input">
+                      </div>
+                      <div class="reply-action-box">
+                        <div class="submit">
+                          <button class="comment-submit-btn" v-if="!replyContent">评论</button>
+                          <button class="comment-submit-btn active" @click="addReply(item.cid, item.cid, 'comment', item.userInfo.openid, item.topicId)" v-if="replyContent">评论</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--回复列表-->
                   <div class="sub-comment-list">
                       <div class="reply-item" v-for="(replyItem,replyIndex) in item.topComment" :key="replyItem.id" >
                         <div class="sub-comment">
@@ -103,24 +121,40 @@
                                     回复 <span class="reply-user">{{replyItem.respUserInfo.nickName}}</span>:{{replyItem.content}}
                                   </div>
                                   <div class="sub-comment-stat-box">
-                                    <div class="sub-comment-action-box">
+                                    <div class="sub-comment-action-box" @click="replyCommentClick(item.cid,replyItem.id,replyItem.userInfo.nickName)">
                                       <div class="sub-reply-action-comment">
                                         <i class="aliiconfont action-icon">&#xe620;</i>
-                                        <span class="action-title" @click="$emit('reply',replyItem.id,replyItem.cid)">回复</span>
+                                        <span class="action-title" >回复</span>
                                       </div>
                                     </div>
                                   </div>
-                                  <topicReplyForm :replyNickName="replyItem.userInfo.nickName" :replyId="replyItem.id"/>
+                                  <div class="reply-form reply" v-if="replyCommentShow&&replyCommentId==replyItem.id">
+                                    <div class="form-box">
+                                      <div class="input-box">
+                                        <input v-model="replyContent" :placeholder="placeholder" type="text" maxlength="100" class="reply-input">
+                                      </div>
+                                      <div class="reply-action-box">
+                                        <div class="submit">
+                                          <button class="comment-submit-btn" v-if="!replyContent">评论</button>
+                                          <button class="comment-submit-btn active" @click="addReply(item.cid, replyItem.id, 'reply', replyItem.userInfo.openid, item.topicId)" v-if="replyContent">评论</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                    <a @click="gteReplyListByCommentId(item.cid)" class="fetch-more-comment" >加载更多</a>
+                    <a  class="fetch-more-comment fetch-active" v-if="fetchAll">加载更多</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <a @click="fetchMore(todo.id)" class="fetch-more-comment" v-if="commentCount>limit">加载更多</a>
+          <a  class="fetch-more-comment fetch-active" v-if="fetchAll">加载更多</a>
           <span class="triangle-top">
             <em class="triangle"></em>
           </span>
@@ -131,15 +165,29 @@
 </template>
 
 <script>
-  import topicReplyForm from './topicReplyForm'
+  import Bus from '../bus'
   export default {
     name: 'topic-item',
-    components: {topicReplyForm},
     data () {
       return {
-        commentList: '',
-        showCommentBox: false,
-        showCommentId: ''
+        commentList: '', // 评论列表
+        commentCount: 0,
+        showCommentBox: false, // 显示评论框
+        showCommentId: '', // 评论的topicId
+        replyCommentShow: false, // 显示回复框
+        replyCommentId: '', // 回复的评论Id
+        commentContent: '', // 评论内容
+        commentListShow: false, // 评论列表的显示
+        replyNickName: '', // 回复目标的nickName
+        nickName: wx.getStorageSync('nickName'), // 用户的nickName
+        openId: wx.getStorageSync('openId'),
+        location: wx.getStorageSync('location'),
+        university: wx.getStorageSync('university'),
+        replyContent: '', // 回复的内容
+        placeholder: '', // 回复的placeholder
+        start: 0,
+        limit: 5,
+        fetchAll: false
       }
     },
     props: {
@@ -148,29 +196,121 @@
       }
     },
     methods: {
-      commentClick (id) {
+      initPageSize () {
+        this.start = 0
+        this.limit = 5
+      },
+      commentClick (id) { // 点击评论图标
         this.showCommentBox = !this.showCommentBox
         this.showCommentId = id
         if (this.showCommentBox) {
           this.getCommentList(id)
         }
       },
-      getCommentList (id) {
+      replyCommentClick (cid, rid, name) { // 点击回复图标
+        this.replyCommentShow = !this.replyCommentShow
+        this.replyCommentId = rid
+        this.replyNickName = name
+        this.placeholder = '回复' + name
+      },
+      addComment (id) { // 添加评论
         let _this = this
         wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/getCommentList',
+          url: _this.GLOBAL.serverPath + '/api/group/addComment',
           method: 'POST',
           data: {
-            id: id
+            openId: _this.openId,
+            topicId: id,
+            content: _this.commentContent
           },
           header: {
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            _this.commentList = res.data.data
+            if (res.data.head.code === 0) {
+              _this.commentContent = ''
+              _this.initPageSize()
+              _this.getCommentList(id)
+              Bus.$emit('getTopicList')
+            }
           }
         })
-        console.log('获取评论', id)
+      },
+      addReply (cid, rid, rType, toUid, topicId) { // 添加回复
+        let _this = this
+        wx.request({
+          url: _this.GLOBAL.serverPath + '/api/group/addReply',
+          method: 'POST',
+          data: {
+            openId: _this.openId,
+            cid: cid,
+            content: _this.replyContent,
+            replyId: rid,
+            replyType: rType,
+            toUid: toUid,
+            topicId: topicId
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded '
+          },
+          success: function (res) {
+            if (res.data.head.code === 0) {
+              _this.initPageSize()
+              _this.replyContent = ''
+              _this.getCommentList(topicId)
+              Bus.$emit('getTopicList')
+              _this.replyCommentShow = false
+            }
+          }
+        })
+      },
+      fetchMore (id) { // 加载更多评论
+        this.start = this.start + this.limit
+        this.limit = this.commentCount
+        this.fetchAll = true
+        this.getCommentList(id, 'more')
+      },
+      gteReplyListByCommentId (cid) {
+        var _this = this
+        wx.request({
+          url: _this.GLOBAL.serverPath + '/api/group/getReplyList',
+          method: 'POST',
+          data: {
+            cid: cid
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded '
+          },
+          success: function (res) {
+            console.log('回复列表', res.data.data)
+          }
+        })
+      },
+      getCommentList (id, type) { // 获取评论以及回复列表
+        let _this = this
+        wx.request({
+          url: _this.GLOBAL.serverPath + '/api/group/getCommentList',
+          method: 'POST',
+          data: {
+            id: id,
+            start: this.start,
+            limit: this.limit
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded '
+          },
+          success: function (res) {
+            _this.commentCount = res.data.data.count
+            _this.fetchAll = false
+            if (type) {
+              _this.commentList.comments = _this.commentList.comments.concat(res.data.data.comments)
+            } else {
+              _this.start = 0
+              _this.limit = 5
+              _this.commentList = res.data.data
+            }
+          }
+        })
       }
     }
   }
@@ -347,63 +487,6 @@
     content: "";
     clear: both;
   }
-
-  .comment-form{
-    display: flex;
-    position: relative;
-    padding: 0.24rem 0.28rem;
-    background-color: #fafbfc;
-    border-radius: 6rpx;
-    margin: 0.30rem 0.20rem;
-  }
-
-  .form-box{
-    flex:1 1 auto;
-    position: relative;
-  }
-
-  .input-box{
-    font-size: 0;
-    background-color: #fff;
-    border: 2rpx solid #f1f1f1;
-    border-radius: 6rpx;
-  }
-
-  .input-content{
-    border: none;
-    position: relative;
-    padding: 0.12rem .24rem;
-    font-size: 24rpx;
-    line-height: 1.7;
-    color: #17171a;
-    outline: none;
-    min-height: .28rem;
-  }
-
-  .comment-action-box{
-    display: flex;
-    align-items: center;
-    margin: .16rem 0 0;
-  }
-
-  .comment-submit{
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    margin-left: auto;
-  }
-
-  .comment-submit-btn{
-    ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    margin-left: auto;
-    padding: 0 .30rem;
-    font-size: .26rem;
-    color: #fff;
-    background-color: #027fff;
-    border-radius: 4rpx;
-    cursor: pointer;
-  }
-
   .comment-list{
     margin: 0 .48rem;
   }
@@ -476,6 +559,125 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+
+  .comment-form{
+    display: flex;
+    position: relative;
+    padding: 0.24rem 0.28rem;
+    background-color: #fafbfc;
+    border-radius: 6rpx;
+    margin: 0.30rem 0.20rem;
+  }
+  .fetch-more-comment{
+    display: block;
+    padding: .24rem 0;
+    font-size: .24rem;
+    text-align: center;
+    color: #406599;
+    border-top: 2rpx solid #ebebeb;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .fetch-active{
+    opacity: .2;
+  }
+
+  .form-box{
+    flex:1 1 auto;
+    position: relative;
+  }
+
+  .input-box{
+    font-size: 0;
+    background-color: #fff;
+    border: 2rpx solid #f1f1f1;
+    border-radius: 6rpx;
+  }
+
+  .input-content{
+    border: none;
+    position: relative;
+    padding: 0.12rem .24rem;
+    font-size: 24rpx;
+    line-height: 1.7;
+    color: #17171a;
+    outline: none;
+    min-height: .28rem;
+  }
+
+  .comment-action-box{
+    display: flex;
+    align-items: center;
+    margin: .16rem 0 0;
+  }
+
+  .comment-submit{
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .comment-submit-btn{
+    opacity: .2;
+    ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: 0 .30rem;
+    font-size: .26rem;
+    color: #fff;
+    background-color: #027fff;
+    border-radius: 4rpx;
+    cursor: pointer;
+  }
+
+  .active{
+    opacity: 2;
+  }
+  .reply-form {
+    margin-top: .25rem;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    padding: .24rem .30rem;
+    background-color: #fafbfc;
+    border-radius: 6rpx
+  }
+
+  .form-box {
+    flex: 1 1 auto;
+    position: relative;
+  }
+
+  .input-box {
+    background-color: #fff;
+    border: 2rpx solid #007fff;
+    border-radius: 6rpx;
+  }
+
+  .reply-input {
+    position: relative;
+    padding: .05rem .1rem;
+    font-size: 26rpx;
+    line-height: 1.7;
+    color: #17181a;
+    outline: none;
+    min-height: .72rem;
+  }
+  .submit {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .reply-action-box {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin: .14rem 0 0;
   }
 
   .reply-action-comment{
