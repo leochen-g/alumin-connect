@@ -1,25 +1,39 @@
 <template>
   <div class="alumni-main">
-    <!--轮播图-->
-    <topicSwiper :list="swiperList"/>
-    <!--发布话题-->
-    <topicEdit />
-    <!--话题列表-->
-    <topicItem v-for="item in list" :key="item.id" :todo="item" />
+    <div class="user-main">
+      <div class="user-content">
+        <div class="user-header" @click="goPath('user')">
+          <img src="https://wx.qlogo.cn/mmopen/vi_32/rRIIkQo8Wibzm5nPalxwZv1cwGia6gm6Th9WRCVvLHa81JRvEVmlcLQmjvGRv6NjUxb7bgbOY3neZIBCAs3QoA2Q/132" class="user-avataurl-img" alt="">
+          <div class="user-base-info">
+            <div class="user-nick-name">Leo</div>
+            <div class="user-school">2018@合肥师范学院</div>
+          </div>
+        </div>
+        <div>
+          <div class="user-info-item" @click="goPath('school')">
+            <div class="aliiconfont info-item-icon">&#xe680;</div>
+            <div class="info-item-title">院校</div>
+          </div>
+          <div class="user-info-item" @click="goPath('company')">
+            <div class="aliiconfont info-item-icon">&#xe615;</div>
+            <div class="info-item-title">公司</div>
+          </div>
+          <div class="user-info-item" @click="">
+            <div class="aliiconfont info-item-icon">&#xe642;</div>
+            <div class="info-item-title">设置</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import topicEdit from '../../components/topicEdit'
-  import topicSwiper from '../../components/topicSwiper'
-  import topicItem from '../../components/topicItem'
   import globalStore from '../../store/global-store'
-  import Bus from '../../bus'
+
   export default {
     name: 'index',
-    components: {
-      topicSwiper, topicEdit, topicItem
-    },
+    components: {},
     computed: {
       university () {
         return globalStore.state.university
@@ -33,59 +47,34 @@
     },
     data () {
       return {
-        swiperList: [{'id': '1', 'url': 'http://image.bloggeng.com/shengdan.png'}, {'id': '2', 'url': 'http://image.bloggeng.com/shengdan.png'}],
-        pushContent: '',
-        wordCount: 100,
-        hasInputCount: '',
-        placeholder: '发布话题',
-        list: [],
-        commentList: ''
+        userInfo: '',
+        openId: wx.getStorageSync('openId')
       }
     },
     onReady: function () {
-      let _this = this
-      _this.getTopicList()
-      Bus.$off('getTopicList')
-      Bus.$on('getTopicList', function () {
-        _this.getTopicList()
-      })
+      this.getUserInfo()
     },
     methods: {
-      getTopicList () {
+      getUserInfo () {
         let _this = this
         wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/getTopicList',
+          url: _this.GLOBAL.serverPath + '/api/group/user/getUserInfo',
           method: 'POST',
           data: {
-            university: _this.university,
-            location: _this.location
+            openId: _this.openId
           },
           header: {
             'content-type': 'application/x-www-form-urlencoded '
           },
           success: function (res) {
-            _this.list = res.data.data.list
+            globalStore.commit('updateUserInfo', res.data.data)
+            _this.userInfo = res.data.data
           }
         })
       },
-      pushTopic () {
-        console.log('发布话题', this.pushContent)
-      },
-      inputEvent (e) {
-        this.hasInputCount = e.mp.detail.cursor
-        // this.$emit('input', e.mp.detail.value)
-        // this.throttle(this.queryData, null, 400, e.mp.detail)
-      },
-      throttle (fn, context, delay, text) {
-        clearTimeout(fn.timeoutId)
-        fn.timeoutId = setTimeout(function () {
-          fn.call(context, text)
-        }, delay)
-      },
-      queryData (e) {
-        console.log(e)
-        this.hasInputCount = e.cursor
-        this.$emit('input', e.value)
+      goPath (val) {
+        let url = '../user-edit/main'
+        wx.navigateTo({ url })
       }
     }
 
@@ -95,5 +84,54 @@
 <style scoped>
   .alumni-main{
     background-color: #f4f5f5;
+    height: 100%;
+    width: 100%;
+  }
+  .user-main{
+    position: fixed;
+    background-color: #F2F2F2;
+    width: 100%;
+    height: 100%;
+  }
+  .user-content{
+    padding-top: 40rpx;
+  }
+  .user-header{
+    background-color: #ffffff;
+    display: flex;
+    position: relative;
+    justify-content: flex-start;
+    padding: 20rpx 20rpx;
+  }
+  .user-avataurl-img{
+    width: 120rpx;
+    height: 120rpx;
+  }
+  .user-base-info{
+    padding: 20rpx;
+  }
+  .user-nick-name{
+    font-size: 28rpx;
+  }
+  .user-school{
+    color: #BFBEBE;
+  }
+  .user-info-item{
+    display: flex;
+    justify-content: flex-start;
+    padding: 20rpx;
+    margin-top: 40rpx;
+    width: 100%;
+    height: 60rpx;
+    line-height: 60rpx;
+    background-color: #ffffff;
+  }
+  .info-item-icon{
+    font-size: 40rpx;
+    color: #027fff;
+  }
+  .info-item-title{
+    padding-left: 40rpx;
+    font-size: 28rpx;
   }
 </style>

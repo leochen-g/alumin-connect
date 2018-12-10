@@ -7,7 +7,9 @@ export default new Vuex.Store({
   state: {
     university: wx.getStorageSync('university') || '请选择',
     nickName: wx.getStorageSync('nickName') || '',
-    location: wx.getStorageSync('location') || ''
+    location: wx.getStorageSync('location') || '',
+    hasAuth: wx.getStorageSync('hasAuth') || false,
+    userInfo: ''
   },
   mutations: {
     increment: (state, n) => {
@@ -18,6 +20,13 @@ export default new Vuex.Store({
     },
     updateLocation: (state, n) => {
       state.location = n
+    },
+    updateAuth: (state, n) => {
+      state.hasAuth = n
+    },
+    updateUserInfo: (state, n) => {
+      state.userInfo = n
+      console.log(state.userInfo)
     }
   }
 })

@@ -15,85 +15,85 @@ function filter(req,res,callback) {
   if(isEmpty(req.body)){
 	res.json({head: {code: 10000, msg: '缺少必须的参数'}, data: {}})
   }else {
-	callback&&callback(req.body,res)
+	callback&&callback(req,res)
   }
 }
 //添加校友圈话题
 router.post('/group/addTopic',function (req,res,next) {
-  filter(req,res,control.addTopic(req,res,next))
+  filter(req,res,control.addTopic)
 })
 //删除校友圈话题
 router.post('/group/deleteTopic',function (req,res,next) {
-  filter(req,res,control.deleteTopic(req,res,next))
+  filter(req,res,control.deleteTopic)
 })
 //获取校友圈话题列表
 router.post('/group/getTopicList',function (req,res,next) {
-  filter(req,res,control.getTopicList(req,res,next))
+  filter(req,res,control.getTopicList)
 })
 //获取用户话题列表
 router.post('/group/getTopicListByUserId',function (req,res,next) {
-  filter(req,res,control.getTopicListByUserId(req,res,next))
+  filter(req,res,control.getTopicListByUserId)
 })
 //获取指定ID话题详情
 router.post('/group/getTopicById',function (req,res,next) {
-  filter(req,res,control.getTopicById(req,res,next))
+  filter(req,res,control.getTopicById)
 })
 
 
 //添加评论
 router.post('/group/addComment',function (req,res,next) {
-  filter(req,res,control.addComment(req,res,next))
+  filter(req,res,control.addComment)
 })
 //删除评论
 router.post('/group/deleteComment',function (req,res,next) {
-  filter(req,res,control.deleteComment(req,res,next))
+  filter(req,res,control.deleteComment)
 })
 //获取话题评论列表
 router.post('/group/getCommentList',function (req,res,next) {
-  filter(req,res,control.getCommentList(req,res,next))
+  filter(req,res,control.getCommentList)
 })
 //获取用户评论列表
 router.post('/group/getCommentListByUserId',function (req,res,next) {
-  filter(req,res,control.getCommentListByUserId(req,res,next))
+  filter(req,res,control.getCommentListByUserId)
 })
 
 //添加回复
 router.post('/group/addReply',function (req,res,next) {
-  filter(req,res,control.addReply(req,res,next))
+  filter(req,res,control.addReply)
 })
 //删除回复
 router.post('/group/deleteReply',function (req,res,next) {
-  filter(req,res,control.deleteReply(req,res,next))
+  filter(req,res,control.deleteReply)
 })
 //获取评论回复列表
 router.post('/group/getReplyList',function (req,res,next) {
-  filter(req,res,control.getReplyList(req,res,next))
+  filter(req,res,control.getReplyList)
 })
 //获取用户评论回复列表
 router.post('/group/getReplyListByUserId',function (req,res,next) {
-  filter(req,res,control.getReplyListByUserId(req,res,next))
+  filter(req,res,control.getReplyListByUserId)
 })
 
 
 //获取用户基本信息
 router.post('/group/user/getUserInfo',function (req,res,next) {
-  filter(req,res,control.getUserInfo(req,res,next))
+  filter(req,res,control.getUserInfo)
 })
 //更新用户昵称
 router.post('/group/user/updateUserNickName',function (req,res,next) {
-  filter(req,res,control.updateUserNickName(req,res,next))
+  filter(req,res,control.updateUserNickName)
 })
 //更新用户联系方式
 router.post('/group/user/updateUserContact',function (req,res,next) {
-  filter(req,res,control.updateUserContact(req,res,next))
+  filter(req,res,control.updateUserContact)
 })
 //更新用户学校信息
 router.post('/group/user/updateUserSchoolInfo',function (req,res,next) {
-  filter(req,res,control.updateUserSchoolInfo(req,res,next))
+  filter(req,res,control.updateUserSchoolInfo)
 })
 //更新用户职业信息
 router.post('/group/user/updateUserCompanyInfo',function (req,res,next) {
-  filter(req,res,control.updateUserCompanyInfo(req,res,next))
+  filter(req,res,control.updateUserCompanyInfo)
 })
 module.exports = router
 

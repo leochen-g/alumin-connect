@@ -41,12 +41,13 @@
     },
     onReady: function () {
       var _this = this
-      wx.getSystemInfo({
-        success (res) {
-          console.log(res)
-          _this.updateUserDeviceInfo(res)
-        }
-      })
+      try {
+        const res = wx.getSystemInfoSync()
+        _this.updateUserDeviceInfo(res)
+      } catch (e) {
+        // Do something when catch error
+        console.log('设备获取失败')
+      }
     },
     onLoad: function (options) {
       var _this = this
@@ -54,12 +55,15 @@
         success: function (res) {
           if (res.authSetting['scope.userInfo']) {
             // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            console.log('已授权')
             _this.hasAuth = true
             wx.getUserInfo({
               success: (res) => {
                 _this.userInfo = res.userInfo
                 globalStore.commit('updateNickName', _this.userInfo.nickName)
+                globalStore.commit('updateAuth', _this.hasAuth)
                 wx.setStorageSync('nickName', _this.userInfo.nickName)
+                wx.setStorageSync('hasAuth', _this.hasAuth)
               }
             })
           } else {
@@ -75,7 +79,6 @@
       })
     },
     onShareAppMessage (options) {
-      console.log(options)
       return {
         title: '快来看看你的校友在哪里？',
         path: '/pages/index/main',

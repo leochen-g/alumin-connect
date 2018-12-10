@@ -1,0 +1,170 @@
+<template>
+  <div class="alumni-main">
+    <div class="edit-main">
+      <div class="edit-content">
+        <!--修改项-->
+        <!--学校信息修改-->
+        <div>
+          <div class="edit-item">
+            <div class="edit-title">学校</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.school.university" @click="focusClick('school')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="focusInput&&type==='school'">
+              <a href="" class="save">保存</a>
+              <a href="" class="cancel">取消</a>
+            </div>
+          </div>
+          <div class="edit-item">
+            <div class="edit-title">毕业时间</div>
+            <div class="edit-input">
+              <picker mode="date" :value="userInfo.school.graduationTime" fields="year" @change="bindDateChange">
+                <div class="picker">{{userInfo.school.graduationTime}}</div>
+              </picker>
+            </div>
+          </div>
+          <div class="edit-item">
+            <div class="edit-title">院系</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.school.college" @click="focusClick('college')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="focusInput&&type==='college'">
+              <a href="" class="save">保存</a>
+              <a href="" class="cancel">取消</a>
+            </div>
+          </div>
+          <div class="edit-item">
+            <div class="edit-title">专业</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.school.major" @click="focusClick('major')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="focusInput&&type==='major'">
+              <a href="" class="save">保存</a>
+              <a href="" class="cancel">取消</a>
+            </div>
+          </div>
+        </div>
+        <!--公司信息修改-->
+        <div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import globalStore from '../../store/global-store'
+
+  export default {
+    name: 'index',
+    computed: {
+      userInfo () {
+        return globalStore.state.userInfo
+      }
+    },
+    data () {
+      return {
+        openId: wx.getStorageSync('openid'),
+        school: '合肥师范学院',
+        college: '',
+        major: '',
+        focusInput: false,
+        type: '',
+        date: '2016'
+      }
+    },
+    methods: {
+      getUserInfo () {
+        let _this = this
+        wx.request({
+          url: _this.GLOBAL.serverPath + '/api/group/getUserInfo',
+          method: 'POST',
+          data: {
+            openId: _this.openId
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded '
+          },
+          success: function (res) {
+            _this.userInfo = res.data.data
+          }
+        })
+      },
+      focusClick (type) {
+        let _this = this
+        _this.type = type
+        _this.focusInput = true
+      },
+      moveClick () {
+        let _this = this
+        _this.focusInput = false
+      },
+      bindDateChange (e) {
+        this.date = e.target.value
+      }
+    }
+
+  }
+</script>
+
+<style scoped>
+  .alumni-main{
+    background-color: #f4f5f5;
+    height: 100%;
+    width: 100%;
+  }
+  .edit-main{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: #F2F2F2;
+  }
+  .edit-content{
+    padding: 10rpx 20rpx;
+    background-color: #ffffff;
+  }
+  .edit-item:first-child{
+    border-top: none!important;
+  }
+  .edit-item{
+    border-top: 2rpx solid #e1e1e1;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    height: 60rpx;
+    line-height: 60rpx;
+    background-color: #ffffff;
+    padding: 20rpx;
+  }
+  .edit-title{
+    font-size: 24rpx;
+  }
+  .edit-input{
+    margin-left: 20rpx;
+    height: 60rpx;
+    width: 60%;
+  }
+  .edit-input input{
+    width: 100%;
+    height: 60rpx;
+    display: block;
+    color: #aaaaaa;
+  }
+  .edit-btn-group{
+    margin-left: 40rpx;
+    width: 130rpx;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+  .cancel{
+    color: #c8c8c8;
+  }
+  .save{
+    color: #027fff
+  }
+  .picker{
+    color: #c8c8c8;
+  }
+</style>

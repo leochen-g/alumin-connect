@@ -330,9 +330,11 @@ module.exports = {
   },
   //获取用户基本信息
   getUserInfo: function (req, res, next) {
+    console.log(res)
 	var param = req.body
 	var arr = [param.openId]
 	sqlControl.group.user.getUserInfo(arr, function (results, fields) {
+	  console.log(results[0])
 	  var obj = {
 		openId: results[0].openid,
 		nickName: results[0].nickName,
