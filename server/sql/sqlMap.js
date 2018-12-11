@@ -35,7 +35,8 @@ var sqlMap = {
 	getCommentListByUserId:'select a.location,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join comment b on a.openid=b.openId where b.openId = ? and b.flag=1',
 	addReply:'insert into reply(openId,cid,replyId,replyType,content,toUid,topicId) values (?,?,?,?,?,?,?)',
 	deleteReply:'update reply set flag = 0 where rid = ? and openId =?',
-	getReplyList:'select count(id) as count from reply where cid=? and flag=1;select * from reply where cid=? and flag=1 order by id desc',
+	getReplyList:'select count(id) as count from reply where cid=? and flag=1;select * from reply where cid=? and flag=1 order by id desc limit 0,2',
+	getReplyListNoLimit:'select count(id) as count from reply where cid=? and flag=1;select * from reply where cid=? and flag=1 order by id desc',
 	user:{
       getReplyUserInfo:'select openid, nickName, location, university, gender, avataUrl, graduationTime, college, major, phone, company, job from user where openid in(?,?)',
       getUserInfo:'select openid, nickName, location, university, gender, avataUrl, graduationTime, college, major, phone, company, job from user where openid = ?',

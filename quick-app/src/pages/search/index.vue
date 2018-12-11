@@ -16,7 +16,7 @@
     </div>
     <div class="panel" v-show="searchClearBtn&&searchValue!==''">
       <div class="panel_bg">
-        <div class="universityItem" v-for="(item, index) in universityList" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver" @click="choose(item.name)">
+        <div class="universityItem" v-for="(item, index) in universityList" :key="index" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver" @click="choose(item.name)">
           <div class="universityItem_icon"><i class="aliiconfont search_btn">&#xe627;</i></div>
           <div class="universityItem_name">{{item.name}}</div>
         </div>
@@ -28,6 +28,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
+  import {getUniversity, updateUserUniversity} from '../../http/api'
   const delay = (function () {
     let timer = 0
     return function (callback, ms) {
@@ -65,25 +66,23 @@
         this.searchValue = val
         wx.setStorageSync('university', val)
         globalStore.commit('increment', val)
-        wx.navigateBack({
-          delta: 1
+        const req = {
+          university: val
+        }
+        updateUserUniversity(req).then(res => {
+          console.log('更新学校信息')
+          wx.navigateBack({
+            delta: 1
+          })
         })
-        // wx.redirectTo({url: '../index/main'})
       },
       fetchData (val) {
-        var _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/getUniversity',
-          method: 'GET',
-          data: {
-            wd: val
-          },
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            _this.universityList = res.data.data
-          }
+        const _this = this
+        const req = {
+          wd: val
+        }
+        getUniversity(req).then(res => {
+          _this.universityList = res.data
         })
       }
     },

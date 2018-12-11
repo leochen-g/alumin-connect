@@ -34,6 +34,8 @@
   import echarts from 'echarts'
   import mpvueEcharts from 'mpvue-echarts'
   import globalStore from '../../store/global-store'
+  import {getMapData, getUserAndLocation} from '../../http/api'
+
   require('echarts/map/js/china')
   let chart = null
   let chartBar = null
@@ -159,13 +161,7 @@
               barWidth: 20,
               itemStyle: {
                 normal: {
-                  color: new echarts.graphic.LinearGradient(
-                    0, 0, 0, 1,
-                    [
-                      {offset: 0, color: '#49EAE5'},
-                      {offset: 1, color: '#49EAE5'}
-                    ]
-                  )
+                  color: '#49EAE5'
                 }
               },
               data: this.topVal
@@ -355,71 +351,55 @@
         var val = _this.university
         _this.topName = []
         _this.topVal = []
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/getMapData',
-          method: 'GET',
-          data: {
-            university: val
-          },
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            _this.map = res.data.data.list
-            _this.pCount = res.data.data.list.length
-            if (_this.pCount >= 5) {
-              for (var i = 0; i < 5; i++) {
-                _this.topName.push(_this.map[i].name)
-                _this.topVal.push(_this.map[i].value)
-              }
-            } else {
-              for (var j = 0; j < _this.pCount; j++) {
-                _this.topName.push(_this.map[j].name)
-                _this.topVal.push(_this.map[j].value)
-              }
+        const req = {
+          university: val
+        }
+        getMapData(req).then(res => {
+          _this.map = res.data.list
+          _this.pCount = res.data.list.length
+          if (_this.pCount >= 5) {
+            for (var i = 0; i < 5; i++) {
+              _this.topName.push(_this.map[i].name)
+              _this.topVal.push(_this.map[i].value)
             }
-            _this.initChart()
-            _this.initChartBar()
-            _this.initHideChart()
-            // _this.locationCity = res.data.data[1]
+          } else {
+            for (var j = 0; j < _this.pCount; j++) {
+              _this.topName.push(_this.map[j].name)
+              _this.topVal.push(_this.map[j].value)
+            }
           }
+          _this.initChart()
+          _this.initChartBar()
+          _this.initHideChart()
         })
       },
       getStudentCount () {
         var _this = this
         var val = _this.university
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/getUserAndLocation',
-          method: 'GET',
-          data: {
-            university: val
-          },
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            console.log(res)
-            _this.userCount = res.data.data.userCount
-            _this.locationCount = res.data.data.locationCount
-            if (_this.locationCount < 2) {
-              _this.proverb = '寥若晨星'
-            } else if (_this.locationCount < 10) {
-              _this.proverb = '寥寥可数'
-            } else if (_this.locationCount < 20) {
-              _this.proverb = '风流云散'
-            } else if (_this.locationCount < 30) {
-              _this.proverb = '百川归海'
-            } else if (_this.locationCount < 50) {
-              _this.proverb = '星罗棋布'
-            } else if (_this.locationCount < 90) {
-              _this.proverb = '浩如烟海'
-            } else if (_this.locationCount < 150) {
-              _this.proverb = '不计其数'
-            } else if (_this.locationCount < 250) {
-              _this.proverb = '人才辈出'
-            } else if (_this.locationCount < 500) {
-              _this.proverb = '四海八荒'
-            }
+        const req = {
+          university: val
+        }
+        getUserAndLocation(req).then(res => {
+          _this.userCount = res.data.userCount
+          _this.locationCount = res.data.locationCount
+          if (_this.locationCount < 2) {
+            _this.proverb = '寥若晨星'
+          } else if (_this.locationCount < 10) {
+            _this.proverb = '寥寥可数'
+          } else if (_this.locationCount < 20) {
+            _this.proverb = '风流云散'
+          } else if (_this.locationCount < 30) {
+            _this.proverb = '百川归海'
+          } else if (_this.locationCount < 50) {
+            _this.proverb = '星罗棋布'
+          } else if (_this.locationCount < 90) {
+            _this.proverb = '浩如烟海'
+          } else if (_this.locationCount < 150) {
+            _this.proverb = '不计其数'
+          } else if (_this.locationCount < 250) {
+            _this.proverb = '人才辈出'
+          } else if (_this.locationCount < 500) {
+            _this.proverb = '四海八荒'
           }
         })
       },
@@ -516,11 +496,6 @@
               })
             }, 500)
           }
-        })
-      },
-      feedBack () {
-        wx.navigateTo({
-          url: '../feedback/main'
         })
       }
     }

@@ -95,6 +95,10 @@ module.exports = {
 	getReplyList: function (req, res, next) {
 	  db.query(sqlMap.group.getReplyList,req,res)
 	},
+	//获取评论回复列表
+	getReplyListNoLimit: function (req, res, next) {
+	  db.query(sqlMap.group.getReplyListNoLimit,req,res)
+	},
 	// 校友圈用户信息
 	user:{
 	  //获取用户基本信息

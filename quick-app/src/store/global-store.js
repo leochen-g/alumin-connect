@@ -9,6 +9,7 @@ export default new Vuex.Store({
     nickName: wx.getStorageSync('nickName') || '',
     location: wx.getStorageSync('location') || '',
     hasAuth: wx.getStorageSync('hasAuth') || false,
+    editType: '',
     userInfo: ''
   },
   mutations: {
@@ -24,9 +25,11 @@ export default new Vuex.Store({
     updateAuth: (state, n) => {
       state.hasAuth = n
     },
+    updateEditType: (state, n) => {
+      state.editType = n
+    },
     updateUserInfo: (state, n) => {
       state.userInfo = n
-      console.log(state.userInfo)
     }
   }
 })

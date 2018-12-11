@@ -13,7 +13,7 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button hover-class="hover" v-show="university!=='请选择'" class="finish" open-type="getUserInfo"   @click="saveUniversity" @getuserinfo="bindGetUserInfo">出&nbsp;&nbsp;发</button>
+          <button hover-class="hover" v-show="university!=='请选择'" class="finish"  @click="goCharts">出&nbsp;&nbsp;发</button>
           <button hover-class="hover" v-show="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
         </div>
       </div>
@@ -23,6 +23,8 @@
 
 <script>
   import globalStore from '../../store/global-store'
+  import {getOpenId, getUserLocation, updateUserDeviceInfo, updateUserBaseInfo} from '../../http/api'
+
   export default {
     computed: {
       university () {
@@ -39,40 +41,31 @@
         location: ''
       }
     },
-    onReady: function () {
-      var _this = this
-      try {
-        const res = wx.getSystemInfoSync()
-        _this.updateUserDeviceInfo(res)
-      } catch (e) {
-        // Do something when catch error
-        console.log('设备获取失败')
-      }
-    },
-    onLoad: function (options) {
-      var _this = this
+    onReady: function (options) {
+      const _this = this
       wx.getSetting({
         success: function (res) {
           if (res.authSetting['scope.userInfo']) {
             // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-            console.log('已授权')
             _this.hasAuth = true
+            globalStore.commit('updateAuth', _this.hasAuth)
+            wx.setStorageSync('hasAuth', true)
             wx.getUserInfo({
               success: (res) => {
                 _this.userInfo = res.userInfo
                 globalStore.commit('updateNickName', _this.userInfo.nickName)
-                globalStore.commit('updateAuth', _this.hasAuth)
                 wx.setStorageSync('nickName', _this.userInfo.nickName)
-                wx.setStorageSync('hasAuth', _this.hasAuth)
               }
             })
           } else {
             _this.hasAuth = false
+            wx.setStorageSync('hasAuth', false)
+            globalStore.commit('updateAuth', _this.hasAuth)
             _this.userInfo = {
-              nickName: '',
-              avatarUrl: '',
-              country: '',
-              gender: ''
+              nickName: '校友足迹',
+              avatarUrl: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bitmap.png',
+              country: 'China',
+              gender: '1'
             }
           }
         }
@@ -90,93 +83,54 @@
     },
     methods: {
       // 调用登录接口
-      getUserInfo () {
-        var _this = this
+      wxLogin () {
+        const _this = this
         wx.login({
           success: (resCode) => {
             _this.code = resCode.code
+            _this.getOpenId(resCode.code)
             // 获取openid
-            wx.getLocation({
-              success: (res) => {
-                _this.location = res.latitude + ',' + res.longitude
-                _this.getOpenId(resCode.code)
-              }
-            })
           }
         })
       },
       // 获取用户openid
       getOpenId (val) {
-        var _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/openid',
-          method: 'POST',
-          data: {
-            code: val
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            _this.openId = res.data.data.openid
-            wx.setStorageSync('openId', _this.openId)
-            _this.getUserLocation(_this.location, _this.openId)
+        const _this = this
+        const obj = {
+          code: val
+        }
+        getOpenId(obj).then(res => {
+          _this.openId = res.data.openid
+          wx.setStorageSync('openId', _this.openId)
+          try {
+            const deviceInfo = wx.getSystemInfoSync()
+            _this.updateUserDeviceInfo(deviceInfo)
+          } catch (e) {
+            console.log('设备获取失败')
           }
+          wx.getLocation({
+            success: (res) => {
+              _this.location = res.latitude + ',' + res.longitude
+              _this.getUserLocation(_this.location, _this.openId)
+            }
+          })
         })
       },
       // 根据经纬度获取用户位置
-      getUserLocation (val, oid) {
-        var _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/getLocation',
-          method: 'POST',
-          data: {
-            oid: oid,
-            location: val
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            _this.city = res.data.data.city
-            globalStore.commit('updateLocation', _this.city)
-            wx.setStorageSync('location', _this.city)
-          }
+      getUserLocation (val) {
+        const _this = this
+        const obj = {
+          location: val
+        }
+        getUserLocation(obj).then(res => {
+          _this.city = res.data.city
+          globalStore.commit('updateLocation', _this.city)
+          wx.setStorageSync('location', _this.city)
         })
       },
-      bindGetUserInfo: function (e) {
-        var _this = this
-        if (e.mp.detail.userInfo) {
-          _this.userInfo = e.mp.detail.userInfo
-          globalStore.commit('updateNickName', _this.userInfo.nickName)
-          wx.setStorageSync('nickName', _this.userInfo.nickName)
-          _this.updateUserBaseInfo(_this.userInfo)
-          const url = '../charts/main'
-          wx.navigateTo({ url })
-        } else {
-          const url = '../charts/main'
-          wx.navigateTo({ url })
-          // wx.showModal({
-          //   title: '温馨提示',
-          //   showCancel: true,
-          //   content: '为了您更好的体验,请先同意授权',
-          //   success: function (res) {
-          //     if (res.confirm) {
-          //       wx.openSetting({
-          //         success: function (res) {
-          //           if (res.authSetting['scope.userInfo']) {
-          //             console.log('谢谢授权')
-          //           } else {
-          //             console.log('还是没有授权')
-          //           }
-          //         }
-          //       })
-          //     } else if (res.cancel) {
-          //       console.log('用户点击取消')
-          //     }
-          //   }
-          // })
-        }
+      goCharts: function () {
+        const url = '../charts/main'
+        wx.navigateTo({ url })
       },
       saveTips () {
         wx.showModal({
@@ -194,76 +148,36 @@
       },
       // 更新用户基本信息
       updateUserBaseInfo (obj) {
-        var _this = this
-        var oid = wx.getStorageSync('openId')
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/updateUserBase',
-          method: 'POST',
-          data: {
-            nickName: obj.nickName,
-            avatarUrl: obj.avatarUrl,
-            country: obj.country,
-            gender: obj.gender,
-            openid: oid
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            console.log('保存成功')
-          }
+        const req = {
+          nickName: obj.nickName,
+          avatarUrl: obj.avatarUrl,
+          country: obj.country,
+          gender: obj.gender
+        }
+        updateUserBaseInfo(req).then(res => {
+          console.log('更新用户基础信息')
         })
       },
       // 更新用户设备信息
-      updateUserDeviceInfo: function (obj) {
-        var _this = this
-        var oid = wx.getStorageSync('openId')
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/updateUserDevice',
-          method: 'POST',
-          data: {
-            brand: obj.brand,
-            model: obj.model,
-            system: obj.system,
-            platform: obj.platform,
-            openid: oid
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            console.log('保存成功')
-          }
+      updateUserDeviceInfo: function (info) {
+        const req = {
+          brand: info.brand,
+          model: info.model,
+          system: info.system,
+          platform: info.platform
+        }
+        updateUserDeviceInfo(req).then(res => {
+          console.log('更新设备信息')
         })
       },
       toSearch: function () {
         wx.navigateTo({
           url: '../search/main'
         })
-      },
-      saveUniversity () {
-        var _this = this
-        var oid = wx.getStorageSync('openId')
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/updateUniversity',
-          method: 'POST',
-          data: {
-            oid: oid,
-            university: _this.university
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            console.log('保存成功')
-          }
-        })
       }
     },
-    mounted () {
-    },
     created () {
-      this.getUserInfo()
+      this.wxLogin()
     }
   }
 </script>

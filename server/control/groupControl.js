@@ -230,8 +230,7 @@ module.exports = {
   getReplyList: function (req, res, next) { //获取指定评论ID的回复列表
 	var param  = req.body
 	var arr = [param.cid,param.cid]
-	console.log('评论id',param.cid)
-	sqlControl.group.getReplyList(arr, function (replyList) {
+	sqlControl.group.getReplyListNoLimit(arr, function (replyList) {
 	  var obj = {topComment:[]}
 	  obj.count = replyList[0][0].count
 	  obj.id = param.cid

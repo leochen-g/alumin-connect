@@ -146,7 +146,7 @@
                           </div>
                         </div>
                       </div>
-                    <a @click="gteReplyListByCommentId(item.cid)" class="fetch-more-comment" >加载更多</a>
+                    <a @click="gteReplyListByCommentId(item.cid, index)" v-if="item.replyCount>2&&!fetchReply" class="fetch-more-comment" >加载更多</a>
                     <a  class="fetch-more-comment fetch-active" v-if="fetchAll">加载更多</a>
                   </div>
                 </div>
@@ -166,6 +166,8 @@
 
 <script>
   import Bus from '../bus'
+  import {addComment, addReply, getReplyList, getCommentList} from '../http/api'
+
   export default {
     name: 'topic-item',
     data () {
@@ -187,7 +189,8 @@
         placeholder: '', // 回复的placeholder
         start: 0,
         limit: 5,
-        fetchAll: false
+        fetchAll: false,
+        fetchReply: false
       }
     },
     props: {
@@ -215,52 +218,36 @@
       },
       addComment (id) { // 添加评论
         let _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/addComment',
-          method: 'POST',
-          data: {
-            openId: _this.openId,
-            topicId: id,
-            content: _this.commentContent
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            if (res.data.head.code === 0) {
-              _this.commentContent = ''
-              _this.initPageSize()
-              _this.getCommentList(id)
-              Bus.$emit('getTopicList')
-            }
+        let req = {
+          topicId: id,
+          content: _this.commentContent
+        }
+        addComment(req).then(res => {
+          if (res.head.code === 0) {
+            _this.commentContent = ''
+            _this.initPageSize()
+            _this.getCommentList(id)
+            Bus.$emit('getTopicList')
           }
         })
       },
       addReply (cid, rid, rType, toUid, topicId) { // 添加回复
         let _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/addReply',
-          method: 'POST',
-          data: {
-            openId: _this.openId,
-            cid: cid,
-            content: _this.replyContent,
-            replyId: rid,
-            replyType: rType,
-            toUid: toUid,
-            topicId: topicId
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            if (res.data.head.code === 0) {
-              _this.initPageSize()
-              _this.replyContent = ''
-              _this.getCommentList(topicId)
-              Bus.$emit('getTopicList')
-              _this.replyCommentShow = false
-            }
+        let req = {
+          cid: cid,
+          content: _this.replyContent,
+          replyId: rid,
+          replyType: rType,
+          toUid: toUid,
+          topicId: topicId
+        }
+        addReply(req).then(res => {
+          if (res.head.code === 0) {
+            _this.initPageSize()
+            _this.replyContent = ''
+            _this.getCommentList(topicId)
+            Bus.$emit('getTopicList')
+            _this.replyCommentShow = false
           }
         })
       },
@@ -270,45 +257,34 @@
         this.fetchAll = true
         this.getCommentList(id, 'more')
       },
-      gteReplyListByCommentId (cid) {
-        var _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/getReplyList',
-          method: 'POST',
-          data: {
-            cid: cid
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            console.log('回复列表', res.data.data)
-          }
+      gteReplyListByCommentId (cid, index) {
+        let _this = this
+        let req = {
+          cid: cid
+        }
+        getReplyList(req).then(res => {
+          console.log('回复列表', res.data)
+          _this.fetchAll = false
+          _this.fetchReply = true
+          _this.commentList.comments[index].topComment = res.data.topComment
         })
       },
       getCommentList (id, type) { // 获取评论以及回复列表
         let _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/getCommentList',
-          method: 'POST',
-          data: {
-            id: id,
-            start: this.start,
-            limit: this.limit
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            _this.commentCount = res.data.data.count
-            _this.fetchAll = false
-            if (type) {
-              _this.commentList.comments = _this.commentList.comments.concat(res.data.data.comments)
-            } else {
-              _this.start = 0
-              _this.limit = 5
-              _this.commentList = res.data.data
-            }
+        let req = {
+          id: id,
+          start: this.start,
+          limit: this.limit
+        }
+        getCommentList(req).then(res => {
+          _this.commentCount = res.data.count
+          _this.fetchAll = false
+          if (type) {
+            _this.commentList.comments = _this.commentList.comments.concat(res.data.comments)
+          } else {
+            _this.start = 0
+            _this.limit = 5
+            _this.commentList = res.data
           }
         })
       }

@@ -18,7 +18,7 @@ module.exports = {
   getUserOpenid: function (req, res, next) {
 	var code = req.body.code;
 	if (!code) {
-	  res.json({head: {code: 10000, msg: '认证码不存在'}, data: {}})
+	  res.json({head: {code: 11000, msg: '认证码不存在'}, data: {}})
 	} else {
 	  var URL = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + config.MINI_APPID + '&secret=' + config.MINI_SECRET + '&js_code=' + code + '&grant_type=authorization_code'
 	  superagent
@@ -39,7 +39,7 @@ module.exports = {
 				})
 			  } else {
 				res.json({
-				  head: {code: 10000, msg: '数据已存在'},
+				  head: {code: 11000, msg: '数据已存在'},
 				  data: {'openid': openId, 'session_key': session_key}
 				})
 			  }
@@ -50,9 +50,9 @@ module.exports = {
   //  获取用户位置信息并保存
   getUserLocation: function (req, res, next) {
 	var param = req.body.location
-	var oid = req.body.oid
+	var oid = req.body.openId
 	if (!param) {
-	  res.json({head: {code: 10000, msg: '请输入参数'}, data: {}})
+	  res.json({head: {code: 11000, msg: '请输入参数'}, data: {}})
 	} else {
 	  var URL = 'http://apis.map.qq.com/ws/geocoder/v1/?location=' + param + '&key=' + config.TENCENT_MAP_KEY + '&get_poi=1';
 	  superagent
@@ -69,7 +69,7 @@ module.exports = {
 			  if (results.affectedRows) {
 				res.json({head: {code: 0, msg: 'ok'}, data: {city: city, pid: pid}})
 			  } else {
-				res.json({head: {code: 10000, msg: '获取位置失败'}, data: {}})
+				res.json({head: {code: 11000, msg: '获取位置失败'}, data: {}})
 			  }
 			})
 		  });
@@ -78,10 +78,10 @@ module.exports = {
   // 更新用户名称头像
   updateUserBaseInfo: function (req, res, next) {
 	var param = req.body
-	if (!param.openid) {
-	  res.json({head: {code: 10000, msg: '数据不存在'}, data: {}})
+	if (!param.openId) {
+	  res.json({head: {code: 11000, msg: '数据不存在'}, data: {}})
 	} else {
-	  var arr = [param.nickName, param.avatarUrl, param.country, param.gender, param.openid]
+	  var arr = [param.nickName, param.avatarUrl, param.country, param.gender, param.openId]
 	  sqlControl.updateUserBase(arr, function (results, fields) {
 		if (results.affectedRows) {
 		  res.json({head: {code: 0, msg: 'ok'}, data: {}})
@@ -95,24 +95,24 @@ module.exports = {
   updateUserUniversity: function (req, res, next) {
 	var param = req.body
 	if (!param) {
-	  res.json({head: {code: 10000, msg: '没有选择院校'}, data: {}})
+	  res.json({head: {code: 11000, msg: '没有选择院校'}, data: {}})
 	} else {
-	  var arr = [param.university, param.oid]
+	  var arr = [param.university, param.openId]
 	  sqlControl.updateUserUniversityInfo(arr, function (results, fields) {
 		if (results.affectedRows) {
 		  res.json({head: {code: 0, msg: '更新成功'}, data: {}})
 		} else {
-		  res.json({head: {code: 1000, msg: '更新失败'}, data: {}})
+		  res.json({head: {code: 11000, msg: '更新失败'}, data: {}})
 		}
 	  })
 	}
   },
   updateUserDeviceInfo: function (req, res, next) {
 	var param = req.body
-	if (!param.openid) {
-	  res.json({head: {code: 10000, msg: '数据不存在'}, data: {}})
+	if (!param.openId) {
+	  res.json({head: {code: 11000, msg: '数据不存在'}, data: {}})
 	} else {
-	  var arr = [param.brand, param.model, param.system, param.platform, param.openid]
+	  var arr = [param.brand, param.model, param.system, param.platform, param.openId]
 	  sqlControl.updateUserDevice(arr, function (results, fields) {
 		if (results.affectedRows) {
 		  res.json({head: {code: 0, msg: 'ok'}, data: {}})
@@ -128,10 +128,9 @@ module.exports = {
   },
 //  获取学校数据地图
   getMapData: function (req, res, next) {
-    console.log('获取院校',req.query.university);
 	var param = req.query.university
 	if (!param) {
-	  res.json({head: {code: 10000, msg: '请输入学校'}, data: {}})
+	  res.json({head: {code: 11000, msg: '请输入学校'}, data: {}})
 	} else {
 	  var arr = [param]
 	  sqlControl.getMapData(arr, function (results, fields) {
@@ -148,7 +147,7 @@ module.exports = {
   getUserAndLocationCount:function (req,res,next) {
 	var param = req.query.university
 	if (!param) {
-	  res.json({head: {code: 10000, msg: '请输入学校'}, data: {}})
+	  res.json({head: {code: 11000, msg: '请输入学校'}, data: {}})
 	} else {
 	  var arr = [param]
 	  sqlControl.getLocationCount(arr, function (results, fields) {
@@ -162,7 +161,7 @@ module.exports = {
   getUniversity: function (req, res, next) {
 	var param = req.query.wd
 	if (!param) {
-	  res.json({head: {code: 10000, msg: '请输入有效值'}, data: {}})
+	  res.json({head: {code: 11000, msg: '请输入有效值'}, data: {}})
 	} else {
 	  var arr = [param]
 	  console.log(arr)

@@ -3,8 +3,31 @@
     <div class="edit-main">
       <div class="edit-content">
         <!--修改项-->
+        <!--昵称修改-->
+        <div v-if="editType==='user'">
+          <div class="edit-item">
+            <div class="edit-title">昵称</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.nickName" @click="focusClick('nickName')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="focusInput&&type==='nickName'">
+              <a href="" class="save">保存</a>
+              <a href="" class="cancel">取消</a>
+            </div>
+          </div>
+          <div class="edit-item">
+            <div class="edit-title">联系方式</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.phone" @click="focusClick('phone')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="focusInput&&type==='phone'">
+              <a href="" class="save">保存</a>
+              <a href="" class="cancel">取消</a>
+            </div>
+          </div>
+        </div>
         <!--学校信息修改-->
-        <div>
+        <div v-if="editType==='school'">
           <div class="edit-item">
             <div class="edit-title">学校</div>
             <div class="edit-input">
@@ -45,8 +68,27 @@
           </div>
         </div>
         <!--公司信息修改-->
-        <div>
-
+        <div v-if="editType==='company'">
+          <div class="edit-item">
+            <div class="edit-title">公司</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.company" @click="focusClick('company')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="focusInput&&type==='company'">
+              <a href="" class="save">保存</a>
+              <a href="" class="cancel">取消</a>
+            </div>
+          </div>
+          <div class="edit-item">
+            <div class="edit-title">职位</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.job" @click="focusClick('job')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="focusInput&&type==='job'">
+              <a href="" class="save">保存</a>
+              <a href="" class="cancel">取消</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -61,17 +103,20 @@
     computed: {
       userInfo () {
         return globalStore.state.userInfo
+      },
+      editType () {
+        return globalStore.state.editType
       }
     },
     data () {
       return {
         openId: wx.getStorageSync('openid'),
-        school: '合肥师范学院',
+        school: '',
         college: '',
         major: '',
         focusInput: false,
         type: '',
-        date: '2016'
+        date: ''
       }
     },
     methods: {

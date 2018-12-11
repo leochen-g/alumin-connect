@@ -20,6 +20,8 @@
 
 <script>
   import Bus from '../bus'
+  import {addTopic} from '../http/api'
+
   export default {
     name: 'topic-edit',
     data () {
@@ -51,24 +53,16 @@
       },
       addTopic () {
         let _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/addTopic',
-          method: 'POST',
-          data: {
-            nickName: _this.nickName,
-            openId: _this.openId,
-            university: _this.university,
-            location: _this.location,
-            content: _this.topicContent
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            if (res.data.head.code === 0) {
-              _this.topicContent = ''
-              Bus.$emit('getTopicList')
-            }
+        let req = {
+          nickName: _this.nickName,
+          university: _this.university,
+          location: _this.location,
+          content: _this.topicContent
+        }
+        addTopic(req).then(res => {
+          if (res.head.code === 0) {
+            _this.topicContent = ''
+            Bus.$emit('getTopicList')
           }
         })
       }

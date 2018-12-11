@@ -16,6 +16,7 @@
   import topicItem from '../../components/topicItem'
   import globalStore from '../../store/global-store'
   import Bus from '../../bus'
+  import {getTopicList, getUserLocation} from '../../http/api'
   export default {
     name: 'index',
     components: {
@@ -50,6 +51,7 @@
     },
     onReady: function () {
       let _this = this
+      _this.validate()
       _this.getTopicList()
       Bus.$off('getTopicList')
       Bus.$on('getTopicList', function () {
@@ -82,33 +84,61 @@
       this.getTopicList('reach')
     },
     methods: {
+      validate () {
+        let _this = this
+        if (_this.university === '请选择') {
+          wx.showModal({
+            title: '提示',
+            content: '请先选择你的学校',
+            showCancel: false,
+            success (res) {
+              if (res.confirm) {
+                wx.navigateTo({
+                  url: '../search/main'
+                })
+              }
+            }
+          })
+        }
+        wx.getLocation({
+          success: (res) => {
+            let local = res.latitude + ',' + res.longitude
+            _this.getUserLocation(local)
+          }
+        })
+      },
+      // 根据经纬度获取用户位置
+      getUserLocation (val) {
+        const _this = this
+        const obj = {
+          location: val
+        }
+        getUserLocation(obj).then(res => {
+          _this.city = res.data.city
+          globalStore.commit('updateLocation', _this.city)
+          wx.setStorageSync('location', _this.city)
+        })
+      },
       initPage () {
         this.start = 0
         this.limit = 10
       },
       getTopicList (type) {
         let _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/getTopicList',
-          method: 'POST',
-          data: {
-            university: _this.university,
-            location: _this.location,
-            start: _this.start,
-            limit: _this.limit
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            _this.topicCount = res.data.data.count
-            _this.pageNumber = Math.ceil(_this.topicCount / _this.limit)
-            if (type) {
-              _this.list = _this.list.concat(res.data.data.list)
-            } else {
-              _this.currentPage = 1
-              _this.list = res.data.data.list
-            }
+        let req = {
+          university: _this.university,
+          location: _this.location,
+          start: _this.start,
+          limit: _this.limit
+        }
+        getTopicList(req).then(res => {
+          _this.topicCount = res.data.count
+          _this.pageNumber = Math.ceil(_this.topicCount / _this.limit)
+          if (type) {
+            _this.list = _this.list.concat(res.data.list)
+          } else {
+            _this.currentPage = 1
+            _this.list = res.data.list
           }
         })
       },
