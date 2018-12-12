@@ -2,6 +2,7 @@ var express = require('express')
 var cookieParser = require('cookie-parser')
 var index = require('./routes/index')
 var group = require('./routes/group')
+var admin = require('./routes/admin')
 var path = require('path')
 var http = require('http')
 var bodyParser = require('body-parser')
@@ -29,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', index)
 //分发路由到校友圈
 app.use('/api', group)
+//分发路由到管理员
+app.use('/api', admin)
 //静态文件处理
 app.use('/static', express.static('static'));
 

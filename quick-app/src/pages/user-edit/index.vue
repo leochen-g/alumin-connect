@@ -10,9 +10,9 @@
             <div class="edit-input">
               <input type="text" v-model="userInfo.nickName" @click="focusClick('nickName')" @blur="moveClick">
             </div>
-            <div class="edit-btn-group" v-if="focusInput&&type==='nickName'">
-              <a href="" class="save">保存</a>
-              <a href="" class="cancel">取消</a>
+            <div class="edit-btn-group" v-if="type==='nickName'">
+              <a href="" class="save" @click="updateUserInfo('nickName',userInfo.nickName)">保存</a>
+              <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
           <div class="edit-item">
@@ -20,9 +20,9 @@
             <div class="edit-input">
               <input type="text" v-model="userInfo.phone" @click="focusClick('phone')" @blur="moveClick">
             </div>
-            <div class="edit-btn-group" v-if="focusInput&&type==='phone'">
-              <a href="" class="save">保存</a>
-              <a href="" class="cancel">取消</a>
+            <div class="edit-btn-group" v-if="type==='phone'">
+              <a href="" class="save" @click="updateUserInfo('phone',userInfo.phone)">保存</a>
+              <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
         </div>
@@ -31,11 +31,7 @@
           <div class="edit-item">
             <div class="edit-title">学校</div>
             <div class="edit-input">
-              <input type="text" v-model="userInfo.school.university" @click="focusClick('school')" @blur="moveClick">
-            </div>
-            <div class="edit-btn-group" v-if="focusInput&&type==='school'">
-              <a href="" class="save">保存</a>
-              <a href="" class="cancel">取消</a>
+              <input type="text" v-model="userInfo.school.university" @click="goSearchSchool()" >
             </div>
           </div>
           <div class="edit-item">
@@ -51,9 +47,9 @@
             <div class="edit-input">
               <input type="text" v-model="userInfo.school.college" @click="focusClick('college')" @blur="moveClick">
             </div>
-            <div class="edit-btn-group" v-if="focusInput&&type==='college'">
-              <a href="" class="save">保存</a>
-              <a href="" class="cancel">取消</a>
+            <div class="edit-btn-group" v-if="type==='college'">
+              <a href="" class="save" @click="updateUserInfo('college',userInfo.school.college)">保存</a>
+              <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
           <div class="edit-item">
@@ -61,9 +57,9 @@
             <div class="edit-input">
               <input type="text" v-model="userInfo.school.major" @click="focusClick('major')" @blur="moveClick">
             </div>
-            <div class="edit-btn-group" v-if="focusInput&&type==='major'">
-              <a href="" class="save">保存</a>
-              <a href="" class="cancel">取消</a>
+            <div class="edit-btn-group" v-if="type==='major'">
+              <a href="" class="save" @click="updateUserInfo('major',userInfo.school.major)">保存</a>
+              <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
         </div>
@@ -74,9 +70,9 @@
             <div class="edit-input">
               <input type="text" v-model="userInfo.company" @click="focusClick('company')" @blur="moveClick">
             </div>
-            <div class="edit-btn-group" v-if="focusInput&&type==='company'">
-              <a href="" class="save">保存</a>
-              <a href="" class="cancel">取消</a>
+            <div class="edit-btn-group" v-if="type==='company'">
+              <a href="" class="save" @click="updateUserInfo('company',userInfo.company)">保存</a>
+              <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
           <div class="edit-item">
@@ -84,9 +80,9 @@
             <div class="edit-input">
               <input type="text" v-model="userInfo.job" @click="focusClick('job')" @blur="moveClick">
             </div>
-            <div class="edit-btn-group" v-if="focusInput&&type==='job'">
-              <a href="" class="save">保存</a>
-              <a href="" class="cancel">取消</a>
+            <div class="edit-btn-group" v-if="type==='job'">
+              <a href="" class="save" @click="updateUserInfo('job',userInfo.job)">保存</a>
+              <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
         </div>
@@ -97,43 +93,55 @@
 
 <script>
   import globalStore from '../../store/global-store'
+  import {getUserInfo, updateUserInfo} from '../../http/api'
 
   export default {
     name: 'index',
     computed: {
-      userInfo () {
-        return globalStore.state.userInfo
-      },
       editType () {
         return globalStore.state.editType
       }
     },
     data () {
       return {
-        openId: wx.getStorageSync('openid'),
-        school: '',
-        college: '',
-        major: '',
         focusInput: false,
-        type: '',
-        date: ''
+        userInfo: '',
+        date: '',
+        type: ''
       }
+    },
+    onShow: function () {
+      this.getUserInfo()
     },
     methods: {
       getUserInfo () {
         let _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/group/getUserInfo',
-          method: 'POST',
-          data: {
-            openId: _this.openId
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            _this.userInfo = res.data.data
+        getUserInfo().then(res => {
+          _this.userInfo = res.data
+          globalStore.commit('updateUserInfo', _this.userInfo)
+        })
+      },
+      updateUserInfo (type, val) {
+        let _this = this
+        let req = {
+          type: type,
+          value: val
+        }
+        updateUserInfo(req).then(res => {
+          if (res.head.code === 0) {
+            _this.getUserInfo()
+            _this.type = ''
+            wx.showToast({
+              title: '保存成功',
+              icon: 'none',
+              duration: 1000
+            })
           }
+        })
+      },
+      goSearchSchool () {
+        wx.navigateTo({
+          url: '../search/main'
         })
       },
       focusClick (type) {
@@ -147,6 +155,10 @@
       },
       bindDateChange (e) {
         this.date = e.target.value
+        this.updateUserInfo('graduationTime', this.date)
+      },
+      cancel () {
+        this.type = ''
       }
     }
 
@@ -198,7 +210,7 @@
   }
   .edit-btn-group{
     margin-left: 40rpx;
-    width: 130rpx;
+    width: 110rpx;
     display: flex;
     justify-content: space-between;
     position: relative;

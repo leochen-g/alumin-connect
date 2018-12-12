@@ -60,6 +60,9 @@ module.exports = {
 	getTopicById: function (req, res, next) {
 	  db.query(sqlMap.group.getTopicById,req,res)
 	},
+	addTipOffs:  function (req, res, next) {
+	  db.query(sqlMap.group.addTipOffs,req,res)
+	},
 	//添加评论
 	addComment: function (req, res, next) {
 	  db.query(sqlMap.group.addComment,req,res)
@@ -109,6 +112,12 @@ module.exports = {
 	  getUserInfo:function (req,res,next) {
 		db.query(sqlMap.group.user.getUserInfo,req,res)
 	  },
+	  //更新用户基础信息
+	  updateUserInfo:function (req,res,next) {
+	    var sql = 'update user set '+req[0]+' = ? where openid = ?'
+		req.shift()
+		db.query(sql,req,res)
+	  },
 	  //更新用户昵称
 	  updateUserNickName:function (req,res,next) {
 		db.query(sqlMap.group.user.updateUserNickName,req,res)
@@ -124,6 +133,12 @@ module.exports = {
 	  //更新用户公司信息
 	  updateUserCompanyInfo:function (req,res,next) {
 		db.query(sqlMap.group.user.updateUserCompanyInfo,req,res)
+	  },
+	},
+	admin: {
+	  //获取用户基本信息
+	  getTipOffs:function (req,res,next) {
+		db.query(sqlMap.group.admin.getTipOffs,req,res)
 	  },
 	}
   }

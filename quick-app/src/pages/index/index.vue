@@ -93,6 +93,25 @@
           }
         })
       },
+      openConfirm () {
+        wx.showModal({
+          content: '检测到您没打开校友足迹的定位权限，是否去设置打开？',
+          confirmText: '确认',
+          cancelText: '取消',
+          success: function (res) {
+            console.log(res)
+            // 点击“确认”时打开设置页面
+            if (res.confirm) {
+              console.log('用户点击确认')
+              wx.openSetting({
+                success: (res) => { }
+              })
+            } else {
+              console.log('用户点击取消')
+            }
+          }
+        })
+      },
       // 获取用户openid
       getOpenId (val) {
         const _this = this
@@ -129,6 +148,14 @@
         })
       },
       goCharts: function () {
+        let _this = this
+        wx.getSetting({
+          success: (res) => {
+            if (!res.authSetting['scope.userLocation']) {
+              _this.openConfirm()
+            }
+          }
+        })
         const url = '../charts/main'
         wx.navigateTo({ url })
       },

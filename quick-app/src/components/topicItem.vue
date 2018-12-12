@@ -10,14 +10,22 @@
           <div class="header-content">
             <div class="user-nickName">{{todo.userInfo.nickName}}</div>
             <div class="user-meta-box">
-              <div class="university-info ellipsis" >{{todo.userInfo.graduationTime}} @ {{todo.userInfo.college}}
+              <div class="university-info ellipsis" >{{todo.userInfo.graduationTime?todo.userInfo.graduationTime:'毕业时间'}} @ {{todo.userInfo.college?todo.userInfo.college:'院系'}}
               </div>
               <div class="dot">·</div>
-              <div>{{todo.userInfo.major}}</div>
+              <div>{{todo.userInfo.major?todo.userInfo.major:'专业'}}</div>
             </div>
           </div>
         </div>
         <div class="header-action">
+          <div class="more-btn" @click="moreAction(todo.id)"><span class="aliiconfont">&#xe668;</span></div>
+          <div class="dropdown" v-if="actionId===todo.id&&showHeaderAction">
+            <div class="dropdown-caret"></div>
+            <ul class="dropdown-menu">
+              <li v-if="openId!==todo.userInfo.openid" @click="tipOff(todo.id)">举报</li>
+              <li v-if="openId===todo.userInfo.openid" @click="deleteTopic(todo.id)">删除</li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="alumni-topic-content-row">
@@ -76,7 +84,7 @@
                 <div class="comment-content-box">
                   <div class="comment-meta-box">
                     <div class="comment-user-info ellipsis">
-                      <span class="user-nickName">{{item.userInfo.nickName}}<span class="comment-user-college"> {{item.userInfo.graduationTime}} @ {{item.userInfo.college}}</span></span>
+                      <span class="user-nickName">{{item.userInfo.nickName}}<span class="comment-user-college"> {{item.userInfo.graduationTime?item.userInfo.graduationTime:'毕业时间'}} @ {{item.userInfo.college?item.userInfo.college:'院系'}}</span></span>
                     </div>
                   </div>
                   <div class="comment-content">
@@ -166,7 +174,7 @@
 
 <script>
   import Bus from '../bus'
-  import {addComment, addReply, getReplyList, getCommentList} from '../http/api'
+  import {addComment, addReply, getReplyList, getCommentList, deleteTopic, tipOffsTopic} from '../http/api'
 
   export default {
     name: 'topic-item',
@@ -190,7 +198,9 @@
         start: 0,
         limit: 5,
         fetchAll: false,
-        fetchReply: false
+        fetchReply: false,
+        actionId: '',
+        showHeaderAction: false
       }
     },
     props: {
@@ -202,6 +212,68 @@
       initPageSize () {
         this.start = 0
         this.limit = 5
+      },
+      moreAction (id) {
+        this.showHeaderAction = !this.showHeaderAction
+        this.actionId = id
+      },
+      tipOff (id) {
+        let _this = this
+        _this.showHeaderAction = !_this.showHeaderAction
+        wx.showActionSheet({
+          itemList: ['恶意攻击谩骂', '广告营销', '含敏感词汇'],
+          success: function (res) {
+            let req = {
+              type: res.tapIndex,
+              topicId: id
+            }
+            tipOffsTopic(req).then(res => {
+              if (res.head.code === 0) {
+                wx.showToast({
+                  title: '举报成功，后台将会审核后处理',
+                  icon: 'none',
+                  duration: 1000
+                })
+              }
+            })
+          },
+          fail: function (res) {
+
+          },
+          complete: function (res) {
+
+          }
+        })
+      },
+      deleteTopic (id) {
+        let _this = this
+        _this.showHeaderAction = !_this.showHeaderAction
+        let req = {
+          id: id
+        }
+        wx.showActionSheet({
+          itemList: ['确认删除'],
+          success: function (res) {
+            if (res.tapIndex === 0) {
+              deleteTopic(req).then(res => {
+                if (res.head.code === 0) {
+                  wx.showToast({
+                    title: '删除成功',
+                    icon: 'none',
+                    duration: 1000
+                  })
+                }
+                Bus.$emit('getTopicList')
+              })
+            }
+          },
+          fail: function (res) {
+
+          },
+          complete: function (res) {
+
+          }
+        })
       },
       commentClick (id) { // 点击评论图标
         this.showCommentBox = !this.showCommentBox
@@ -312,9 +384,57 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: 32rpx 0.048rem 0 40rpx;
+    padding: 32rpx 0.48rem 0 40rpx;
+  }
+  .header-action{
+    position: relative;
+    margin-left: 32rpx;
+  }
+  .more-btn{
+    cursor: pointer;
   }
 
+  .dropdown{
+    left: -60rpx;
+    position: absolute;
+    margin-top: 48rpx;
+    z-index: 1;
+  }
+  .dropdown-caret{
+    position: absolute;
+    top: -22rpx;
+    width: 0;
+    height: 0;
+    border: 12rpx solid;
+    border-color: transparent transparent #ebebeb;
+    left: 72rpx
+  }
+  .dropdown-caret:after{
+    content: "";
+    top: -10rpx;
+    left: -12rpx;
+    border-bottom-color: #fff;
+  }
+  .dropdown-menu{
+    display: block;
+    padding: 12rpx 0;
+    border-radius: 6rpx;
+    background-color: #fff;
+    border: 2rpx solid #ebebeb;
+    box-shadow: 0 6rpx 24rpx 0 rgba(0,0,0,.06);
+  }
+  .dropdown-menu li{
+    padding: 20rpx 24rpx;
+    display: block;
+    font-size: 26rpx;
+    color: #84878b;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .hide-drop{
+    display: none;
+  }
   .account-group {
     align-items: center;
     display: flex;

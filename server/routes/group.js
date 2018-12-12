@@ -38,7 +38,10 @@ router.post('/group/getTopicListByUserId',function (req,res,next) {
 router.post('/group/getTopicById',function (req,res,next) {
   filter(req,res,control.getTopicById)
 })
-
+//举报指定ID话题
+router.post('/group/postTipOffsTopic',function (req,res,next) {
+  filter(req,res,control.postTipOffsTopic)
+})
 
 //添加评论
 router.post('/group/addComment',function (req,res,next) {
@@ -79,6 +82,10 @@ router.post('/group/getReplyListByUserId',function (req,res,next) {
 router.post('/group/user/getUserInfo',function (req,res,next) {
   filter(req,res,control.getUserInfo)
 })
+//更新用户基础信息
+router.post('/group/user/updateUserInfo',function (req,res,next) {
+  filter(req,res,control.updateUserInfo)
+})
 //更新用户昵称
 router.post('/group/user/updateUserNickName',function (req,res,next) {
   filter(req,res,control.updateUserNickName)
@@ -95,5 +102,6 @@ router.post('/group/user/updateUserSchoolInfo',function (req,res,next) {
 router.post('/group/user/updateUserCompanyInfo',function (req,res,next) {
   filter(req,res,control.updateUserCompanyInfo)
 })
+
 module.exports = router
 

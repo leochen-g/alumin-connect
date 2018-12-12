@@ -24,6 +24,14 @@
 
   export default {
     name: 'topic-edit',
+    onShow: function () {
+      let _this = this
+      _this.nickName = wx.getStorageSync('nickName')
+      _this.openId = wx.getStorageSync('openId')
+      _this.location = wx.getStorageSync('location')
+      _this.university = wx.getStorageSync('university')
+      _this.hasAuth = wx.getStorageSync('hasAuth')
+    },
     data () {
       return {
         topicContent: '',
@@ -33,10 +41,31 @@
         nickName: wx.getStorageSync('nickName'),
         openId: wx.getStorageSync('openId'),
         location: wx.getStorageSync('location'),
-        university: wx.getStorageSync('university')
+        university: wx.getStorageSync('university'),
+        hasAuth: wx.getStorageSync('hasAuth')
       }
     },
     methods: {
+      authCheck () {
+        let _this = this
+        if (_this.hasAuth) {
+          return true
+        } else {
+          wx.showModal({
+            content: '校友圈交流需要登录后才可操作',
+            confirmText: '确认',
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.switchTab({
+                  url: '../user/main'
+                })
+              }
+            }
+          })
+          return false
+        }
+      },
       inputEvent (e) {
         this.hasInputCount = e.mp.detail.cursor
       },
@@ -59,12 +88,14 @@
           location: _this.location,
           content: _this.topicContent
         }
-        addTopic(req).then(res => {
-          if (res.head.code === 0) {
-            _this.topicContent = ''
-            Bus.$emit('getTopicList')
-          }
-        })
+        if (_this.authCheck()) {
+          addTopic(req).then(res => {
+            if (res.head.code === 0) {
+              _this.topicContent = ''
+              Bus.$emit('getTopicList')
+            }
+          })
+        }
       }
     }
   }

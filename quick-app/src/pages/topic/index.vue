@@ -41,24 +41,25 @@
         hasInputCount: '',
         placeholder: '发布话题',
         list: [],
-        commentList: '',
         start: 0,
         limit: 10,
         currentPage: 1,
         pageNumber: 1,
-        topicCount: ''
+        topicCount: '',
+        hasAuth: wx.getStorageSync('hasAuth')
       }
     },
     onReady: function () {
       let _this = this
-      _this.validate()
-      _this.getTopicList()
       Bus.$off('getTopicList')
       Bus.$on('getTopicList', function () {
         _this.start = 0
         _this.limit = 10
         _this.getTopicList()
       })
+    },
+    onShow: function () {
+      this.validate()
     },
     async onPullDownRefresh () { // 下拉刷新
       this.initPage()
@@ -99,11 +100,49 @@
               }
             }
           })
+          return false
         }
-        wx.getLocation({
-          success: (res) => {
-            let local = res.latitude + ',' + res.longitude
-            _this.getUserLocation(local)
+        if (!_this.location) {
+          wx.getSetting({
+            success: (res) => {
+              if (!res.authSetting['scope.userLocation']) {
+                _this.openConfirm()
+              } else {
+                if (!_this.location) {
+                  wx.getLocation({
+                    success: (res) => {
+                      let local = res.latitude + ',' + res.longitude
+                      _this.getUserLocation(local)
+                    }
+                  })
+                }
+              }
+            }
+          })
+          return false
+        } else {
+          _this.getTopicList()
+        }
+      },
+      openConfirm () {
+        let _this = this
+        wx.showModal({
+          content: '检测到您没打开校友足迹的定位权限，是否去设置打开？',
+          confirmText: '确认',
+          cancelText: '取消',
+          success: function (res) {
+            console.log(res)
+            // 点击“确认”时打开设置页面
+            if (res.confirm) {
+              console.log('用户点击确认')
+              wx.openSetting({
+                success: (res) => {
+                }
+              })
+            } else {
+              _this.validate()
+              console.log('用户点击取消')
+            }
           }
         })
       },
@@ -117,6 +156,7 @@
           _this.city = res.data.city
           globalStore.commit('updateLocation', _this.city)
           wx.setStorageSync('location', _this.city)
+          _this.getTopicList()
         })
       },
       initPage () {

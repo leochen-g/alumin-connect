@@ -18,6 +18,10 @@
             <div class="aliiconfont info-item-icon">&#xe615;</div>
             <div class="info-item-title">公司</div>
           </div>
+          <div class="user-info-item" @click="goUserTopic()">
+            <div class="aliiconfont info-item-icon">&#xe6e8;</div>
+            <div class="info-item-title">话题</div>
+          </div>
           <div class="user-info-item" @click="">
             <div class="aliiconfont info-item-icon">&#xe642;</div>
             <div class="info-item-title">设置</div>
@@ -57,12 +61,17 @@
         this.getUserInfo()
       }
     },
+    onShow: function () {
+      if (this.hasAuth) {
+        this.getUserInfo()
+      }
+    },
     methods: {
       getUserInfo () {
         let _this = this
         getUserInfo().then(res => {
-          globalStore.commit('updateUserInfo', res.data.data)
-          _this.userInfo = res.data.data
+          globalStore.commit('updateUserInfo', res.data)
+          _this.userInfo = res.data
         })
       },
       goPath (val) {
@@ -70,8 +79,12 @@
         globalStore.commit('updateEditType', val)
         wx.navigateTo({ url })
       },
+      goUserTopic () {
+        let url = '../user-topic/main'
+        wx.navigateTo({ url })
+      },
       onGotUserInfo: function (e) {
-        var _this = this
+        let _this = this
         if (e.mp.detail.userInfo) {
           wx.setStorageSync('hasAuth', true)
           _this.hasAuth = true

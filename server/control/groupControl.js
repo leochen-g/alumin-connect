@@ -69,8 +69,9 @@ module.exports = {
 	var param = req.body
 	var arr = [param.openId]
 	sqlControl.group.getTopicListByUserId(arr, function (results, fields) {
+	  var list = []
 	  async.eachSeries(results, function (item, callback) {
-		var obj = {user: {}};
+		var obj = {userInfo: {}};
 		sqlControl.group.user.getUserInfo([item.openId], function (resInfo) {
 		  obj.userInfo = resInfo[0]
 		  callback(null)
@@ -88,7 +89,7 @@ module.exports = {
 		} else {
 		  res.json({
 			head: {code: 0, msg: 'ok'}, data: {
-			  list: list,
+			  list: list
 			}
 		  })
 		}
@@ -129,6 +130,17 @@ module.exports = {
 		res.json({
 		  head: {code: 10000, msg: '此话题已删除'}, data: {}
 		})
+	  }
+	})
+  },
+  postTipOffsTopic: function (req, res, next) {
+	var param = req.body
+	var arr = [param.openId,param.topicId,param.type]
+	sqlControl.group.addTipOffs(arr,function (results, fields) {
+	  if (results.affectedRows) {
+	    res.send({head: {code: 0, msg: 'ok'}, data: {}})
+	  } else {
+		res.send({head: {code: 10000, msg: '举报失败'}, data: {}})
 	  }
 	})
   },
@@ -329,11 +341,9 @@ module.exports = {
   },
   //获取用户基本信息
   getUserInfo: function (req, res, next) {
-    console.log(res)
 	var param = req.body
 	var arr = [param.openId]
 	sqlControl.group.user.getUserInfo(arr, function (results, fields) {
-	  console.log(results[0])
 	  var obj = {
 		openId: results[0].openid,
 		nickName: results[0].nickName,
@@ -353,6 +363,17 @@ module.exports = {
 	  res.json({
 		head: {code: 0, msg: 'ok'}, data: obj
 	  })
+	})
+  },
+  updateUserInfo: function (req, res, next) {
+	var param = req.body
+	var arr = [param.type, param.value, param.openId]
+	sqlControl.group.user.updateUserInfo(arr, function (results, fields) {
+	  if (results.affectedRows) {
+		res.json({head: {code: 0, msg: 'ok'}, data: {}})
+	  } else {
+		res.json({head: {code: 10000, msg: '修改失败'}, data: {}})
+	  }
 	})
   },
   //更新用户昵称

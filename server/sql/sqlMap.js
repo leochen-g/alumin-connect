@@ -24,9 +24,10 @@ var sqlMap = {
     addTopic:'insert into topic(openId, location, university, nickName, content) values (?,?,?,?,?)',
 	deleteTopic:'update topic set flag = 0 where id = ? and openId = ?',
 	updateTopic:'',
-	getTopicListByUserId:'select a.location as userLocation,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join topic b on a.openid=b.openId where b.openId = ? and b.flag=1',
+	getTopicListByUserId:'select b.* from topic b where b.openId = ? and b.flag=1 order by id desc',
 	getTopicById:'select a.location as userLocation,a.university,a.gender,a.avataUrl,a.college,a.major,b.* from user a inner join topic b on a.openid=b.openId where b.id = ? and b.flag=1',
 	getTopicList:'select count(id) as count from topic where university = ? and flag=1 and location= ?;select * from topic where university = ? and flag=1 and location= ? order by id desc limit ?,?',
+	addTipOffs: 'insert into tip_off (openId,topicId,type) values (?,?,?)',
 	addComment:'insert into comment(openId, cid, topicId,content) values (?,?,?,?)',
 	deleteComment:'update comment set flag = 0 where id = ? and openId = ?',
 	updateCommentCount:'update topic set commentCount=commentCount+1 where id = ?',
@@ -44,6 +45,9 @@ var sqlMap = {
 	  updateUserContact:'update user set phone = ? where openid = ?',
 	  updateUserSchoolInfo:'update user set university = ?, graduationTime = ?, college = ?, major = ?  where openid = ?',
 	  updateUserCompanyInfo:'update user set company = ?, job = ? where openid = ?',
+	},
+	admin:{
+	  getTipOffs: 'select c.id,c.type,b.id as topicId,b.content,b.university,b.location,a.nickName,a.openId,a.avataUrl from (user a inner join tip_off c on a.openId=c.openId) inner join topic b where b.id=c.topicId order by id desc'
 	}
   }
 }
