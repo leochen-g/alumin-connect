@@ -85,6 +85,7 @@
       },
       onGotUserInfo: function (e) {
         let _this = this
+        console.log(e)
         if (e.mp.detail.userInfo) {
           wx.setStorageSync('hasAuth', true)
           _this.hasAuth = true

@@ -23,7 +23,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
-  import {getOpenId, getUserLocation, updateUserDeviceInfo, updateUserBaseInfo} from '../../http/api'
+  import {getOpenId, getUserLocation, updateUserDeviceInfo} from '../../http/api'
 
   export default {
     computed: {
@@ -148,14 +148,6 @@
         })
       },
       goCharts: function () {
-        let _this = this
-        wx.getSetting({
-          success: (res) => {
-            if (!res.authSetting['scope.userLocation']) {
-              _this.openConfirm()
-            }
-          }
-        })
         const url = '../charts/main'
         wx.navigateTo({ url })
       },
@@ -171,18 +163,6 @@
               })
             }
           }
-        })
-      },
-      // 更新用户基本信息
-      updateUserBaseInfo (obj) {
-        const req = {
-          nickName: obj.nickName,
-          avatarUrl: obj.avatarUrl,
-          country: obj.country,
-          gender: obj.gender
-        }
-        updateUserBaseInfo(req).then(res => {
-          console.log('更新用户基础信息')
         })
       },
       // 更新用户设备信息
@@ -219,7 +199,7 @@
     width: 100%;
     height: auto;
     box-sizing: border-box;
-    background-image: url('https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg7.jpg');
+    background-image: url('http://image.bloggeng.com/20181213164522.png');
     background-repeat: no-repeat;
     background-size: 100%;
   }

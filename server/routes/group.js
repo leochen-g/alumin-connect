@@ -18,6 +18,9 @@ function filter(req,res,callback) {
 	callback&&callback(req,res)
   }
 }
+router.post('/group/getBannerList',function (req,res,next) {
+  filter(req,res,control.getBannerList)
+})
 //添加校友圈话题
 router.post('/group/addTopic',function (req,res,next) {
   filter(req,res,control.addTopic)

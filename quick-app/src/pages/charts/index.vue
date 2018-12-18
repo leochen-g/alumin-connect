@@ -433,7 +433,7 @@
       drawPath (path) {
         var _this = this
         wx.getImageInfo({
-          src: 'https://alumni.xkboke.com/static/img/wechat_bg.jpg',
+          src: 'http://image.bloggeng.com/20181213164400.png',
           success: function (res) {
             const random = (parseInt(9 * Math.random() + 90))
             const ctx = wx.createCanvasContext('shareCanvas')
@@ -524,7 +524,7 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-image: url("https://alumni.xkboke.com/static/img/chart-bg.jpg");
+    background-image: url("http://image.bloggeng.com/20181213164314.png");
     background-repeat: no-repeat;
     background-size: 100%;
   }

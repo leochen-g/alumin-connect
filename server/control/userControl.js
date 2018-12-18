@@ -35,12 +35,12 @@ module.exports = {
 			  if (result.insertId) {
 				res.json({
 				  head: {code: 0, msg: 'ok'},
-				  data: {'openid': openId, 'session_key': session_key}
+				  data: {'openid': openId}
 				})
 			  } else {
 				res.json({
 				  head: {code: 11000, msg: '数据已存在'},
-				  data: {'openid': openId, 'session_key': session_key}
+				  data: {'openid': openId}
 				})
 			  }
 			})

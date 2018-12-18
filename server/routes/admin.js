@@ -18,7 +18,7 @@ function filter(req,res,callback) {
 	callback&&callback(req,res)
   }
 }
-//添加校友圈话题
+//获取举报的话题
 router.post('/admin/topic/getTipOffs',function (req,res,next) {
   filter(req,res,control.getTipOffs)
 })

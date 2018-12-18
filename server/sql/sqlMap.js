@@ -21,6 +21,7 @@ var sqlMap = {
 	saveUsrLocation: "update user set pid=?,location=? where openid=?"
   },
   group: {
+	getBannerList:'select * from screen_map where type = "public" and flag = 1;select * from screen_map where university = ? and flag = 1',
     addTopic:'insert into topic(openId, location, university, nickName, content) values (?,?,?,?,?)',
 	deleteTopic:'update topic set flag = 0 where id = ? and openId = ?',
 	updateTopic:'',

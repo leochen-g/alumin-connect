@@ -6,6 +6,21 @@ var uuid = require('uuid/v1')
 var async = require('async')
 
 module.exports = {
+  // 获取轮播图
+  getBannerList: function (req, res, next) {
+	var param = req.body
+	var arr = [param.university]
+	sqlControl.group.getBannerList(arr, function (results, fields) {
+	  var arr = []
+	  if(results[1].length > 0){
+		arr.push(results[0][0])
+		arr = arr.concat(results[1])
+	  }else {
+		arr.push(results[0][0])
+	  }
+	  res.send({head: {code: 0, msg: 'ok'}, data: {list:arr}})
+	})
+  },
   //添加话题
   addTopic: function (req, res, next) {
 	var param = req.body

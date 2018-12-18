@@ -1,13 +1,13 @@
 var express = require('express')
 var cookieParser = require('cookie-parser')
+require('env2')('./.env');
+const config = require('./config')
 var index = require('./routes/index')
 var group = require('./routes/group')
 var admin = require('./routes/admin')
 var path = require('path')
 var http = require('http')
 var bodyParser = require('body-parser')
-require('env2')('./.env');
-const config = require('./config')
 var app = express()
 
 app.set('trust proxy','loopback')

@@ -35,11 +35,16 @@ var provinceMap = {
   '澳门': 33,
   '台湾': 34
 }
-module.exports = {
+const config = {
   HOST: env.HOST,
   PORT: env.PORT,
   MINI_APPID: env.MINI_APPID,
   MINI_SECRET:env.MINI_SECRET,
   TENCENT_MAP_KEY: env.TENCENT_MAP_KEY,
-  PROVINCEMAP:provinceMap
+  PROVINCEMAP:provinceMap,
+  RDS_PORT: env.RDS_PORT,
+  RDS_HOST: env.RDS_HOST,
+  RDS_PWD: env.RDS_PWD
 }
+
+module.exports = config

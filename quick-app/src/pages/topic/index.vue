@@ -6,6 +6,9 @@
     <topicEdit />
     <!--话题列表-->
     <topicItem v-for="item in list" :key="item.id" :todo="item" />
+    <div class="init-topic" v-if="list.length<=0">
+      <div class="init-tips">圈子里还没人说话，快来活跃气氛</div>
+    </div>
   </div>
 
 </template>
@@ -16,7 +19,7 @@
   import topicItem from '../../components/topicItem'
   import globalStore from '../../store/global-store'
   import Bus from '../../bus'
-  import {getTopicList, getUserLocation} from '../../http/api'
+  import {getTopicList, getUserLocation, getBannerList} from '../../http/api'
   export default {
     name: 'index',
     components: {
@@ -35,7 +38,7 @@
     },
     data () {
       return {
-        swiperList: [{'id': '1', 'url': 'http://image.bloggeng.com/shengdan.png'}, {'id': '2', 'url': 'http://image.bloggeng.com/shengdan.png'}],
+        swiperList: [],
         pushContent: '',
         wordCount: 100,
         hasInputCount: '',
@@ -60,10 +63,12 @@
     },
     onShow: function () {
       this.validate()
+      this.getSwiperList()
     },
     async onPullDownRefresh () { // 下拉刷新
       this.initPage()
       this.getTopicList()
+      this.getSwiperList()
       wx.showToast({
         title: '刷新成功',
         icon: 'none',
@@ -123,6 +128,16 @@
         } else {
           _this.getTopicList()
         }
+      },
+      getSwiperList () {
+        let _this = this
+        let req = {
+          university: _this.university || '无'
+        }
+        getBannerList(req).then(res => {
+          _this.swiperList = []
+          _this.swiperList = res.data.list
+        })
       },
       openConfirm () {
         let _this = this
@@ -206,5 +221,18 @@
 <style scoped>
   .alumni-main{
     background-color: #f4f5f5;
+  }
+  .init-topic{
+    position: relative;
+    display: flex;
+    height: 400rpx;
+    line-height: 400rpx;
+    width: 100%;
+    justify-content: center;
+    background-color: #fff;
+  }
+  .init-tips{
+    font-size: 32rpx;
+    color: #c8c8c8;
   }
 </style>
