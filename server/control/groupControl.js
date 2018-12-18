@@ -4,7 +4,7 @@
 var sqlControl = require('../sql/sqlController')
 var uuid = require('uuid/v1')
 var async = require('async')
-
+var topicService = require('../service/topicLiked')
 module.exports = {
   // 获取轮播图
   getBannerList: function (req, res, next) {
@@ -188,8 +188,6 @@ module.exports = {
 	  }
 	})
   },
-
-
   //获取话题评论列表
   getCommentList: function (req, res, next) {
 	var param = req.body
@@ -353,6 +351,25 @@ module.exports = {
 		res.json({head: {code: 10000, msg: '删除失败'}, data: {}})
 	  }
 	})
+  },
+  // 用户点赞
+  addLikedByTopicId: function (req,res,next) {
+	var param  = req.body
+	if(param.liked){
+	  topicService.addTopicLiked(param.topicId,param.openId).then(function (result) {
+		console.log('点赞成功',result)
+		if(result){
+		  res.json({head: {code: 0, msg: 'ok'}, data: {}})
+		}
+	  })
+	}else {
+	  topicService.removeTopicLiked(param.topicId,param.openId).then(function (result) {
+		console.log('取消点赞成功',result)
+		if(res){
+		  res.json({head: {code: 0, msg: 'ok'}, data: {}})
+		}
+	  })
+	}
   },
   //获取用户基本信息
   getUserInfo: function (req, res, next) {

@@ -16,6 +16,11 @@ module.exports = {
 		+ " " + date.getHours() + seperator2 + date.getMinutes()
 		+ seperator2 + date.getSeconds();
 	return currentdate;
+  },
+  //获取当前时间戳
+  getTime: function () {
+	var date = new Date()
+	return date.getTime()
   }
 }
 

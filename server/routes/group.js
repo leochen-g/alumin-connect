@@ -6,7 +6,7 @@ var control = require('../control/groupControl')
 //校验参数是否为空
 function isEmpty(body) {
   for (i in body){
-	if(body[i]==''||body[i]==undefined||body==null)
+	if(body[i]===''||body[i]===undefined||body[i]===null||body==null)
 	  return true
   }
   return false
@@ -80,6 +80,9 @@ router.post('/group/getReplyListByUserId',function (req,res,next) {
   filter(req,res,control.getReplyListByUserId)
 })
 
+router.post('/group/addLikedByTopicId',function (req,res,next) {
+  filter(req,res,control.addLikedByTopicId)
+})
 
 //获取用户基本信息
 router.post('/group/user/getUserInfo',function (req,res,next) {

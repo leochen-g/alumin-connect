@@ -1,58 +1,58 @@
-var redis = require('redis')
+var Redis = require('ioredis')
 var config = require('../config')
-var rds = {}
-var client = redis.createClient(config.RDS_PORT,config.RDS_HOST,{auth_pass:config.RDS_PWD})
+var redis = new Redis({port:config.RDS_PORT,host:config.RDS_HOST,password:config.RDS_PWD})
 
-client.on("error", function (err) {
+redis.on("error", function (err) {
   console.log("Error :" , err);
 });
 
-client.on('connect', function(res){
+redis.on('connect', function(res){
   console.log('Redis连接成功.');
 })
-
 /**
- * 添加string类型的数据
- * @param key 键
+ * 有序集合添加
+ * @param key
  * @param value
- * @param expire (过期时间,单位秒;可为空，为空表示不过期)
- * @param callback(err,result)
+ * @return {Promise<void>}
  */
-rds.set = function(key, value, expire, callback){
-
-  client.set(key, value, function(err, result){
-
-	if (err) {
-	  console.log(err);
-	  callback(err,null);
-	  return;
-	}
-
-	if (!isNaN(expire) && expire > 0) {
-	  client.expire(key, parseInt(expire));
-	}
-
-	callback(null,result)
-  })
-}
-
+// rds.zadd = (key, value) => {
+//   return client.zadd(key, value)
+// }
 /**
- * 查询string类型的数据
- * @param key 键
- * @param callback(err,result)
+ * 有序集合获取指定key的value总数
+ * @param key
+ * @return {*}
  */
-rds.get = function(key, callback){
-
-  client.get(key, function(err,result){
-
-	if (err) {
-	  console.log(err);
-	  callback(err,null)
-	  return;
-	}
-
-	callback(null,result);
-  });
-}
-
-module.exports = rds
+// rds.zcard = (key) => {
+//   return client.zcard(key)
+// }
+/**
+ * 有序集合返回所有数据
+ * @param key
+ * @return {*}
+ */
+// rds.zrange  = (key) => {
+//   return client.zrange(key, 0, -1)
+// }
+/**
+ * 有序就和获取指定key的值是否存在
+ * @param key
+ * @param value
+ * @return {*}
+ */
+// rds.zscore = (key, value) => {
+//   return client.zscore(key,value)
+// }
+/**
+ * 有序集合移除指定key的value值
+ * @param key
+ * @param value
+ * @return {*}
+ */
+// rds.zrem = (key,value) => {
+//   return client.zrem(key,value)
+// }
+// rds.zremrangebyscore = (key,start,end) => {
+//   return client.zremrangebyscore(key,start,end)
+// }
+module.exports = redis

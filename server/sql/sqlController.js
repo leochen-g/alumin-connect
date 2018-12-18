@@ -1,21 +1,6 @@
 var db = require('./sqlConfig');  //require的路径是我们的db模块相对于本文件的路径
-var rds = require('./../redis/redisConfig')
 var sqlMap = require('./sqlMap')
-//
-// rds.set('test2', '封装方法', '100', function(err,result) {
-//   if (err) {
-// 	console.log(err);
-// 	return;
-//   }
-//   console.log('插入数据结果:', result);
-// })
-// rds.get('test2',function(err,result){
-//   if (err) {
-// 	console.log(err);
-// 	return;
-//   }
-//   console.log(result);
-// })
+
 module.exports = {
 
 //  保存用户昵称头像
