@@ -1,5 +1,4 @@
 //管理员校友圈路由
-
 var express = require('express')
 var router = express.Router()
 var control = require('../control/adminControl')

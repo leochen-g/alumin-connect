@@ -107,7 +107,7 @@
                       <div class="reply-action-box">
                         <div class="submit">
                           <button class="comment-submit-btn" v-if="!replyContent">评论</button>
-                          <button class="comment-submit-btn active" @click="addReply(item.cid, item.cid, 'comment', item.userInfo.openid, item.topicId)" v-if="replyContent">评论</button>
+                          <button class="comment-submit-btn active" @click="addReply(item.cid, item.cid, 'comment', item.userInfo.openid, item.topicId, index)" v-if="replyContent">评论</button>
                         </div>
                       </div>
                     </div>
@@ -144,7 +144,7 @@
                                       <div class="reply-action-box">
                                         <div class="submit">
                                           <button class="comment-submit-btn" v-if="!replyContent">评论</button>
-                                          <button class="comment-submit-btn active" @click="addReply(item.cid, replyItem.id, 'reply', replyItem.userInfo.openid, item.topicId)" v-if="replyContent">评论</button>
+                                          <button class="comment-submit-btn active" @click="addReply(item.cid, replyItem.id, 'reply', replyItem.userInfo.openid, item.topicId,index)" v-if="replyContent">评论</button>
                                         </div>
                                       </div>
                                     </div>
@@ -299,11 +299,11 @@
             _this.commentContent = ''
             _this.initPageSize()
             _this.getCommentList(id)
-            Bus.$emit('getTopicList')
+            _this.todo.commentCount = _this.todo.commentCount + 1
           }
         })
       },
-      addReply (cid, rid, rType, toUid, topicId) { // 添加回复
+      addReply (cid, rid, rType, toUid, topicId, index) { // 添加回复
         let _this = this
         let req = {
           cid: cid,
@@ -317,8 +317,8 @@
           if (res.head.code === 0) {
             _this.initPageSize()
             _this.replyContent = ''
-            _this.getCommentList(topicId)
-            Bus.$emit('getTopicList')
+            _this.gteReplyListByCommentId(cid, index)
+            _this.todo.commentCount = _this.todo.commentCount + 1
             _this.replyCommentShow = false
           }
         })
@@ -338,6 +338,7 @@
           console.log('回复列表', res.data)
           _this.fetchAll = false
           _this.fetchReply = true
+          console.log(index, res.data.topComment)
           _this.commentList.comments[index].topComment = res.data.topComment
         })
       },

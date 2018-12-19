@@ -69,11 +69,11 @@
       this.initPage()
       this.getTopicList()
       this.getSwiperList()
-      wx.showToast({
-        title: '刷新成功',
-        icon: 'none',
-        duration: 1000
-      })
+      // wx.showToast({
+      //   title: '刷新成功',
+      //   icon: 'none',
+      //   duration: 2000
+      // })
       wx.stopPullDownRefresh()
     },
     onReachBottom () { // 上拉加载

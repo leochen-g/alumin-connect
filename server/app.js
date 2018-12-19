@@ -2,7 +2,7 @@ var express = require('express')
 var cookieParser = require('cookie-parser')
 require('env2')('./.env');
 const config = require('./config')
-var index = require('./routes/index')
+var user = require('./routes/user')
 var group = require('./routes/group')
 var admin = require('./routes/admin')
 var path = require('path')
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //分发路由到校友足迹
-app.use('/api', index)
+app.use('/api', user)
 //分发路由到校友圈
 app.use('/api', group)
 //分发路由到管理员

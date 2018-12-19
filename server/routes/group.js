@@ -92,22 +92,6 @@ router.post('/group/user/getUserInfo',function (req,res,next) {
 router.post('/group/user/updateUserInfo',function (req,res,next) {
   filter(req,res,control.updateUserInfo)
 })
-//更新用户昵称
-router.post('/group/user/updateUserNickName',function (req,res,next) {
-  filter(req,res,control.updateUserNickName)
-})
-//更新用户联系方式
-router.post('/group/user/updateUserContact',function (req,res,next) {
-  filter(req,res,control.updateUserContact)
-})
-//更新用户学校信息
-router.post('/group/user/updateUserSchoolInfo',function (req,res,next) {
-  filter(req,res,control.updateUserSchoolInfo)
-})
-//更新用户职业信息
-router.post('/group/user/updateUserCompanyInfo',function (req,res,next) {
-  filter(req,res,control.updateUserCompanyInfo)
-})
 
 module.exports = router
 
