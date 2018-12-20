@@ -1,6 +1,6 @@
 const Fly = require('flyio/dist/npm/wx')
 const fly = new Fly()
-const host = 'http://127.0.0.1:4000'
+const host = 'http://127.0.0.1:4001'
 // 添加请求拦截器
 fly.config.baseURL = host
 fly.interceptors.request.use((request) => {

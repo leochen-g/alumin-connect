@@ -44,8 +44,8 @@
       <div class="alumni-topic-action-row">
         <div class="action-box">
           <div class="like-action action">
-            <div class="action-title-box" @click="$emit('like',todo.id)">
-              <i class="aliiconfont action-icon">&#xe70b;</i>
+            <div class="action-title-box" @click="likeClick(todo.id)">
+              <i class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked}">&#xe630;</i>
               <span class="action-title">{{todo.likeCount?todo.likeCount:'赞'}}</span>
             </div>
           </div>
@@ -174,7 +174,7 @@
 
 <script>
   import Bus from '../bus'
-  import {addComment, addReply, getReplyList, getCommentList, deleteTopic, tipOffsTopic} from '../http/api'
+  import {addComment, addReply, getReplyList, getCommentList, deleteTopic, tipOffsTopic, addLiked} from '../http/api'
 
   export default {
     name: 'topic-item',
@@ -358,6 +358,25 @@
             _this.start = 0
             _this.limit = 5
             _this.commentList = res.data
+          }
+        })
+      },
+      likeClick (tid) {
+        var _this = this
+        var liked = !_this.todo.hasLiked
+        console.log('点赞', liked)
+        let req = {
+          liked: liked,
+          topicId: tid
+        }
+        addLiked(req).then(res => {
+          if (res.head.code === 0) {
+            _this.todo.hasLiked = liked
+            if (liked) {
+              _this.todo.likeCount = _this.todo.likeCount + 1
+            } else {
+              _this.todo.likeCount = _this.todo.likeCount - 1
+            }
           }
         })
       }
@@ -566,8 +585,12 @@
 
   .action-icon {
     font-size: 36rpx;
+    color: #999999;
   }
 
+  .active-action {
+    color: #027fff;
+  }
   .action-title {
     margin-left: .072rem;
     font-size: 26rpx;

@@ -22,7 +22,11 @@
             <div class="aliiconfont info-item-icon">&#xe6e8;</div>
             <div class="info-item-title">话题</div>
           </div>
-          <div class="user-info-item" @click="">
+          <div class="user-info-item" @click="goUserMessage()">
+            <div class="aliiconfont info-item-icon">&#xe6a9;</div>
+            <div class="info-item-title">消息</div>
+          </div>
+          <div class="user-info-item" @click="goSetting()">
             <div class="aliiconfont info-item-icon">&#xe642;</div>
             <div class="info-item-title">设置</div>
           </div>
@@ -81,6 +85,14 @@
       },
       goUserTopic () {
         let url = '../user-topic/main'
+        wx.navigateTo({ url })
+      },
+      goUserMessage () {
+        let url = '../user-message/main'
+        wx.navigateTo({ url })
+      },
+      goSetting () {
+        let url = '../user-setting/main'
         wx.navigateTo({ url })
       },
       onGotUserInfo: function (e) {

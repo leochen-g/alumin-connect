@@ -38,7 +38,7 @@ module.exports = {
   getTopicList: async function (req, res) {
 	var param = req.body
 	var arr = [param.university, param.location, param.university, param.location, parseInt(param.start), parseInt(param.limit)]
-	var results = await groupService.getTopicList(arr)
+	var results = await groupService.getTopicList(arr, param.openId)
 	res.json({
 	  head: {code: 0, msg: 'ok'}, data: results
 	})
@@ -57,8 +57,8 @@ module.exports = {
   //获取指定ID话题详情
   getTopicById: async function (req, res) {
 	var param = req.body
-	var arr = [param.id]
-	var results = await groupService.getTopicById(arr)
+	var arr = [param.topicId]
+	var results = await groupService.getTopicById(arr,param.openId)
 	if (results == null) {
 	  res.json({head: {code: 10000, msg: '此话题已删除'}, data: {}})
 	} else {
@@ -152,20 +152,19 @@ module.exports = {
   // 用户点赞
   addLikedByTopicId: function (req, res, next) {
 	var param = req.body
-	if (param.liked) {
-	  topicService.addTopicLiked(param.topicId, param.openId).then(function (result) {
-		console.log('点赞成功', result)
-		if (result) {
-		  res.json({head: {code: 0, msg: 'ok'}, data: {}})
-		}
-	  })
-	} else {
-	  topicService.removeTopicLiked(param.topicId, param.openId).then(function (result) {
-		console.log('取消点赞成功', result)
-		if (res) {
-		  res.json({head: {code: 0, msg: 'ok'}, data: {}})
-		}
-	  })
+	var arr = [param.topicId, param.openId]
+	var liked = param.liked=='false'
+	if (!liked) { //点赞
+	  var results = groupService.addLike(arr)
+	  if (results) {
+		res.json({head: {code: 0, msg: 'ok'}, data: {}})
+	  }
+	} else { //取消点赞
+	  console.log('取消')
+	  var response = groupService.removeLiked(arr)
+	  if (response) {
+		res.json({head: {code: 0, msg: 'ok'}, data: {}})
+	  }
 	}
   },
 }

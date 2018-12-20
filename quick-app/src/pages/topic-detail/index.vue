@@ -8,16 +8,15 @@
 <script>
   import topicItem from '../../components/topicItem'
   import globalStore from '../../store/global-store'
-  import Bus from '../../bus'
-  import {getUserTopicList} from '../../http/api'
+  import {getTopicById} from '../../http/api'
   export default {
     name: 'index',
     components: {
       topicItem
     },
     computed: {
-      editType () {
-        return globalStore.state.editType
+      selectTopicId () {
+        return globalStore.state.selectTopicId
       }
     },
     data () {
@@ -25,25 +24,22 @@
         list: []
       }
     },
-    onReady: function () {
-      let _this = this
-      _this.getTopicList()
-      Bus.$off('getTopicList')
-      Bus.$on('getTopicList', function () {
-        _this.getTopicList()
-      })
-    },
     onShow: function () {
       wx.setNavigationBarTitle({
-        title: '个人话题'
+        title: '话题详情'
       })
+      let _this = this
+      _this.getTopicById()
     },
     methods: {
-      getTopicList () {
+      getTopicById () {
         let _this = this
         _this.list = []
-        getUserTopicList().then(res => {
-          _this.list = res.data.list
+        let req = {
+          topicId: _this.selectTopicId
+        }
+        getTopicById(req).then(res => {
+          _this.list = [res.data]
         })
       }
     }

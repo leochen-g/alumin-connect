@@ -111,6 +111,9 @@
       }
     },
     onShow: function () {
+      wx.setNavigationBarTitle({
+        title: '信息修改'
+      })
       this.getUserInfo()
     },
     methods: {

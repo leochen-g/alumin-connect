@@ -80,7 +80,8 @@ router.post('/group/getReplyListByUserId',function (req,res,next) {
   filter(req,res,control.getReplyListByUserId)
 })
 
-router.post('/group/addLikedByTopicId',function (req,res,next) {
+//点赞
+router.post('/group/addLiked',function (req,res,next) {
   filter(req,res,control.addLikedByTopicId)
 })
 

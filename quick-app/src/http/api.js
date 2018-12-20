@@ -23,8 +23,9 @@ export const getUserAndLocation = (params) => { return fly.get('/api/user/getUse
  **/
 // 获取话题列表
 export const getTopicList = (params) => { return fly.post('/api/group/getTopicList', params) }
-// 获取用户画图
+// 获取用户话题列表
 export const getUserTopicList = (params) => { return fly.post('/api/group/getTopicListByUserId', params) }
+export const getTopicById = (params) => { return fly.post('/api/group/getTopicById', params) }
 // 获取banner图
 export const getBannerList = (params) => { return fly.post('/api/group/getBannerList', params) }
 // 添加话题
@@ -39,7 +40,10 @@ export const getReplyList = (params) => { return fly.post('/api/group/getReplyLi
 export const getCommentList = (params) => { return fly.post('/api/group/getCommentList', params) }
 // 删除话题
 export const deleteTopic = (params) => { return fly.post('/api/group/deleteTopic', params) }
+// 举报话题
 export const tipOffsTopic = (params) => { return fly.post('/api/group/postTipOffsTopic', params) }
+// 点赞
+export const addLiked = (params) => { return fly.post('/api/group/addLiked', params) }
 /**
  * 个人中心接口
  **/

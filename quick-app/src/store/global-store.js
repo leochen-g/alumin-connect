@@ -10,7 +10,8 @@ export default new Vuex.Store({
     location: wx.getStorageSync('location') || '',
     hasAuth: wx.getStorageSync('hasAuth') || false,
     editType: '',
-    userInfo: ''
+    userInfo: '',
+    selectTopicId: '58'
   },
   mutations: {
     increment: (state, n) => {
@@ -30,6 +31,10 @@ export default new Vuex.Store({
     },
     updateUserInfo: (state, n) => {
       state.userInfo = n
+    },
+    updateSelectTopicId: (state, n) => {
+      state.selectTopicId = n
     }
+
   }
 })

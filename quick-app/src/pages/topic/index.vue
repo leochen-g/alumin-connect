@@ -62,6 +62,9 @@
       })
     },
     onShow: function () {
+      wx.setNavigationBarTitle({
+        title: '个人中心'
+      })
       this.validate()
       this.getSwiperList()
     },

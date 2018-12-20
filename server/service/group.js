@@ -1,4 +1,5 @@
 let sqlDao = require('../sql/sqlDao')
+let topicService = require('./topicLiked')
 let until = require('../until')
 
 let groupService = {
@@ -25,7 +26,7 @@ let groupService = {
 	return results.affectedRows
   },
   // 获取话题列表
-  getTopicList: async function (arr) {
+  getTopicList: async function (arr,uid) {
 	let results = await sqlDao.group.getTopicList(arr)
 	let res = {}
 	let list = []
@@ -37,9 +38,10 @@ let groupService = {
 	  obj.id = item.id
 	  obj.content = item.content
 	  obj.commentCount = item.commentCount
-	  obj.likeCount = item.likeCount
+	  obj.likeCount = await topicService.getLikedCountByTid(item.id)
 	  obj.updatedAt = item.updatedAt
 	  obj.location = item.location
+	  obj.hasLiked = await topicService.hasUserLikedByTid(item.id,uid)===null?false:true
 	  list.push(obj)
 	}
 	res.count = count
@@ -56,8 +58,9 @@ let groupService = {
 	  obj.userInfo = await this.getUserBaseInfo([item.openId])
 	  obj.id = item.id
 	  obj.content = item.content
+	  obj.likeCount = await topicService.getLikedCountByTid(item.id)
+	  obj.hasLiked = await topicService.hasUserLikedByTid(item.id,arr[0])===null?false:true
 	  obj.commentCount = item.commentCount
-	  obj.likeCount = item.likeCount
 	  obj.updatedAt = item.updatedAt
 	  obj.location = item.location
 	  list.push(obj)
@@ -65,7 +68,7 @@ let groupService = {
 	return list
   },
   // 获取指定ID话题详情
-  getTopicById: async function (arr) {
+  getTopicById: async function (arr,uid) {
 	let results = await sqlDao.group.getTopicById(arr)
 	if (results.length > 0) {
 	  let obj = {userInfo: {}};
@@ -73,6 +76,8 @@ let groupService = {
 	  obj.userInfo = await this.getUserBaseInfo([item.openId])
 	  obj.id = item.id
 	  obj.content = item.content
+	  obj.likeCount = await topicService.getLikedCountByTid(item.id)
+	  obj.hasLiked = await topicService.hasUserLikedByTid(item.id,uid)===null?false:true
 	  obj.commentCount = item.commentCount
 	  obj.likeCount = item.likeCount
 	  obj.updatedAt = item.updatedAt
@@ -186,6 +191,14 @@ let groupService = {
 	}else {
       return false
 	}
+  },
+  //点赞
+  addLike: async function(arr) {
+    return await topicService.addTopicLiked(arr[0], arr[1])
+  },
+  //取消点赞
+  removeLiked: async function(arr) {
+	return await topicService.removeTopicLiked(arr[0], arr[1])
   },
   // 获取用户所有信息
   getAllUserInfo: async function (arr) {

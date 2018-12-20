@@ -35,6 +35,7 @@ router.get('/user/getUniversity',async function (req,res) {
 router.get('/user/getMapData',async function (req,res) {
   control.getMapData(req,res)
 })
+//获取学校总人数和分布城市数
 router.get('/user/getUserAndLocation',async function (req,res) {
   control.getUserAndLocationCount(req,res)
 })

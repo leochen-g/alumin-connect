@@ -14,11 +14,11 @@ export default {
 <style>
   @font-face {
     font-family: 'aliiconfont';  /* project id 709721 */
-    src: url('//at.alicdn.com/t/font_709721_k8fy6j10m3c.eot');
-    src: url('//at.alicdn.com/t/font_709721_k8fy6j10m3c.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_709721_k8fy6j10m3c.woff') format('woff'),
-    url('//at.alicdn.com/t/font_709721_k8fy6j10m3c.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_709721_k8fy6j10m3c.svg#aliiconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_709721_y3v3cgif9m.eot');
+    src: url('//at.alicdn.com/t/font_709721_y3v3cgif9m.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_709721_y3v3cgif9m.woff') format('woff'),
+    url('//at.alicdn.com/t/font_709721_y3v3cgif9m.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_709721_y3v3cgif9m.svg#aliiconfont') format('svg');
   }
   html{
     font-size: 24rpx;
