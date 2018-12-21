@@ -47,6 +47,11 @@ var sqlMap = {
 	  updateUserContact:'update user set phone = ? where openid = ?',
 	  updateUserSchoolInfo:'update user set university = ?, graduationTime = ?, college = ?, major = ?  where openid = ?',
 	  updateUserCompanyInfo:'update user set company = ?, job = ? where openid = ?',
+	  checkLikedMessage: 'select count(id) as count from message where contentType="liked" and producer = ? and topicId = ?',
+	  addUserMessage:'insert into message (msgType,contentType,topicId,producer,consumer) values (?,?,?,?,?)',
+	  getMessage:'select count(id) as count from message where msgType = "user" and consumer = ? and flag = 1;select * from message where msgType = "user" and consumer = ? order by updatedAt desc',
+	  getSystemMessage:'select count(id) as count from message where msgType = "system";select * from message where msgType = "system" order by updatedAt desc',
+	  readMessage:'update message set flag = 0 where id = ? and consumer = ?'
 	},
 	admin:{
 	  getTipOffs: 'select c.id,c.type,b.id as topicId,b.content,b.university,b.location,a.nickName,a.openId,a.avataUrl from (user a inner join tip_off c on a.openId=c.openId) inner join topic b where b.id=c.topicId order by id desc'

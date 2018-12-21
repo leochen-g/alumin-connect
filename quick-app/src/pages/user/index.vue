@@ -24,7 +24,7 @@
           </div>
           <div class="user-info-item" @click="goUserMessage()">
             <div class="aliiconfont info-item-icon">&#xe6a9;</div>
-            <div class="info-item-title">消息</div>
+            <div class="info-item-title">消息 <span class="messageCount" v-if="msgCount">{{msgCount?msgCount:''}}</span></div>
           </div>
           <div class="user-info-item" @click="goSetting()">
             <div class="aliiconfont info-item-icon">&#xe642;</div>
@@ -44,7 +44,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
-  import {getUserInfo} from '../../http/api'
+  import {getUserInfo, getUserMessage} from '../../http/api'
   export default {
     name: 'index',
     components: {},
@@ -57,7 +57,8 @@
       return {
         userInfo: '',
         openId: wx.getStorageSync('openId'),
-        hasAuth: wx.getStorageSync('hasAuth')
+        hasAuth: wx.getStorageSync('hasAuth'),
+        msgCount: ''
       }
     },
     onReady: function () {
@@ -68,6 +69,7 @@
     onShow: function () {
       if (this.hasAuth) {
         this.getUserInfo()
+        this.getUserMessage()
       }
     },
     methods: {
@@ -76,6 +78,13 @@
         getUserInfo().then(res => {
           globalStore.commit('updateUserInfo', res.data)
           _this.userInfo = res.data
+        })
+      },
+      getUserMessage () {
+        let _this = this
+        getUserMessage().then(res => {
+          globalStore.commit('updateUserMessage', res.data.list)
+          _this.msgCount = res.data.count
         })
       },
       goPath (val) {
@@ -219,5 +228,15 @@
     font-size: 24rpx;
     color: #b5b5b5;
     text-align: center;
+  }
+  .messageCount{
+    text-align: center;
+    display: inline-block;
+    background-color: red;
+    color: #ffffff;
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border-radius: 40rpx;
   }
 </style>

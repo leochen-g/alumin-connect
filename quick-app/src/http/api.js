@@ -44,6 +44,12 @@ export const deleteTopic = (params) => { return fly.post('/api/group/deleteTopic
 export const tipOffsTopic = (params) => { return fly.post('/api/group/postTipOffsTopic', params) }
 // 点赞
 export const addLiked = (params) => { return fly.post('/api/group/addLiked', params) }
+// 获取用户通知
+export const getUserMessage = (params) => { return fly.post('/api/group/user/getUserMessage', params) }
+// 获取系统通知
+export const getSystemMessage = (params) => { return fly.post('/api/group/user/getSystemMessage', params) }
+export const readMessage = (params) => { return fly.post('/api/group/user/readMessage', params) }
+
 /**
  * 个人中心接口
  **/

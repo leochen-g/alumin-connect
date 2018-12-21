@@ -34,14 +34,17 @@ let groupService = {
 	for (item in results[1]) {
 	  item = results[1][item]
 	  let obj = {userInfo: {}};
-	  obj.userInfo = await this.getUserBaseInfo([item.openId])
 	  obj.id = item.id
 	  obj.content = item.content
 	  obj.commentCount = item.commentCount
-	  obj.likeCount = await topicService.getLikedCountByTid(item.id)
 	  obj.updatedAt = item.updatedAt
 	  obj.location = item.location
-	  obj.hasLiked = await topicService.hasUserLikedByTid(item.id,uid)===null?false:true
+	  userInfo = this.getUserBaseInfo([item.openId])
+	  likeCount =  topicService.getLikedCountByTid(item.id)
+	  hasLiked =  topicService.hasUserLikedByTid(item.id,uid)
+	  obj.userInfo = await userInfo
+	  obj.likeCount = await likeCount
+	  obj.hasLiked = await hasLiked===null?false:true
 	  list.push(obj)
 	}
 	res.count = count
@@ -55,14 +58,18 @@ let groupService = {
 	for (item in results) {
 	  item = results[item]
 	  let obj = {userInfo: {}};
-	  obj.userInfo = await this.getUserBaseInfo([item.openId])
+	  let userInfo,likeCount,hasLiked
 	  obj.id = item.id
 	  obj.content = item.content
-	  obj.likeCount = await topicService.getLikedCountByTid(item.id)
-	  obj.hasLiked = await topicService.hasUserLikedByTid(item.id,arr[0])===null?false:true
 	  obj.commentCount = item.commentCount
 	  obj.updatedAt = item.updatedAt
 	  obj.location = item.location
+	  likeCount = topicService.getLikedCountByTid(item.id)
+	  hasLiked = topicService.hasUserLikedByTid(item.id,arr[0])
+	  userInfo = this.getUserBaseInfo([item.openId])
+	  obj.likeCount = await likeCount
+	  obj.hasLiked = await hasLiked===null?false:true
+	  obj.userInfo = await userInfo
 	  list.push(obj)
 	}
 	return list
@@ -72,20 +79,29 @@ let groupService = {
 	let results = await sqlDao.group.getTopicById(arr)
 	if (results.length > 0) {
 	  let obj = {userInfo: {}};
+	  let userInfo,likeCount,hasLiked
 	  var item = results[0]
-	  obj.userInfo = await this.getUserBaseInfo([item.openId])
 	  obj.id = item.id
 	  obj.content = item.content
-	  obj.likeCount = await topicService.getLikedCountByTid(item.id)
-	  obj.hasLiked = await topicService.hasUserLikedByTid(item.id,uid)===null?false:true
 	  obj.commentCount = item.commentCount
 	  obj.likeCount = item.likeCount
 	  obj.updatedAt = item.updatedAt
 	  obj.location = item.location
+	  userInfo = this.getUserBaseInfo([item.openId])
+	  likeCount = topicService.getLikedCountByTid(item.id)
+	  hasLiked =  topicService.hasUserLikedByTid(item.id,uid)
+	  obj.userInfo = await userInfo
+	  obj.likeCount = await likeCount
+	  obj.hasLiked = await hasLiked===null?false:true
 	  return obj
 	} else {
 	  return null
 	}
+  },
+  //获取简单的话题详情
+  getSimpleTopicInfo: async function (arr) {
+	let results = await sqlDao.group.getTopicById(arr)
+	return results[0]
   },
   // 举报话题
   addTipOffs: async function (arr) {
@@ -112,16 +128,19 @@ let groupService = {
 	}
 	for (item in commentList[0]) {
 	  var com = {topComment: []};
+	  let userInfo,reply
 	  item = commentList[0][item]
 	  com.id = item.id
 	  com.cid = item.cid
 	  com.content = item.content
 	  com.topicId = item.topicId
 	  com.updatedAt = item.updatedAt
-	  com.userInfo = await this.getUserBaseInfo([item.openId])
-	  let reply = await this.getReplyList([item.cid, item.cid])
-	  com.replyCount = reply.count
-	  com.topComment = reply.list
+	  userInfo = this.getUserBaseInfo([item.openId])
+	  reply = this.getReplyList([item.cid, item.cid])
+	  replyObj = await reply
+	  com.userInfo = await userInfo
+	  com.replyCount = replyObj.count
+	  com.topComment =  replyObj.list
 	  obj.comments.push(com)
 	}
 	return obj
@@ -199,6 +218,52 @@ let groupService = {
   //取消点赞
   removeLiked: async function(arr) {
 	return await topicService.removeTopicLiked(arr[0], arr[1])
+  },
+  checkLikedMessage: async function(arr) {
+    return await  sqlDao.group.user.checkLikedMessage(arr)
+  },
+  //添加用户消息
+  addUserMessage: async function (arr) {
+	let result = await sqlDao.group.user.addUserMessage(arr)
+	return result.affectedRows
+  },
+  //获取用户通知
+  getUserMessage: async function (arr) {
+	let result = await sqlDao.group.user.getUserMessage(arr)
+	let list = []
+	for (item in  result[1]) {
+	  let msg = {}
+	  var ite = result[1][item]
+	  msg.id = ite.id
+	  msg.producer = await this.getUserBaseInfo(ite.producer)
+	  msg.topicInfo = await this.getTopicById(ite.topicId)
+	  msg.updateAt = ite.updatedAt
+	  msg.contentType = ite.contentType
+	  msg.flag = ite.flag
+	  list.push(msg)
+	}
+	return {count: result[0][0].count, list: list}
+  },
+  //获取系统通知
+  getSystemMessage: async function (arr) {
+    let result =  await sqlDao.group.user.getSystemMessage(arr)
+	let list = []
+	for (item in  result[1]) {
+	  let msg = {}
+	  var ite = result[1][item]
+	  msg.id = ite.id
+	  msg.updateAt = ite.updatedAt
+	  msg.contentType = ite.contentType
+	  msg.content = ite.content
+	  msg.flag = ite.flag
+	  list.push(msg)
+	}
+	return {count: result[0][0].count, list: list}
+  },
+  // 标记消息已读
+  readMessage: async function (arr) {
+    let result = await sqlDao.group.user.readMessage(arr)
+	return result.affectedRows
   },
   // 获取用户所有信息
   getAllUserInfo: async function (arr) {

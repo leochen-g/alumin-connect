@@ -142,6 +142,26 @@ module.exports = {
 	  updateUserCompanyInfo:function (req) {
 		return db.query(sqlMap.group.user.updateUserCompanyInfo,req)
 	  },
+	  //检测是否已经存在点赞通知
+	  checkLikedMessage: function (req) {
+		return db.query(sqlMap.group.user.checkLikedMessage,req)
+	  },
+	  //添加用户消息通知
+	  addUserMessage:function (req) {
+	    return db.query(sqlMap.group.user.addUserMessage,req)
+	  },
+	  //获取用户消息通知
+	  getUserMessage:function (req) {
+		return db.query(sqlMap.group.user.getMessage,req)
+	  },
+	  //获取系统消息通知
+	  getSystemMessage:function (req) {
+		return db.query(sqlMap.group.user.getSystemMessage,req)
+	  },
+	  //标记消息已读
+	  readMessage:function (req) {
+		return db.query(sqlMap.group.user.readMessage,req)
+	  }
 	},
 	admin: {
 	  //获取用户基本信息

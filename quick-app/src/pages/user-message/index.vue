@@ -1,17 +1,20 @@
 <template>
   <div class="alumni-main">
-    消息中心
+    <messageItem v-for="(item,index) in userMessage" :key="item.id" :todo="item" :index="index"/>
   </div>
 </template>
 
 <script>
   import globalStore from '../../store/global-store'
-
+  import messageItem from '../../components/messageItem'
   export default {
     name: 'index',
+    components: {
+      messageItem
+    },
     computed: {
-      editType () {
-        return globalStore.state.editType
+      userMessage () {
+        return globalStore.state.userMessage
       }
     },
     onShow: function () {
@@ -21,16 +24,10 @@
     },
     data () {
       return {
-        focusInput: false,
-        userInfo: '',
-        date: '',
-        type: ''
       }
     },
     methods: {
-
     }
-
   }
 </script>
 

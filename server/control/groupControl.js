@@ -87,6 +87,10 @@ module.exports = {
 	} else {
 	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
 	}
+	var topicInfo = await groupService.getSimpleTopicInfo([param.topicId])
+	var msgArr = ['user','comment',param.topicId,param.openId,topicInfo.openId]
+	var msg = await groupService.addUserMessage(msgArr)
+	console.log('插入结果',msg)
   },
   //获取话题评论列表
   getCommentList: async function (req, res) {
@@ -117,6 +121,12 @@ module.exports = {
 	} else {
 	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
 	}
+	var topicInfo = await groupService.getSimpleTopicInfo([param.topicId])
+	var msgArr = ['user','reply',param.topicId,param.openId,param.toUid] // 添加回复通知
+	var msgArr1 = ['user','comment',param.topicId,param.openId,topicInfo.openId] //添加评论通知
+	var msg =  groupService.addUserMessage(msgArr)
+	var msg1 = groupService.addUserMessage(msgArr1)
+	console.log(await msg,await msg1)
   },
   //删除回复
   deleteReply: async function (req, res) {
@@ -150,21 +160,55 @@ module.exports = {
 	}
   },
   // 用户点赞
-  addLikedByTopicId: function (req, res, next) {
+  addLikedByTopicId: async function (req, res, next) {
 	var param = req.body
 	var arr = [param.topicId, param.openId]
 	var liked = param.liked=='false'
 	if (!liked) { //点赞
-	  var results = groupService.addLike(arr)
+	  var results = await groupService.addLike(arr)
 	  if (results) {
 		res.json({head: {code: 0, msg: 'ok'}, data: {}})
 	  }
+	  var topicInfo = await groupService.getSimpleTopicInfo([param.topicId])
+	  var msgArr = ['user','liked',param.topicId,param.openId,topicInfo.openId] // 添加点赞通知
+	  var checkResult =  await groupService.checkLikedMessage([param.openId,param.topicId])
+	  console.log(checkResult)
+	  if (!checkResult[0].count){
+		var msg = await groupService.addUserMessage(msgArr)
+		console.log('点赞',msg)
+	  }else {
+	    console.log('已赞')
+	  }
 	} else { //取消点赞
-	  console.log('取消')
-	  var response = groupService.removeLiked(arr)
+	  var response = await groupService.removeLiked(arr)
 	  if (response) {
 		res.json({head: {code: 0, msg: 'ok'}, data: {}})
 	  }
 	}
   },
+  // 获取用户消息通知
+  getUserMessage: async function (req, res) {
+	var param = req.body
+	var arr = [param.openId,param.openId]
+	var result = await groupService.getUserMessage(arr)
+	res.json({head:{code: 0, msg: 'ok'}, data: result})
+  },
+  // 获取系统消息通知
+  getSystemMessage: async function (req, res) {
+	var param = req.body
+	var arr = []
+	var result = await groupService.getSystemMessage(arr)
+	res.json({head:{code: 0, msg: 'ok'}, data: result})
+  },
+  // 读取消息
+  readMessage: async function (req, res) {
+	var param = req.body
+	var arr = [param.mid,param.openId]
+	var result = await groupService.readMessage(arr)
+	if(result){
+	  res.json({head:{code: 0, msg: 'ok'}, data: {}})
+	}else {
+	  res.json({head:{code: 10000, msg: '已读失败'}, data: {}})
+	}
+  }
 }

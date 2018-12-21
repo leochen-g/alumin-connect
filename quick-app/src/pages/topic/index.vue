@@ -1,5 +1,10 @@
 <template>
   <div class="alumni-main">
+    <block v-if="donghua">
+      <div class="donghhua">
+        <image  v-bind:style="{left:left1+'px'}" :animation="animationData1" class='love' src='http://image.bloggeng.com/snow.png'></image>
+      </div>
+    </block>
     <!--轮播图-->
     <topicSwiper :list="swiperList"/>
     <!--发布话题-->
@@ -7,7 +12,7 @@
     <!--话题列表-->
     <topicItem v-for="item in list" :key="item.id" :todo="item" />
     <div class="init-topic" v-if="list.length<=0">
-      <div class="init-tips">圈子里还没人说话，快来活跃气氛</div>
+      <div class="init-tips">你所在城市的圈子里还没小伙伴说话，快来活跃气氛</div>
     </div>
   </div>
 
@@ -49,7 +54,10 @@
         currentPage: 1,
         pageNumber: 1,
         topicCount: '',
-        hasAuth: wx.getStorageSync('hasAuth')
+        hasAuth: wx.getStorageSync('hasAuth'),
+        donghua: true,
+        left1: Math.floor(Math.random() * 305 + 1),
+        animationData1: ''
       }
     },
     onReady: function () {
@@ -65,8 +73,11 @@
       wx.setNavigationBarTitle({
         title: '个人中心'
       })
+      this.start = 0
+      this.limit = 10
       this.validate()
       this.getSwiperList()
+      this.animationChange()
     },
     async onPullDownRefresh () { // 下拉刷新
       this.initPage()
@@ -215,9 +226,28 @@
         console.log(e)
         this.hasInputCount = e.cursor
         this.$emit('input', e.value)
+      },
+      animationChange () {
+        let animation = wx.createAnimation()
+        var i = 1
+        setTimeout(function () {
+          animation.translateY(604).step({duration: 4000})
+          let str = ['animationData' + i]
+          this[str] = animation.export()
+          i++
+        }.bind(this), 500)
+        if (i < 7) {
+          setTimeout(function () {
+            this.animationChange()
+          }.bind(this), 500)
+        } else {
+          console.log(22)
+          setTimeout(function () {
+            this.donghua = false
+          }.bind(this), 4500)
+        }
       }
     }
-
   }
 </script>
 
@@ -237,5 +267,11 @@
   .init-tips{
     font-size: 32rpx;
     color: #c8c8c8;
+  }
+  .love{
+    width: 100rpx;
+    height: 100rpx;
+    position: absolute;
+    top: -100rpx;
   }
 </style>

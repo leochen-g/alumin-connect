@@ -43,8 +43,8 @@
       </div>
       <div class="alumni-topic-action-row">
         <div class="action-box">
-          <div class="like-action action">
-            <div class="action-title-box" @click="likeClick(todo.id)">
+          <div class="like-action action" @click="likeClick(todo.id)">
+            <div class="action-title-box">
               <i class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked}">&#xe630;</i>
               <span class="action-title">{{todo.likeCount?todo.likeCount:'赞'}}</span>
             </div>

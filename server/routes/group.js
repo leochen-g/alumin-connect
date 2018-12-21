@@ -84,7 +84,18 @@ router.post('/group/getReplyListByUserId',function (req,res,next) {
 router.post('/group/addLiked',function (req,res,next) {
   filter(req,res,control.addLikedByTopicId)
 })
-
+//获取用户通知
+router.post('/group/user/getUserMessage',function (req,res,next) {
+  filter(req,res,control.getUserMessage)
+})
+//获取系统通知
+router.post('/group/user/getSystemMessage',function (req,res,next) {
+  filter(req,res,control.getSystemMessage)
+})
+//已读通知
+router.post('/group/user/readMessage',function (req,res,next) {
+  filter(req,res,control.readMessage)
+})
 //获取用户基本信息
 router.post('/group/user/getUserInfo',function (req,res,next) {
   filter(req,res,control.getUserInfo)
