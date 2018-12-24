@@ -4,11 +4,11 @@
       <!--话题详情-->
       <div class="alumni-topic-header-row">
         <div class="account-group">
-          <div class="user-popover-box">
+          <div class="user-popover-box" @click="toUserDetail(todo.userInfo.openid)">
             <img class="user-avataUrl" v-bind:src="todo.userInfo.avataUrl" alt="">
           </div>
           <div class="header-content">
-            <div class="user-nickName">{{todo.userInfo.nickName}}</div>
+            <div class="user-nickName" @click="toUserDetail(todo.userInfo.openid)">{{todo.userInfo.nickName}}</div>
             <div class="user-meta-box">
               <div class="university-info ellipsis" >{{todo.userInfo.graduationTime?todo.userInfo.graduationTime:'毕业时间'}} @ {{todo.userInfo.college?todo.userInfo.college:'院系'}}
               </div>
@@ -45,7 +45,7 @@
         <div class="action-box">
           <div class="like-action action" @click="likeClick(todo.id)">
             <div class="action-title-box">
-              <i class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked}">&#xe630;</i>
+              <i :animation="animationUp" class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked, 'animate':likedAnimate}">&#xe630;</i>
               <span class="action-title">{{todo.likeCount?todo.likeCount:'赞'}}</span>
             </div>
           </div>
@@ -78,13 +78,13 @@
           <div class="comment-list"  v-if="commentList.targetId==todo.id">
             <div class="comment-item" v-for="(item,index) in commentList.comments" :key="item.id">
               <div class="comment">
-                <div class="user-popover-box">
+                <div class="user-popover-box" @click="toUserDetail(item.userInfo.openId)">
                   <img class="user-avataUrl comment-user-avataUrl" v-bind:src="item.userInfo.avataUrl" alt="">
                 </div>
                 <div class="comment-content-box">
                   <div class="comment-meta-box">
                     <div class="comment-user-info ellipsis">
-                      <span class="user-nickName">{{item.userInfo.nickName}}<span class="comment-user-college"> {{item.userInfo.graduationTime?item.userInfo.graduationTime:'毕业时间'}} @ {{item.userInfo.college?item.userInfo.college:'院系'}}</span></span>
+                      <span class="user-nickName" @click="toUserDetail(item.userInfo.openId)">{{item.userInfo.nickName}}<span class="comment-user-college"> {{item.userInfo.graduationTime?item.userInfo.graduationTime:'毕业时间'}} @ {{item.userInfo.college?item.userInfo.college:'院系'}}</span></span>
                     </div>
                   </div>
                   <div class="comment-content">
@@ -118,12 +118,12 @@
                         <div class="sub-comment">
                           <div class="sub-comment-content-row">
                             <div class="sub-comment-content-box">
-                              <div class="user-popover-box">
+                              <div class="user-popover-box" @click="toUserDetail(replyItem.userInfo.openId)">
                                 <img class="user-avataUrl comment-user-avataUrl" v-bind:src="replyItem.userInfo.avataUrl" alt="">
                               </div>
                                 <div class="user-content-box">
                                   <div class="comment-user-info ellipsis">
-                                    <span class="user-nickName">{{replyItem.userInfo.nickName}}<span class="comment-user-college"> {{replyItem.userInfo.graduationTime}} @ {{replyItem.userInfo.college}}</span></span>
+                                    <span class="user-nickName" @click="toUserDetail(replyItem.userInfo.openId)">{{replyItem.userInfo.nickName}}<span class="comment-user-college"> {{replyItem.userInfo.graduationTime}} @ {{replyItem.userInfo.college}}</span></span>
                                   </div>
                                   <div class="comment-content">
                                     回复 <span class="reply-user">{{replyItem.respUserInfo.nickName}}</span>:{{replyItem.content}}
@@ -174,6 +174,7 @@
 
 <script>
   import Bus from '../bus'
+  import global from '../store/global-store'
   import {addComment, addReply, getReplyList, getCommentList, deleteTopic, tipOffsTopic, addLiked} from '../http/api'
 
   export default {
@@ -200,7 +201,8 @@
         fetchAll: false,
         fetchReply: false,
         actionId: '',
-        showHeaderAction: false
+        showHeaderAction: false,
+        likedAnimate: false
       }
     },
     props: {
@@ -362,13 +364,13 @@
         })
       },
       likeClick (tid) {
-        var _this = this
-        var liked = !_this.todo.hasLiked
-        console.log('点赞', liked)
+        let _this = this
+        let liked = !_this.todo.hasLiked
         let req = {
           liked: liked,
           topicId: tid
         }
+        _this.likedAnimate = true
         addLiked(req).then(res => {
           if (res.head.code === 0) {
             _this.todo.hasLiked = liked
@@ -379,6 +381,11 @@
             }
           }
         })
+      },
+      toUserDetail (id) {
+        global.commit('updateSelectUserId', id)
+        let url = '../user-info-card/main'
+        wx.navigateTo({ url })
       }
     }
   }
@@ -911,6 +918,14 @@
     border-right: 2rpx solid #ebebeb;
     border-bottom: 2rpx solid #ebebeb;
     background: #fff;
+  }
+  @keyframes animate
+  {
+    from {font-size: 30rpx}
+    to {font-size: 24rpx}
+  }
+  .animate{
+    animation: animate 3s;
   }
 
 

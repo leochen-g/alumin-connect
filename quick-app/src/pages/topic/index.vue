@@ -1,14 +1,10 @@
 <template>
   <div class="alumni-main">
-    <block v-if="donghua">
-      <div class="donghhua">
-        <image  v-bind:style="{left:left1+'px'}" :animation="animationData1" class='love' src='http://image.bloggeng.com/snow.png'></image>
-      </div>
-    </block>
     <!--轮播图-->
     <topicSwiper :list="swiperList"/>
     <!--发布话题-->
     <topicEdit />
+    <lampBanner :systemInfo="systemInfo" />
     <!--话题列表-->
     <topicItem v-for="item in list" :key="item.id" :todo="item" />
     <div class="init-topic" v-if="list.length<=0">
@@ -22,13 +18,14 @@
   import topicEdit from '../../components/topicEdit'
   import topicSwiper from '../../components/topicSwiper'
   import topicItem from '../../components/topicItem'
+  import lampBanner from '../../components/lampBanner'
   import globalStore from '../../store/global-store'
   import Bus from '../../bus'
-  import {getTopicList, getUserLocation, getBannerList} from '../../http/api'
+  import {getTopicList, getUserLocation, getBannerList, getSystemMessage} from '../../http/api'
   export default {
     name: 'index',
     components: {
-      topicSwiper, topicEdit, topicItem
+      topicSwiper, topicEdit, topicItem, lampBanner
     },
     computed: {
       university () {
@@ -55,9 +52,7 @@
         pageNumber: 1,
         topicCount: '',
         hasAuth: wx.getStorageSync('hasAuth'),
-        donghua: true,
-        left1: Math.floor(Math.random() * 305 + 1),
-        animationData1: ''
+        systemInfo: ''
       }
     },
     onReady: function () {
@@ -77,7 +72,7 @@
       this.limit = 10
       this.validate()
       this.getSwiperList()
-      this.animationChange()
+      this.getSystemInfo()
     },
     async onPullDownRefresh () { // 下拉刷新
       this.initPage()
@@ -211,6 +206,13 @@
           }
         })
       },
+      getSystemInfo () {
+        let _this = this
+        getSystemMessage().then(res => {
+          console.log(res.data)
+          _this.systemInfo = res.data.list
+        })
+      },
       inputEvent (e) {
         this.hasInputCount = e.mp.detail.cursor
         // this.$emit('input', e.mp.detail.value)
@@ -226,26 +228,6 @@
         console.log(e)
         this.hasInputCount = e.cursor
         this.$emit('input', e.value)
-      },
-      animationChange () {
-        let animation = wx.createAnimation()
-        var i = 1
-        setTimeout(function () {
-          animation.translateY(604).step({duration: 4000})
-          let str = ['animationData' + i]
-          this[str] = animation.export()
-          i++
-        }.bind(this), 500)
-        if (i < 7) {
-          setTimeout(function () {
-            this.animationChange()
-          }.bind(this), 500)
-        } else {
-          console.log(22)
-          setTimeout(function () {
-            this.donghua = false
-          }.bind(this), 4500)
-        }
       }
     }
   }
@@ -272,6 +254,7 @@
     width: 100rpx;
     height: 100rpx;
     position: absolute;
+    z-index: 999;
     top: -100rpx;
   }
 </style>

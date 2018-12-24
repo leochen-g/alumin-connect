@@ -18,7 +18,6 @@
       <cover-view class="floatCover">
         <button hover-class="hover" open-type="share"  class="btn shareBtn ">分享</button>
         <button hover-class="hover" @click ='saveImg'  class="btn downImg ">下载</button>
-        <button hover-class="hover" open-type="feedback" class="btn feedback">反馈</button>
       </cover-view>
     </div>
     <div class="echarts-hide">

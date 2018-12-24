@@ -16,6 +16,16 @@
             </div>
           </div>
           <div class="edit-item">
+            <div class="edit-title">微信号</div>
+            <div class="edit-input">
+              <input type="text" v-model="userInfo.wechat" @click="focusClick('wechat')" @blur="moveClick">
+            </div>
+            <div class="edit-btn-group" v-if="type==='wechat'">
+              <a href="" class="save" @click="updateUserInfo('wechat',userInfo.wechat)">保存</a>
+              <a href="" class="cancel" @click="cancel">取消</a>
+            </div>
+          </div>
+          <div class="edit-item">
             <div class="edit-title">联系方式</div>
             <div class="edit-input">
               <input type="text" v-model="userInfo.phone" @click="focusClick('phone')" @blur="moveClick">

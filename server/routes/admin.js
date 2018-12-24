@@ -21,5 +21,9 @@ function filter(req,res,callback) {
 router.post('/admin/topic/getTipOffs',function (req,res,next) {
   filter(req,res,control.getTipOffs)
 })
+//添加系统通知
+router.post('/admin/topic/addSystemMessage',function (req,res,next) {
+  filter(req,res,control.addSystemMessage)
+})
 
 module.exports = router

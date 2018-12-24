@@ -89,8 +89,10 @@ module.exports = {
 	}
 	var topicInfo = await groupService.getSimpleTopicInfo([param.topicId])
 	var msgArr = ['user','comment',param.topicId,param.openId,topicInfo.openId]
-	var msg = await groupService.addUserMessage(msgArr)
-	console.log('插入结果',msg)
+	if(param.openId!==topicInfo.openId){
+	  var msg = await groupService.addUserMessage(msgArr)
+	  console.log('插入结果',msg)
+	}
   },
   //获取话题评论列表
   getCommentList: async function (req, res) {
@@ -124,8 +126,12 @@ module.exports = {
 	var topicInfo = await groupService.getSimpleTopicInfo([param.topicId])
 	var msgArr = ['user','reply',param.topicId,param.openId,param.toUid] // 添加回复通知
 	var msgArr1 = ['user','comment',param.topicId,param.openId,topicInfo.openId] //添加评论通知
-	var msg =  groupService.addUserMessage(msgArr)
-	var msg1 = groupService.addUserMessage(msgArr1)
+	if(param.openId!==param.toUid){
+	  var msg =  groupService.addUserMessage(msgArr)
+	}
+	if(param.openId!==topicInfo.openId){
+	  var msg1 = groupService.addUserMessage(msgArr1)
+	}
 	console.log(await msg,await msg1)
   },
   //删除回复
@@ -138,6 +144,15 @@ module.exports = {
 	} else {
 	  res.json({head: {code: 10000, msg: '删除失败'}, data: {}})
 	}
+  },
+  // 获取选择的用户信息
+  getSelectUserInfo: async function (req, res) {
+	var param = req.body
+	var arr = [param.userOpenId]
+	var results = await groupService.getAllUserInfo(arr)
+	res.json({
+	  head: {code: 0, msg: 'ok'}, data: results
+	})
   },
   //获取用户基本信息
   getUserInfo: async function (req, res) {
@@ -174,7 +189,9 @@ module.exports = {
 	  var checkResult =  await groupService.checkLikedMessage([param.openId,param.topicId])
 	  console.log(checkResult)
 	  if (!checkResult[0].count){
-		var msg = await groupService.addUserMessage(msgArr)
+	    if(param.openId!==topicInfo.openId){
+		  var msg = await groupService.addUserMessage(msgArr)
+		}
 		console.log('点赞',msg)
 	  }else {
 	    console.log('已赞')

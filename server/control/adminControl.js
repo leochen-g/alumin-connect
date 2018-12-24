@@ -12,5 +12,16 @@ module.exports = {
 	var results = await adminService.getTipOffs(arr)
 	res.send({head: {code: 0, msg: 'ok'}, data: {list:results}})
   },
+  addSystemMessage: async function (req, res, next) {
+	var param = req.body
+	var arr = [param.msgType,param.contentType,param.content,param.imgSrc,param.detail]
+	var results = await adminService.addSystemMessage(arr)
+	if (results) {
+	  res.send({head: {code: 0, msg: 'ok'}, data: {}})
+	}else {
+	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
+	}
+
+  }
 
 }

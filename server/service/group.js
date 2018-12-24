@@ -231,17 +231,22 @@ let groupService = {
   getUserMessage: async function (arr) {
 	let result = await sqlDao.group.user.getUserMessage(arr)
 	let list = []
+	let time1 = new Date()
 	for (item in  result[1]) {
 	  let msg = {}
 	  var ite = result[1][item]
 	  msg.id = ite.id
-	  msg.producer = await this.getUserBaseInfo(ite.producer)
-	  msg.topicInfo = await this.getTopicById(ite.topicId)
 	  msg.updateAt = ite.updatedAt
 	  msg.contentType = ite.contentType
 	  msg.flag = ite.flag
+	  producer = this.getUserBaseInfo(ite.producer)
+	  topicInfo = this.getTopicById(ite.topicId)
+	  msg.producer = await producer
+	  msg.topicInfo = await topicInfo
 	  list.push(msg)
 	}
+	let time2 = new Date()
+	console.log('耗时',time2.getTime()-time1.getTime())
 	return {count: result[0][0].count, list: list}
   },
   //获取系统通知
@@ -256,6 +261,8 @@ let groupService = {
 	  msg.contentType = ite.contentType
 	  msg.content = ite.content
 	  msg.flag = ite.flag
+	  msg.imgSrc = ite.imgSrc
+	  msg.detail = ite.detail
 	  list.push(msg)
 	}
 	return {count: result[0][0].count, list: list}
@@ -277,6 +284,7 @@ let groupService = {
 	  phone: results[0].phone,
 	  company: results[0].company,
 	  job: results[0].job,
+	  wechat: results[0].wechat,
 	  school: {
 		university: results[0].university,
 		graduationTime: results[0].graduationTime,
@@ -300,7 +308,7 @@ let groupService = {
   },
   // 更新用户基础信息
   updateUserInfo: async function (arr) {
-    let results = await group.user.updateUserInfo(arr)
+    let results = await sqlDao.group.user.updateUserInfo(arr)
 	return results.affectedRows
   }
 }

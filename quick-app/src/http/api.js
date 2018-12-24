@@ -55,5 +55,7 @@ export const readMessage = (params) => { return fly.post('/api/group/user/readMe
  **/
 // 获取用户信息
 export const getUserInfo = (params) => { return fly.post('/api/group/user/getUserInfo', params) }
+// 获取选择的用户信息
+export const getSelectUserInfo = (params) => { return fly.post('/api/group/user/getSelectUserInfo', params) }
 // 更新用户基础信息
 export const updateUserInfo = (params) => { return fly.post('/api/group/user/updateUserInfo', params) }

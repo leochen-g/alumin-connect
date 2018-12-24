@@ -168,6 +168,10 @@ module.exports = {
 	  getTipOffs:function (req) {
 		return db.query(sqlMap.group.admin.getTipOffs,req)
 	  },
+	  addSystemMessage:function (req) {
+	    console.log(req)
+		return db.query(sqlMap.group.admin.addSystemMessage,req)
+	  }
 	}
   }
 }

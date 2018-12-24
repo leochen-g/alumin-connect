@@ -100,6 +100,10 @@ router.post('/group/user/readMessage',function (req,res,next) {
 router.post('/group/user/getUserInfo',function (req,res,next) {
   filter(req,res,control.getUserInfo)
 })
+//获取用户基本信息
+router.post('/group/user/getSelectUserInfo',function (req,res,next) {
+  filter(req,res,control.getSelectUserInfo)
+})
 //更新用户基础信息
 router.post('/group/user/updateUserInfo',function (req,res,next) {
   filter(req,res,control.updateUserInfo)

@@ -11,8 +11,9 @@ export default new Vuex.Store({
     hasAuth: wx.getStorageSync('hasAuth') || false,
     editType: '',
     userInfo: '',
-    selectTopicId: '58',
-    userMessage: []
+    selectTopicId: '',
+    userMessage: [],
+    selectUserId: 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ'
   },
   mutations: {
     increment: (state, n) => {
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     updateUserMessageFlag: (state, n) => {
       console.log(n.index)
       state.userMessage[n.index].flag = n.value
+    },
+    updateSelectUserId: (state, n) => {
+      state.selectUserId = n
     }
   }
 })
