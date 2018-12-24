@@ -42,7 +42,7 @@ module.exports = {
   updateUserUniversity: async function (req, res) {
 	var param = req.body
 	var arr = [param.university, param.openId]
-	var results = await userService.updateUserUniversityInfo(arr)
+	var results = await userService.updateUserUniversity(arr)
 	if (results) {
 	  res.json({head: {code: 0, msg: '更新成功'}, data: {}})
 	} else {
