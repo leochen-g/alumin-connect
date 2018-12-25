@@ -55,7 +55,7 @@ var sqlMap = {
 	},
 	admin:{
 	  getTipOffs: 'select c.id,c.type,b.id as topicId,b.content,b.university,b.location,a.nickName,a.openId,a.avataUrl from (user a inner join tip_off c on a.openId=c.openId) inner join topic b where b.id=c.topicId order by id desc',
-	  addSystemMessage:'insert into message (msgType,contentType,content,imgSrc,detail) values (?,?,?,?,?)'
+	  addSystemMessage:'insert into message (msgType,contentType,title,imgSrc,detail) values (?,?,?,?,?)'
 	}
   }
 }

@@ -1,24 +1,21 @@
 <template>
-  <div class="message-main" @click="changeMessageStatus(todo.id)">
-    <div class="message-content" >
-      <div class="message-panel">
+  <div class="system-message-main" @click="changeMessageStatus(todo.id)">
+    <div class="system-message-content" >
+      <div class="system-message-panel">
         <!--头像-->
-        <div class="message-left">
-          <div class="user-avataurl">
-            <img v-bind:src="todo.producer.avataUrl" alt="" class="user-avataUrl-img">
+        <div class="system-message-left">
+          <div class="system-user-avataurl">
+            <img v-bind:src="todo.imgSrc" alt="" class="system-user-avataUrl-img">
           </div>
         </div>
         <!--消息主体-->
-        <div class="message-right">
-          <div class="message-header">
-            <div class="message-user-nickName">{{todo.producer.nickName}}</div>
-            <div class="message-time">{{createTime}}</div>
+        <div class="system-message-right">
+          <div class="system-message-header">
+            <div class="system-message-title">{{todo.title}}</div>
+            <div class="system-message-updateTime">{{createTime}}</div>
           </div>
-          <div class="message-content-main ellipsis">
-            <span v-if="todo.contentType==='liked'">赞了：{{todo.topicInfo.content}}</span>
-            <span v-if="todo.contentType==='comment'">评论了你的话题：{{todo.topicInfo.content}}</span>
-            <span v-if="todo.contentType==='reply'">回复了你的评论：{{todo.topicInfo.content}}</span>
-            <span v-show="todo.flag" v-bind:class="{'active-msg':todo.flag}" class="aliiconfont">&#xe643;</span>
+          <div class="system-message-content-main ">
+            <div class="system-message-detail ellipsis2 ">{{todo.detail}}</div>
           </div>
         </div>
       </div>
@@ -31,7 +28,7 @@
   import {readMessage} from '../http/api'
 
   export default {
-    name: 'messageItem',
+    name: 'systemMessageItem',
     props: {
       todo: {
         required: true
@@ -82,54 +79,54 @@
 </script>
 
 <style lang="stylus" scoped>
-  .message-main{
+  .system-message-main{
     background-color: background-color ;
   }
 
-  .message-panel {
+  .system-message-panel {
     display: flex;
     justify-content: space-between;
     position: relative;
   }
 
-  .message-left {
+  .system-message-left {
     display: flex;
     justify-content: flex-start;
     position: relative;
-    width: 80rpx;
     padding: 8rpx 10rpx;
   }
-  .user-avataurl {
-    width: 80rpx;
-    height: 80rpx;
+  .system-user-avataurl {
+    width: 200rpx;
+    height: 100rpx;
   }
 
-  .message-right{
+  .system-message-right{
     flex: 1;
     padding: 8rpx 10rpx 12rpx 10rpx;
-    border-bottom: 1px solid borderColor;
   }
 
-  .message-header{
+  .system-message-header{
     display: flex;
     justify-content: space-between;
   }
 
-  .user-avataUrl-img {
+  .system-user-avataUrl-img {
     width: 100%;
     height: 100%;
   }
 
-  .message-user-nickName {
-    font-size: 28rpx;
+  .system-message-title {
     font-weight: bold;
     color: themeColor;
   }
-  .message-content-main{
+  .system-message-content-main{
     display: flex;
     justify-content: space-between;
   }
-  .active-msg {
+  .system-active-msg {
    color:  themeColor;
+  }
+  .system-message-detail{
+    color grayColor
   }
 </style>

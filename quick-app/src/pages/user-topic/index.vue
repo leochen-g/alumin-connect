@@ -50,7 +50,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .alumni-main{
     background-color: #f4f5f5;
     height: 100%;

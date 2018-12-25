@@ -46,7 +46,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .alumni-main{
     position: fixed;
     background-color: #f4f5f5;

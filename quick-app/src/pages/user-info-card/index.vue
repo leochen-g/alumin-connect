@@ -118,7 +118,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .user-card-main{
     position: fixed;
     background-color: #f4f5f5;
@@ -155,7 +155,7 @@
     margin-top: 20rpx;
   }
   .user-card-item-icon{
-    color: #027fff;
+    color: themeColor;
   }
   .card-item-icon{
     font-size: 45rpx;

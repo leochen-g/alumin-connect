@@ -13,6 +13,7 @@ export default new Vuex.Store({
     userInfo: '',
     selectTopicId: '',
     userMessage: [],
+    systemMessage: [],
     selectUserId: 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ'
   },
   mutations: {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     },
     updateUserMessage: (state, n) => {
       state.userMessage = n
+    },
+    updateSystemMessage: (state, n) => {
+      state.systemMessage = n
     },
     updateUserMessageFlag: (state, n) => {
       console.log(n.index)

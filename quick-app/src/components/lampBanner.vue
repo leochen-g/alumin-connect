@@ -3,10 +3,10 @@
     <div class="scroll-icon">
       <span class="aliiconfont">&#xe617;</span>
     </div>
-    <swiper class="swiper" vertical indicator-dots="true" autoplay="true" interval="5000" duration="1000" circular="true">
-      <block v-for="(item, index) in systemInfo" :index="index" :key="key" @click="systemInfo(item.id)">
-        <swiper-item class="ellipsis">
-         {{item.content}}
+    <swiper @click="systemMessage()" class="swiper" vertical indicator-dots="true" autoplay="true" interval="5000" duration="1000" circular="true">
+      <block v-for="(item, index) in systemInfo" :index="index" :key="key">
+        <swiper-item class="ellipsis lampContent">
+         {{item.title}}
         </swiper-item>
       </block>
     </swiper>
@@ -27,18 +27,19 @@
       }
     },
     methods: {
-      systemInfo (id) {
-
+      systemMessage () {
+        const url = '../system-message/main'
+        wx.navigateTo({ url })
       }
     }
 
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .scroll-icon{
     padding-left: 38rpx;
-    background-color: #ffffff;
+    background-color: whiteColor;
     position: relative;
     z-index: 2;
   }
@@ -47,14 +48,15 @@
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    background: #ffffff;
+    background: whiteColor;
     height: 40rpx;
+    line-height 40rpx
     overflow: hidden;
     margin-bottom: 16rpx;
     padding: 10rpx 0rpx;
   }
   .swiper{
     flex: 1;
-    color: #027fff;
+    color: themeColor;
   }
 </style>

@@ -178,7 +178,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .alumni-main{
     background-color: #f4f5f5;
     height: 100%;
@@ -207,9 +207,6 @@
     background-color: #ffffff;
     padding: 20rpx;
   }
-  .edit-title{
-    font-size: 24rpx;
-  }
   .edit-input{
     margin-left: 20rpx;
     height: 60rpx;
@@ -232,7 +229,7 @@
     color: #c8c8c8;
   }
   .save{
-    color: #027fff
+    color: themeColor
   }
   .picker{
     color: #c8c8c8;

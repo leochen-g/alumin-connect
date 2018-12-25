@@ -210,6 +210,7 @@
         let _this = this
         getSystemMessage().then(res => {
           console.log(res.data)
+          globalStore.commit('updateSystemMessage', res.data.list)
           _this.systemInfo = res.data.list
         })
       },
@@ -233,7 +234,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .alumni-main{
     background-color: #f4f5f5;
   }

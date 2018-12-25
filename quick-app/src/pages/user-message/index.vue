@@ -31,7 +31,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .message{
     background-color: #ffffff;
     height: 100%;

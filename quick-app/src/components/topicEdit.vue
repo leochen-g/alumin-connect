@@ -101,7 +101,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus">
   .topic-edit{
     margin-bottom: 16rpx;
     background-color: #fff;
@@ -128,7 +128,7 @@
   .edit-toolbar{
     display: -ms-flexbox;
     display: flex;
-    color: #007fff;
+    color: themeColor;
     -ms-flex-direction: row;
     flex-direction: row;
     -ms-flex-pack: justify;
@@ -149,7 +149,7 @@
     opacity: .2;
     cursor: not-allowed;
     padding: 0!important;
-    background-color: #027fff;
+    background-color: themeColor;
     height: 64rpx;
     line-height: 64rpx;
     font-size: 30rpx;
@@ -163,7 +163,7 @@
   button{
     -webkit-appearance: none;
     appearance: none;
-    background-color: #007fff;
+    background-color: themeColor;
     color: #fff;
     border-radius: 4rpx;
     border: none;
@@ -181,7 +181,6 @@
 
   .edit{
     position: relative;
-    font-size: 24rpx;
     word-wrap: break-word;
     resize: none;
     height: 100rpx;

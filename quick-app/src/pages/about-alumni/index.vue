@@ -39,9 +39,9 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .alumni-main{
-    background-color: #f4f5f5;
+    background-color: backGroundColor;
     height: 100%;
     width: 100%;
   }

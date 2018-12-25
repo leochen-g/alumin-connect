@@ -1,25 +1,25 @@
 <template>
   <div class="message">
-    <messageItem v-for="(item,index) in userMessage" :key="item.id" :todo="item" :index="index"/>
+    <systemMessageItem v-for="(item,index) in systemMessage" :key="item.id" :todo="item" :index="index"/>
   </div>
 </template>
 
 <script>
   import globalStore from '../../store/global-store'
-  import messageItem from '../../components/messageItem'
+  import systemMessageItem from '../../components/systemMessageItem'
   export default {
     name: 'index',
     components: {
-      messageItem
+      systemMessageItem
     },
     computed: {
-      userMessage () {
-        return globalStore.state.userMessage
+      systemMessage () {
+        return globalStore.state.systemMessage
       }
     },
     onShow: function () {
       wx.setNavigationBarTitle({
-        title: '消息通知'
+        title: '系统通知'
       })
     },
     data () {
@@ -31,7 +31,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .message{
     background-color: #ffffff;
     height: 100%;

@@ -189,7 +189,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .schoolMain{
     display: flex;
     position: fixed;
@@ -242,7 +242,7 @@
     height: 70rpx;
     line-height: 70rpx;
     color: #FFFFFF;
-    background-color: #5687e7 ;
+    background-color: themeColor;
     border-radius: 16rpx;
     font-size: 32rpx ;
   }

@@ -98,7 +98,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .searchMain{
     position: fixed;
     background-color:#E5E5E5 ;
@@ -128,8 +128,8 @@
   }
   .search_input{
     padding:10rpx 20rpx ;
+    font-size 28rpx
     color:#888888 ;
-    font-size: 14pt;
   }
   .universityItem{
     display: flex;

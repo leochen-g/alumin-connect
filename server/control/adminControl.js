@@ -14,7 +14,7 @@ module.exports = {
   },
   addSystemMessage: async function (req, res, next) {
 	var param = req.body
-	var arr = [param.msgType,param.contentType,param.content,param.imgSrc,param.detail]
+	var arr = [param.msgType,param.contentType,param.title,param.imgSrc,param.detail]
 	var results = await adminService.addSystemMessage(arr)
 	if (results) {
 	  res.send({head: {code: 0, msg: 'ok'}, data: {}})

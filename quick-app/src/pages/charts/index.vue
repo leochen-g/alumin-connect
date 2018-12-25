@@ -501,7 +501,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .school-name{
     color: #49EAE5;
     font-weight: bold;

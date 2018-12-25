@@ -37,7 +37,7 @@
         <div class="content-location">
           <div class="location-title-box">
             <i class="aliiconfont location-icon">&#xe64a;</i>
-            <span class="location-title">{{todo.location}}</span>
+            <div class="location-content">{{todo.location}}</div>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
         <div class="action-box">
           <div class="like-action action" @click="likeClick(todo.id)">
             <div class="action-title-box">
-              <i :animation="animationUp" class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked, 'animate':likedAnimate}">&#xe630;</i>
+              <i :animation="animationUp" class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked}">&#xe630;</i>
               <span class="action-title">{{todo.likeCount?todo.likeCount:'赞'}}</span>
             </div>
           </div>
@@ -391,10 +391,10 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .activity-item{
     margin-bottom: 16rpx;
-    background-color: #fff;
+    background-color: whiteColor;
     border-radius: .048rem;
   }
 
@@ -403,7 +403,7 @@
   }
 
   .alumni-topic-item {
-    background-color: #fff;
+    background-color: whiteColor;
     border-radius: .042rem;
   }
 
@@ -433,21 +433,21 @@
     width: 0;
     height: 0;
     border: 12rpx solid;
-    border-color: transparent transparent #ebebeb;
+    border-color: transparent transparent borderColor;
     left: 72rpx
   }
   .dropdown-caret:after{
     content: "";
     top: -10rpx;
     left: -12rpx;
-    border-bottom-color: #fff;
+    border-bottom-color: whiteColor;
   }
   .dropdown-menu{
     display: block;
     padding: 12rpx 0;
     border-radius: 6rpx;
-    background-color: #fff;
-    border: 2rpx solid #ebebeb;
+    background-color: whiteColor;
+    border: 2rpx solid borderColor;
     box-shadow: 0 6rpx 24rpx 0 rgba(0,0,0,.06);
   }
   .dropdown-menu li{
@@ -481,7 +481,6 @@
   }
 
   .user-nickName {
-    font-size: 24rpx;
     font-family: -apple-system, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Arial, sans-serif;
     word-break: break-word;
     text-rendering: optimizeLegibility;
@@ -506,7 +505,6 @@
     display: flex;
     align-items: center;
     margin: 0.026rem 0 0;
-    font-size: 24rpx;
     color: #8a9aa9;
     cursor: default;
   }
@@ -542,14 +540,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #027fff;
+    color: themeColor
   }
 
   .location-icon {
-    font-size: 24rpx;
-    color: #027fff;
+    color: themeColor;
   }
-
   .action-box {
     display: flex;
     position: relative;
@@ -596,7 +592,7 @@
   }
 
   .active-action {
-    color: #027fff;
+    color: themeColor;
   }
   .action-title {
     margin-left: .072rem;
@@ -699,7 +695,6 @@
   .fetch-more-comment{
     display: block;
     padding: .24rem 0;
-    font-size: .24rem;
     text-align: center;
     color: #406599;
     border-top: 2rpx solid #ebebeb;
@@ -729,7 +724,6 @@
     border: none;
     position: relative;
     padding: 0.12rem .24rem;
-    font-size: 24rpx;
     line-height: 1.7;
     color: #17171a;
     outline: none;
@@ -756,7 +750,7 @@
     padding: 0 .30rem;
     font-size: .26rem;
     color: #fff;
-    background-color: #027fff;
+    background-color: themeColor;
     border-radius: 4rpx;
     cursor: pointer;
   }
@@ -781,7 +775,7 @@
 
   .input-box {
     background-color: #fff;
-    border: 2rpx solid #007fff;
+    border: 2rpx solid themeColor;
     border-radius: 6rpx;
   }
 
@@ -919,14 +913,4 @@
     border-bottom: 2rpx solid #ebebeb;
     background: #fff;
   }
-  @keyframes animate
-  {
-    from {font-size: 30rpx}
-    to {font-size: 24rpx}
-  }
-  .animate{
-    animation: animate 3s;
-  }
-
-
 </style>

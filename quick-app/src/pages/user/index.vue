@@ -1,41 +1,45 @@
 <template>
-  <div class="alumni-main">
-    <div class="user-main">
-      <div class="user-content">
-        <div class="user-header" @click="goPath('user')">
-          <img :src="userInfo?userInfo.avataUrl:'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bitmap.png'" class="user-avataurl-img" alt="">
-          <div class="user-base-info">
-            <div class="user-nick-name">{{userInfo?userInfo.nickName:'昵称'}}</div>
-            <div class="user-school">{{userInfo?userInfo.school.graduationTime:'毕业时间'}} @ {{userInfo?userInfo.school.university:'学校'}}</div>
+  <div class="user-main">
+    <div class="user-content">
+      <div class="user-header" @click="goPath('user')">
+        <img :src="userInfo?userInfo.avataUrl:'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bitmap.png'"
+             class="user-avataurl-img" alt="">
+        <div class="user-base-info">
+          <div class="user-nick-name">{{userInfo?userInfo.nickName:'昵称'}}</div>
+          <div class="user-school">{{userInfo?userInfo.school.graduationTime:'毕业时间'}} @
+            {{userInfo?userInfo.school.university:'学校'}}
           </div>
         </div>
-        <div v-if="hasAuth">
-          <div class="user-info-item" @click="goPath('school')">
-            <div class="aliiconfont info-item-icon">&#xe680;</div>
-            <div class="info-item-title">院校</div>
-          </div>
-          <div class="user-info-item" @click="goPath('company')">
-            <div class="aliiconfont info-item-icon">&#xe615;</div>
-            <div class="info-item-title">公司</div>
-          </div>
-          <div class="user-info-item" @click="goUserTopic()">
-            <div class="aliiconfont info-item-icon">&#xe6e8;</div>
-            <div class="info-item-title">话题</div>
-          </div>
-          <div class="user-info-item" @click="goUserMessage()">
-            <div class="aliiconfont info-item-icon">&#xe6a9;</div>
-            <div class="info-item-title">消息 <span class="messageCount" v-if="msgCount">{{msgCount?msgCount:''}}</span></div>
-          </div>
-          <div class="user-info-item" @click="goSetting()">
-            <div class="aliiconfont info-item-icon">&#xe642;</div>
-            <div class="info-item-title">设置</div>
+      </div>
+      <div v-if="hasAuth">
+        <div class="user-info-item" @click="goPath('school')">
+          <div class="aliiconfont info-item-icon">&#xe680;</div>
+          <div class="info-item-title">院校</div>
+        </div>
+        <div class="user-info-item" @click="goPath('company')">
+          <div class="aliiconfont info-item-icon">&#xe615;</div>
+          <div class="info-item-title">公司</div>
+        </div>
+        <div class="user-info-item" @click="goUserTopic()">
+          <div class="aliiconfont info-item-icon">&#xe6e8;</div>
+          <div class="info-item-title">话题</div>
+        </div>
+        <div class="user-info-item" @click="goUserMessage()">
+          <div class="aliiconfont info-item-icon">&#xe6a9;</div>
+          <div class="info-item-title">消息 <span class="messageCount" v-if="msgCount">{{msgCount?msgCount:''}}</span>
           </div>
         </div>
-        <div v-if="!hasAuth">
-          <div class="login-main">
-            <button open-type="getUserInfo" type="primary" size="default" class="login-btn" @getuserinfo="onGotUserInfo">登录</button>
-            <div class="login-tips">登陆后即刻开启校友生活</div>
-          </div>
+        <div class="user-info-item" @click="goSetting()">
+          <div class="aliiconfont info-item-icon">&#xe642;</div>
+          <div class="info-item-title">设置</div>
+        </div>
+      </div>
+      <div v-if="!hasAuth">
+        <div class="login-main">
+          <button open-type="getUserInfo" type="primary" size="default" class="login-btn" @getuserinfo="onGotUserInfo">
+            登录
+          </button>
+          <div class="login-tips">登陆后即刻开启校友生活</div>
         </div>
       </div>
     </div>
@@ -161,12 +165,7 @@
   }
 </script>
 
-<style scoped>
-  .alumni-main{
-    background-color: #f4f5f5;
-    height: 100%;
-    width: 100%;
-  }
+<style lang="stylus" scoped>
   .user-main{
     position: fixed;
     background-color: #F2F2F2;
@@ -194,7 +193,7 @@
     font-size: 28rpx;
   }
   .user-school{
-    color: #BFBEBE;
+    color: grayColor
   }
   .user-info-item{
     display: flex;
@@ -204,11 +203,11 @@
     width: 100%;
     height: 60rpx;
     line-height: 60rpx;
-    background-color: #ffffff;
+    background-color: whiteColor;
   }
   .info-item-icon{
     font-size: 40rpx;
-    color: #027fff;
+    color: themeColor;
   }
   .info-item-title{
     padding-left: 40rpx;
@@ -225,15 +224,14 @@
   }
   .login-tips{
     padding-top: 20rpx;
-    font-size: 24rpx;
     color: #b5b5b5;
     text-align: center;
   }
   .messageCount{
     text-align: center;
     display: inline-block;
-    background-color: red;
-    color: #ffffff;
+    background-color: messageBackgroundColor;
+    color: whiteColor;
     width: 40rpx;
     height: 40rpx;
     line-height: 40rpx;
