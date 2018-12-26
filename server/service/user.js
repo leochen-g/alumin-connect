@@ -1,5 +1,7 @@
 let sqlDao = require('../sql/sqlDao')
 let superagent = require('superagent')
+let WXBizDataCrypt = require('../until/RdWXBizDataCrypt')
+let jwt = require('../until/token')
 const config = require('../config')
 
 let userService = {
@@ -10,15 +12,39 @@ let userService = {
 	let resp = await superagent.get(URL)
 	let obj = JSON.parse(resp.text)
 	let openId = obj.openid
-	let session_key = resp.session_key
+	let session_key = obj.session_key
 	let list = [openId, '', '', '', '']
 	let result = await sqlDao.saveUser(list)
+	console.log('session_key', obj)
 	if(result.insertId){
-	  return {hasSave:false,openId:openId}
+	  return {hasSave:false,openId:openId,session_key:session_key}
 	}else {
-	  return {hasSave:true,openId:openId}
+	  return {hasSave:true,openId:openId,session_key:session_key}
 	}
   },
+  // 解析加密用户信息
+  decryptUserInfo: async function (arr) {
+    let code = arr[0]
+	let URL = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + config.MINI_APPID + '&secret=' + config.MINI_SECRET + '&js_code=' + code + '&grant_type=authorization_code'
+	let resp = await superagent.get(URL)
+	let obj = JSON.parse(resp.text)
+	let session_key = obj.session_key
+	let pc = new WXBizDataCrypt(config.MINI_APPID, session_key)
+	let data = pc.decryptData(arr[1], arr[2])
+	console.log('解密',data)
+	let userId = await this.findUser([data.unionId])
+	if(!userId){
+	  let info = [data.nickName, data.avatarUrl, data.country, data.gender, data.unionId, data.openId]
+	  let res = await this.updateUserBaseInfo(info)
+	}
+	return jwt.createJWT({userId:data.openId})
+  },
+  // 查找用户并返回userID
+  findUser: async  function (arr) {
+    let result = await sqlDao.group.user.findUser(arr)
+	return result[0].id?result[0].id:null
+  },
+
   //获取用户位置并保存
   getUserLocation: async function (arr) {
 	var param = arr[0]

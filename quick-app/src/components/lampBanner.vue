@@ -42,6 +42,8 @@
     background-color: whiteColor;
     position: relative;
     z-index: 2;
+    font-size 32rpx
+    padding-right 20rpx
   }
   .scroll_view_border{
     position: relative;

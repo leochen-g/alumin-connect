@@ -12,7 +12,8 @@ fly.interceptors.request.use((request) => {
   // request.headers['content-type']= 'application/json'
   request.headers = {
     'X-Tag': 'flyio',
-    'content-type': 'application/x-www-form-urlencoded '
+    'content-type': 'application/x-www-form-urlencoded ',
+    'authorization': wx.getStorageSync('token') || ''
   }
 
   let authParams = {

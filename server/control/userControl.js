@@ -27,16 +27,12 @@ module.exports = {
 	res.json({head: {code: 0, msg: 'ok'}, data: results})
 
   },
-  // 更新用户名称头像
-  updateUserBaseInfo: async function (req, res) {
+  // 登录，签发JWT
+  login: async function (req, res) {
 	var param = req.body
-	var arr = [param.nickName, param.avatarUrl, param.country, param.gender, param.openId]
-	var results = await userService.updateUserBaseInfo(arr)
-	if (results) {
-	  res.json({head: {code: 0, msg: 'ok'}, data: {}})
-	} else {
-	  res.json({head: {code: 0, msg: '更新失败'}, data: {}})
-	}
+	var arr = [param.code, param.encryptedData, param.iv]
+	var results = await userService.decryptUserInfo(arr)
+	res.json({head: {code: 0, msg: 'ok'}, data: {token:results}})
   },
   //  更新用户学校信息
   updateUserUniversity: async function (req, res) {

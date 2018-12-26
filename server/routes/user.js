@@ -10,9 +10,9 @@ router.post('/user/openid',async function (req,res) {
 router.post('/user/getLocation',async function (req,res) {
   control.getUserLocation(req,res)
 })
-//更新用户基本信息（昵称，头像）
-router.post('/user/updateUserBase',async function (req, res, next) {
-  control.updateUserBaseInfo(req,res)
+//登录，获取jwt Token
+router.post('/user/login',async function (req, res, next) {
+  control.login(req,res)
 })
 //更新用户设备信息
 router.post('/user/updateUserDevice',async function (req,res) {

@@ -10,7 +10,12 @@ export default {
   }
 }
 </script>
-
+<style>
+  page {
+    background-color: #f4f5f5;
+  }
+</style>
 <style lang="stylus" type="text/stylus" rel="stylesheet/stylus">
   @import "stylus/index.styl"
+
 </style>

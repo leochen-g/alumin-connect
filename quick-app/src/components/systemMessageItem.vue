@@ -1,6 +1,6 @@
 <template>
-  <div class="system-message-main" @click="changeMessageStatus(todo.id)">
-    <div class="system-message-content" >
+  <div class="system-message-main" @click="systemDetail(todo)">
+    <div class="system-message-content">
       <div class="system-message-panel">
         <!--头像-->
         <div class="system-message-left">
@@ -25,7 +25,6 @@
 
 <script>
   import globalStore from '../store/global-store'
-  import {readMessage} from '../http/api'
 
   export default {
     name: 'systemMessageItem',
@@ -59,20 +58,10 @@
       }
     },
     methods: {
-      changeMessageStatus (id) {
-        let req = {
-          mid: id
-        }
-        globalStore.commit({
-          type: 'updateUserMessageFlag',
-          value: 0,
-          index: this.index
-        })
-        globalStore.commit('updateSelectTopicId', id)
-        readMessage(req).then(res => {
-          const url = '../topic-detail/main'
-          wx.navigateTo({ url })
-        })
+      systemDetail (obj) {
+        globalStore.commit('updateSelectSystemMessage', obj)
+        const url = '../system-message-detail/main'
+        wx.navigateTo({ url })
       }
     }
   }
@@ -80,7 +69,13 @@
 
 <style lang="stylus" scoped>
   .system-message-main{
-    background-color: background-color ;
+    margin-top 15rpx
+    background-color: whiteColor ;
+    padding 10rpx 10rpx
+    border-radius 8rpx
+    -moz-box-shadow:0 4rpx 18rpx rgba(2,127,255,0.3);
+    -webkit-box-shadow:0 4rpx 18rpx rgba(2,127,255,0.3);
+    box-shadow:0 4rpx 18rpx rgba(2,127,255,0.3);
   }
 
   .system-message-panel {
@@ -119,6 +114,9 @@
     font-weight: bold;
     color: themeColor;
   }
+    .system-message-updateTime{
+      color grayColor
+    }
   .system-message-content-main{
     display: flex;
     justify-content: space-between;

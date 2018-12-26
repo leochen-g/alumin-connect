@@ -4,6 +4,7 @@
       <!--话题详情-->
       <div class="alumni-topic-header-row">
         <div class="account-group">
+          <div class="jewelry" v-if="showJewelry"></div>
           <div class="user-popover-box" @click="toUserDetail(todo.userInfo.openid)">
             <img class="user-avataUrl" v-bind:src="todo.userInfo.avataUrl" alt="">
           </div>
@@ -45,7 +46,7 @@
         <div class="action-box">
           <div class="like-action action" @click="likeClick(todo.id)">
             <div class="action-title-box">
-              <i :animation="animationUp" class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked}">&#xe630;</i>
+              <i class="aliiconfont action-icon" v-bind:class="{'active-action':todo.hasLiked}">&#xe630;</i>
               <span class="action-title">{{todo.likeCount?todo.likeCount:'赞'}}</span>
             </div>
           </div>
@@ -64,7 +65,8 @@
           <div class="comment-form">
             <div class="form-box">
               <div class="input-box">
-                <label for=""><input v-model="commentContent" maxlength="100" placeholder="输入评论..." class="input-content" type="text"></label>
+                <!--<input v-model="commentContent" placeholder="输入评论..." type="text" maxlength="100" class="reply-input">-->
+                <input v-model="commentContent" placeholder="输入评论..." type="text" maxlength="100" class="input-content" >
               </div>
               <div class="comment-action-box">
                 <div class="comment-submit">
@@ -202,7 +204,8 @@
         fetchReply: false,
         actionId: '',
         showHeaderAction: false,
-        likedAnimate: false
+        likedAnimate: false,
+        showJewelry: false // 显示饰品
       }
     },
     props: {
@@ -463,12 +466,9 @@
     display: none;
   }
   .account-group {
+    position relative
     align-items: center;
     display: flex;
-  }
-
-  .user-popover-box {
-    display: inline;
   }
 
   .comment-user-avataUrl{
@@ -623,11 +623,18 @@
   }
 
   .user-popover-box{
-    width: 66rpx;
-    height: 66rpx;
     display: inline;
   }
-
+  .jewelry{
+    position: absolute
+    background url("http://image.bloggeng.com/20181226171423.png") no-repeat
+    width 80rpx
+    height 80rpx
+    background-size 80rpx 80rpx
+    left -24rpx
+    top -37rpx
+    z-index 2
+  }
   .comment-content-box{
     border-bottom: 2rpx solid #f1f1f1;
     margin-left: .18rem;
@@ -721,13 +728,13 @@
   }
 
   .input-content{
-    border: none;
     position: relative;
-    padding: 0.12rem .24rem;
+    padding: .05rem .1rem;
+    font-size: 26rpx;
     line-height: 1.7;
-    color: #17171a;
+    color: #17181a;
     outline: none;
-    min-height: .28rem;
+    min-height: .72rem;
   }
 
   .comment-action-box{

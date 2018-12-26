@@ -44,7 +44,8 @@ const config = {
   PROVINCEMAP:provinceMap,
   RDS_PORT: env.RDS_PORT,
   RDS_HOST: env.RDS_HOST,
-  RDS_PWD: env.RDS_PWD
+  RDS_PWD: env.RDS_PWD,
+  JWTSECRET: env.JWTSECRET
 }
 
 module.exports = config

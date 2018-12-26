@@ -1,5 +1,5 @@
 <template>
-  <div class="message-main" @click="changeMessageStatus(todo.id)">
+  <div class="message-main" @click="changeMessageStatus(todo.id,todo.flag)">
     <div class="message-content" >
       <div class="message-panel">
         <!--头像-->
@@ -62,7 +62,7 @@
       }
     },
     methods: {
-      changeMessageStatus (id) {
+      changeMessageStatus (id, flag) {
         let req = {
           mid: id
         }
@@ -72,10 +72,15 @@
           index: this.index
         })
         globalStore.commit('updateSelectTopicId', id)
-        readMessage(req).then(res => {
+        if (flag) {
+          readMessage(req).then(res => {
+            const url = '../topic-detail/main'
+            wx.navigateTo({ url })
+          })
+        } else {
           const url = '../topic-detail/main'
           wx.navigateTo({ url })
-        })
+        }
       }
     }
   }
@@ -83,7 +88,12 @@
 
 <style lang="stylus" scoped>
   .message-main{
-    background-color: background-color ;
+    margin-top 15rpx
+    background-color: whiteColor;
+    border-radius 8rpx
+    -moz-box-shadow:0 4rpx 18rpx rgba(2,127,255,0.3);
+    -webkit-box-shadow:0 4rpx 18rpx rgba(2,127,255,0.3);
+    box-shadow:0 4rpx 18rpx rgba(2,127,255,0.3);
   }
 
   .message-panel {
@@ -107,7 +117,6 @@
   .message-right{
     flex: 1;
     padding: 8rpx 10rpx 12rpx 10rpx;
-    border-bottom: 1px solid borderColor;
   }
 
   .message-header{

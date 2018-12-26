@@ -112,6 +112,10 @@ module.exports = {
 	},
 	// 校友圈用户信息
 	user:{
+	  // 查找用户是否存在
+	  findUser:function (req) {
+	    return db.query(sqlMap.group.user.findUser, req)
+	  },
 	  //获取用户基本信息
 	  getReplyUserInfo:function (req) {
 		return db.query(sqlMap.group.user.getReplyUserInfo,req)

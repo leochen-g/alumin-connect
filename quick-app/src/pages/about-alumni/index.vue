@@ -2,8 +2,10 @@
   <div class="alumni-main">
     <div class="about-main">
       <div class="about-content">
-        <div>关于校友足迹</div>
-        一个致力于帮助同城校友联系的好圈子，个人兴趣开发
+        <div class="about-title">关于校友足迹</div>
+        <div class="about-content">
+          一个致力于帮助同城校友联系的好圈子，个人兴趣开发，如果你有更好的电子，欢迎反馈给我
+        </div>
       </div>
     </div>
   </div>
@@ -40,15 +42,21 @@
 </script>
 
 <style lang="stylus" scoped>
-  .alumni-main{
-    background-color: backGroundColor;
-    height: 100%;
-    width: 100%;
-  }
   .about-main{
     position: fixed;
-    background-color: #F2F2F2;
+    background-color: whiteColor;
     width: 100%;
     height: 100%;
   }
+  .about-title{
+    font-size 28rpx
+    text-align center
+  }
+  .about-content
+    padding 20rpx
+    text-indent 48rpx
+    font-size 28rpx
+    line-height 1.5
+    min-height 500rpx
+    color textColor
 </style>

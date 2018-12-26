@@ -53,6 +53,8 @@ export const readMessage = (params) => { return fly.post('/api/group/user/readMe
 /**
  * 个人中心接口
  **/
+// 登录
+export const login = (params) => { return fly.post('/api/user/login', params) }
 // 获取用户信息
 export const getUserInfo = (params) => { return fly.post('/api/group/user/getUserInfo', params) }
 // 获取选择的用户信息

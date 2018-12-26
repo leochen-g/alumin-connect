@@ -13,7 +13,7 @@ var sqlMap = {
 	locationCount: "select count(DISTINCT location) as locationCount,count(openid) as userCount from user where university = ? ;"
   },
   user: {
-	updateBase: 'update user set nickName = ?,avataUrl = ?, country = ?, gender = ?  where openid = ?;',
+	updateBase: 'update user set nickName = ?,avataUrl = ?, country = ?, gender = ?, unionid = ?  where openid = ?;',
 	updateDevice: 'update user set brand = ?,model = ?, system = ?, platform = ?  where openid = ?;',
 	insert: "insert ignore into user(openid,nickName,avataUrl,country,gender) values (?,?,?,?,?); ",
 	select: "select * from user where openid in (?)",
@@ -42,6 +42,7 @@ var sqlMap = {
 	getReplyListNoLimit:'select count(id) as count from reply where cid=? and flag=1;select * from reply where cid=? and flag=1 order by id desc',
 	user:{
       getReplyUserInfo:'select openid, nickName, location, university, gender, avataUrl, graduationTime, college, major, phone, company, job from user where openid in(?,?)',
+	  findUser: 'select id from user where unionid = ?',
       getUserInfo:'select openid, nickName, location, university, gender, avataUrl, graduationTime, college, major, phone, wechat, company, job from user where openid = ?',
 	  updateUserNickName:'update user set nickName = ? where openid = ?',
 	  updateUserContact:'update user set phone = ? where openid = ?',

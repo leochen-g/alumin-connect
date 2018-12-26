@@ -9,7 +9,7 @@ var path = require('path')
 var http = require('http')
 var bodyParser = require('body-parser')
 var app = express()
-
+var jwt = require('./until/token')
 app.set('trust proxy','loopback')
 
 app.all('*',function (req,res,next) {
@@ -26,8 +26,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 //分发路由到校友足迹
 app.use('/api', user)
+//token验证
+app.use(function (req,res,next) {
+  var token = req.body.token || req.query.token || req.headers['authorization']
+  var openId = req.body.openId
+  var auth =  jwt.verifyToken(token,openId)
+  console.log('验证',auth)
+  if(auth){
+    next()
+  }else {
+    res.json({head:{code: 10000, msg: '验证失败'}, data: {}})
+  }
+})
 //分发路由到校友圈
 app.use('/api', group)
 //分发路由到管理员

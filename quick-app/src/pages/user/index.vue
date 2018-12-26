@@ -48,7 +48,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
-  import {getUserInfo, getUserMessage} from '../../http/api'
+  import {getUserInfo, getUserMessage, login} from '../../http/api'
   export default {
     name: 'index',
     components: {},
@@ -63,11 +63,6 @@
         openId: wx.getStorageSync('openId'),
         hasAuth: wx.getStorageSync('hasAuth'),
         msgCount: ''
-      }
-    },
-    onReady: function () {
-      if (this.hasAuth) {
-        this.getUserInfo()
       }
     },
     onShow: function () {
@@ -108,15 +103,31 @@
         let url = '../user-setting/main'
         wx.navigateTo({ url })
       },
+      // 登录
       onGotUserInfo: function (e) {
         let _this = this
-        console.log(e)
         if (e.mp.detail.userInfo) {
+          console.log('信息', e)
           wx.setStorageSync('hasAuth', true)
           _this.hasAuth = true
           globalStore.commit('updateNickName', e.mp.detail.userInfo.nickName)
           wx.setStorageSync('nickName', e.mp.detail.userInfo.nickName)
-          _this.updateUserBaseInfo(e.mp.detail.userInfo)
+          wx.login({
+            timeout: 3000,
+            success: res => {
+              const code = res.code
+              const {encryptedData, iv} = e.mp.detail
+              let req = {
+                code: code,
+                encryptedData: encryptedData,
+                iv: iv
+              }
+              login(req).then(res => {
+                wx.setStorageSync('token', res.data.token)
+                _this.getUserInfo()
+              })
+            }
+          })
         } else {
           wx.showModal({
             title: '温馨提示',
@@ -139,29 +150,8 @@
             }
           })
         }
-      },
-      // 更新用户基本信息
-      updateUserBaseInfo (obj) {
-        let _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/updateUserBase',
-          method: 'POST',
-          data: {
-            nickName: obj.nickName,
-            avatarUrl: obj.avatarUrl,
-            country: obj.country,
-            gender: obj.gender
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded '
-          },
-          success: function (res) {
-            _this.getUserInfo()
-          }
-        })
       }
     }
-
   }
 </script>
 

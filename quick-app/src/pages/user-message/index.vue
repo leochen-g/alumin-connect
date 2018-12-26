@@ -33,8 +33,6 @@
 
 <style lang="stylus" scoped>
   .message{
-    background-color: #ffffff;
-    height: 100%;
-    width: 100%;
+    padding 10rpx 30rpx
   }
 </style>
