@@ -36,6 +36,9 @@
       },
       location () {
         return globalStore.state.location
+      },
+      hasAuth () {
+        return globalStore.state.hasAuth
       }
     },
     data () {
@@ -51,7 +54,6 @@
         currentPage: 1,
         pageNumber: 1,
         topicCount: '',
-        hasAuth: wx.getStorageSync('hasAuth'),
         systemInfo: ''
       }
     },
@@ -71,8 +73,6 @@
       this.start = 0
       this.limit = 10
       this.validate()
-      this.getSwiperList()
-      this.getSystemInfo()
     },
     async onPullDownRefresh () { // 下拉刷新
       this.initPage()
@@ -135,7 +135,25 @@
           })
           return false
         } else {
-          _this.getTopicList()
+          console.log('鉴权', _this.hasAuth)
+          if (_this.hasAuth) {
+            _this.getSwiperList()
+            _this.getSystemInfo()
+            _this.getTopicList()
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: '登录后即可查看校友圈子',
+              showCancel: false,
+              success (res) {
+                if (res.confirm) {
+                  wx.switchTab({
+                    url: '../user/main'
+                  })
+                }
+              }
+            })
+          }
         }
       },
       getSwiperList () {

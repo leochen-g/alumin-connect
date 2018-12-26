@@ -53,15 +53,13 @@
     name: 'index',
     components: {},
     computed: {
-      location () {
-        return globalStore.state.location
+      hasAuth () {
+        return globalStore.state.hasAuth
       }
     },
     data () {
       return {
         userInfo: '',
-        openId: wx.getStorageSync('openId'),
-        hasAuth: wx.getStorageSync('hasAuth'),
         msgCount: ''
       }
     },
@@ -77,6 +75,7 @@
         getUserInfo().then(res => {
           globalStore.commit('updateUserInfo', res.data)
           _this.userInfo = res.data
+          _this.getUserMessage()
         })
       },
       getUserMessage () {
@@ -84,6 +83,8 @@
         getUserMessage().then(res => {
           globalStore.commit('updateUserMessage', res.data.list)
           _this.msgCount = res.data.count
+          wx.setStorageSync('hasAuth', true)
+          globalStore.commit('updateAuth', true)
         })
       },
       goPath (val) {
@@ -108,8 +109,6 @@
         let _this = this
         if (e.mp.detail.userInfo) {
           console.log('信息', e)
-          wx.setStorageSync('hasAuth', true)
-          _this.hasAuth = true
           globalStore.commit('updateNickName', e.mp.detail.userInfo.nickName)
           wx.setStorageSync('nickName', e.mp.detail.userInfo.nickName)
           wx.login({

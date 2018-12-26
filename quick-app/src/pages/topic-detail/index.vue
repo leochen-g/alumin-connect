@@ -47,10 +47,4 @@
 </script>
 
 <style lang="stylus" scoped>
-  .alumni-main{
-    position: fixed;
-    background-color: #f4f5f5;
-    height: 100%;
-    width: 100%;
-  }
 </style>

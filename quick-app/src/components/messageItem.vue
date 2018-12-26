@@ -1,5 +1,5 @@
 <template>
-  <div class="message-main" @click="changeMessageStatus(todo.id,todo.flag)">
+  <div class="message-main" @click="changeMessageStatus(todo.topicInfo.id,todo.flag)">
     <div class="message-content" >
       <div class="message-panel">
         <!--头像-->
