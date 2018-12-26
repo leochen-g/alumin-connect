@@ -42,7 +42,11 @@ let userService = {
   // 查找用户并返回userID
   findUser: async  function (arr) {
     let result = await sqlDao.group.user.findUser(arr)
-	return result[0].id?result[0].id:null
+	if(result.length>0){
+	  return result[0].id
+	}else {
+	  return null
+	}
   },
 
   //获取用户位置并保存
