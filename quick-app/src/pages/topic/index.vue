@@ -39,6 +39,9 @@
       },
       hasAuth () {
         return globalStore.state.hasAuth
+      },
+      systemInfo () {
+        return globalStore.state.systemMessage
       }
     },
     data () {
@@ -53,8 +56,7 @@
         limit: 10,
         currentPage: 1,
         pageNumber: 1,
-        topicCount: '',
-        systemInfo: ''
+        topicCount: ''
       }
     },
     onReady: function () {
@@ -68,7 +70,7 @@
     },
     onShow: function () {
       wx.setNavigationBarTitle({
-        title: '个人中心'
+        title: '校友圈子'
       })
       this.start = 0
       this.limit = 10
@@ -225,11 +227,8 @@
         })
       },
       getSystemInfo () {
-        let _this = this
         getSystemMessage().then(res => {
-          console.log(res.data)
           globalStore.commit('updateSystemMessage', res.data.list)
-          _this.systemInfo = res.data.list
         })
       },
       inputEvent (e) {

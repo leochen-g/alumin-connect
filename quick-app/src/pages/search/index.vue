@@ -40,6 +40,9 @@
     computed: {
       university () {
         return globalStore.state.universtity
+      },
+      userInfo () {
+        return globalStore.state.userInfo
       }
     },
     data () {
@@ -70,7 +73,14 @@
           university: val
         }
         updateUserUniversity(req).then(res => {
-          console.log('更新学校信息')
+          if (this.userInfo) {
+            globalStore.commit({
+              type: 'updateUserInfoItem',
+              key: 'university',
+              otherKey: 'school',
+              value: val
+            })
+          }
           wx.navigateBack({
             delta: 1
           })

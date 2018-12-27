@@ -1,5 +1,5 @@
 <template>
-  <div class="message-main" @click="changeMessageStatus(todo.topicInfo.id,todo.flag)">
+  <div class="message-main" @click="changeMessageStatus(todo.id,todo.topicInfo.id,todo.flag)">
     <div class="message-content" >
       <div class="message-panel">
         <!--头像-->
@@ -62,16 +62,16 @@
       }
     },
     methods: {
-      changeMessageStatus (id, flag) {
+      changeMessageStatus (mid, tid, flag) {
         let req = {
-          mid: id
+          mid: mid
         }
         globalStore.commit({
           type: 'updateUserMessageFlag',
           value: 0,
           index: this.index
         })
-        globalStore.commit('updateSelectTopicId', id)
+        globalStore.commit('updateSelectTopicId', tid)
         if (flag) {
           readMessage(req).then(res => {
             const url = '../topic-detail/main'

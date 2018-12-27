@@ -13,7 +13,7 @@ module.exports = {
 	  })
 	} else {
 	  res.json({
-		head: {code: 11000, msg: '数据已存在'},
+		head: {code: 1, msg: '数据已存在'},
 		data: {'openid': results.openId}
 	  })
 	}
@@ -42,7 +42,7 @@ module.exports = {
 	if (results) {
 	  res.json({head: {code: 0, msg: '更新成功'}, data: {}})
 	} else {
-	  res.json({head: {code: 11000, msg: '更新失败'}, data: {}})
+	  res.json({head: {code: 10000, msg: '更新失败'}, data: {}})
 	}
   },
   // 更新用户设备信息
@@ -53,7 +53,7 @@ module.exports = {
 	if (results) {
 	  res.json({head: {code: 0, msg: 'ok'}, data: {}})
 	} else {
-	  res.json({head: {code: 0, msg: '更新失败'}, data: {}})
+	  res.json({head: {code: 10000, msg: '更新失败'}, data: {}})
 	}
   },
   //  获取学校数据地图

@@ -9,6 +9,7 @@
 <script>
   import globalStore from '../../store/global-store'
   import systemMessageItem from '../../components/systemMessageItem'
+  import {getSystemMessage} from '../../http/api'
   export default {
     name: 'index',
     components: {
@@ -27,11 +28,19 @@
         backgroundColor: '#123456'
       })
     },
+    async onPullDownRefresh () { // 下拉刷新
+      wx.stopPullDownRefresh()
+    },
     data () {
       return {
       }
     },
     methods: {
+      getSystemInfo () {
+        getSystemMessage().then(res => {
+          globalStore.commit('updateSystemMessage', res.data.list)
+        })
+      }
     }
   }
 </script>

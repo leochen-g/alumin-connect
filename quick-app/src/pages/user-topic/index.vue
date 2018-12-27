@@ -8,7 +8,6 @@
 <script>
   import topicItem from '../../components/topicItem'
   import globalStore from '../../store/global-store'
-  import Bus from '../../bus'
   import {getUserTopicList} from '../../http/api'
   export default {
     name: 'index',
@@ -25,23 +24,19 @@
         list: []
       }
     },
-    onReady: function () {
-      let _this = this
-      _this.getTopicList()
-      Bus.$off('getTopicList')
-      Bus.$on('getTopicList', function () {
-        _this.getTopicList()
-      })
-    },
     onShow: function () {
+      this.getUserTopicList()
       wx.setNavigationBarTitle({
         title: '个人话题'
       })
     },
+    async onPullDownRefresh () { // 下拉刷新
+      this.getUserTopicList()
+      wx.stopPullDownRefresh()
+    },
     methods: {
-      getTopicList () {
+      getUserTopicList () {
         let _this = this
-        _this.list = []
         getUserTopicList().then(res => {
           _this.list = res.data.list
         })

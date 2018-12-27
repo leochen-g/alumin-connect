@@ -13,7 +13,7 @@ function isEmpty(body) {
 }
 function filter(req,res,callback) {
   if(isEmpty(req.body)){
-	res.json({head: {code: 10000, msg: '缺少必须的参数'}, data: {}})
+	res.json({head: {code: 10001, msg: '缺少参数'}, data: {}})
   }else {
 	callback&&callback(req,res)
   }

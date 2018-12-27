@@ -7,6 +7,7 @@
 <script>
   import globalStore from '../../store/global-store'
   import messageItem from '../../components/messageItem'
+  import {getUserMessage} from '../../http/api'
   export default {
     name: 'index',
     components: {
@@ -22,11 +23,20 @@
         title: '消息通知'
       })
     },
+    async onPullDownRefresh () { // 下拉刷新
+      this.getUserMessage()
+      wx.stopPullDownRefresh()
+    },
     data () {
       return {
       }
     },
     methods: {
+      getUserMessage () {
+        getUserMessage().then(res => {
+          globalStore.commit('updateUserMessage', res.data.list)
+        })
+      }
     }
   }
 </script>

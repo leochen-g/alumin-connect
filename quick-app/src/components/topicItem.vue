@@ -156,7 +156,7 @@
                           </div>
                         </div>
                       </div>
-                    <a @click="gteReplyListByCommentId(item.cid, index)" v-if="item.replyCount>2&&!fetchReply" class="fetch-more-comment" >加载更多</a>
+                    <a @click="gteReplyListByCommentId(item.cid, index)" v-if="item.replyCount>2&&(!fetchReply)" class="fetch-more-comment" >加载更多</a>
                     <a  class="fetch-more-comment fetch-active" v-if="fetchAll">加载更多</a>
                   </div>
                 </div>
@@ -357,6 +357,7 @@
         getCommentList(req).then(res => {
           _this.commentCount = res.data.count
           _this.fetchAll = false
+          _this.fetchReply = false
           if (type) {
             _this.commentList.comments = _this.commentList.comments.concat(res.data.comments)
           } else {

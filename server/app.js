@@ -34,11 +34,10 @@ app.use(function (req,res,next) {
   var token = req.body.token || req.query.token || req.headers['authorization']
   var openId = req.body.openId
   var auth =  jwt.verifyToken(token,openId)
-  console.log('验证',auth)
   if(auth){
     next()
   }else {
-    res.json({head:{code: 10000, msg: '验证失败'}, data: {}})
+    res.json({head:{code: 401, msg: '身份验证失败'}, data: {}})
   }
 })
 //分发路由到校友圈

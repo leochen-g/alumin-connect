@@ -37,7 +37,7 @@ fly.interceptors.request.use((request) => {
 fly.interceptors.response.use(
   (response) => {
     wx.hideLoading()
-    if (response.data.head.code === 10000) {
+    if (response.data.head.code === 401) { // 鉴权失败
       wx.showModal({
         title: '提示',
         content: '登录后即可查看校友圈子',
@@ -49,6 +49,16 @@ fly.interceptors.response.use(
             })
           }
         }
+      })
+    } else if (response.data.head.code === 10000) { // 后端错误,网络失败
+      wx.showToast({
+        title: response.data.head.msg,
+        duration: 2000
+      })
+    } else if (response.data.head.code === 10001) { // 缺少必须的参数
+      wx.showToast({
+        title: response.data.head.msg,
+        duration: 2000
       })
     }
     return response.data // 请求成功之后将返回值返回

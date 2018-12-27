@@ -269,6 +269,7 @@ let groupService = {
   },
   // 标记消息已读
   readMessage: async function (arr) {
+    console.log('已读',arr)
     let result = await sqlDao.group.user.readMessage(arr)
 	return result.affectedRows
   },

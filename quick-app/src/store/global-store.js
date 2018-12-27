@@ -36,6 +36,13 @@ export default new Vuex.Store({
     updateUserInfo: (state, n) => {
       state.userInfo = n
     },
+    updateUserInfoItem: (state, n) => {
+      if (n.otherKey) {
+        state.userInfo[n.otherKey][n.key] = n.value
+      } else {
+        state.userInfo[n.key] = n.value
+      }
+    },
     updateSelectTopicId: (state, n) => {
       state.selectTopicId = n
     },

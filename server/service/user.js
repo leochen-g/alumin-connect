@@ -5,29 +5,30 @@ let jwt = require('../until/token')
 const config = require('../config')
 
 let userService = {
-  //  获取用户openid并保存
-  getUserOpenid: async function (arr) {
-    let code = arr[0]
+  // 根据code返回SessionKey和openId
+  getSessionKey: async function (code) {
 	let URL = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + config.MINI_APPID + '&secret=' + config.MINI_SECRET + '&js_code=' + code + '&grant_type=authorization_code'
 	let resp = await superagent.get(URL)
 	let obj = JSON.parse(resp.text)
+	return obj
+  },
+  //  获取用户openid并保存
+  getUserOpenid: async function (arr) {
+    let code = arr[0]
+	let obj = await this.getSessionKey(code)
 	let openId = obj.openid
-	let session_key = obj.session_key
 	let list = [openId, '', '', '', '']
 	let result = await sqlDao.saveUser(list)
-	console.log('session_key', obj)
 	if(result.insertId){
-	  return {hasSave:false,openId:openId,session_key:session_key}
+	  return {hasSave:false,openId:openId}
 	}else {
-	  return {hasSave:true,openId:openId,session_key:session_key}
+	  return {hasSave:true,openId:openId}
 	}
   },
   // 解析加密用户信息
   decryptUserInfo: async function (arr) {
     let code = arr[0]
-	let URL = 'https://api.weixin.qq.com/sns/jscode2session?appid=' + config.MINI_APPID + '&secret=' + config.MINI_SECRET + '&js_code=' + code + '&grant_type=authorization_code'
-	let resp = await superagent.get(URL)
-	let obj = JSON.parse(resp.text)
+	let obj = await this.getSessionKey(code)
 	let session_key = obj.session_key
 	let pc = new WXBizDataCrypt(config.MINI_APPID, session_key)
 	let data = pc.decryptData(arr[1], arr[2])

@@ -58,7 +58,7 @@
               <input type="text" v-model="userInfo.school.college" @click="focusClick('college')" @blur="moveClick">
             </div>
             <div class="edit-btn-group" v-if="type==='college'">
-              <a href="" class="save" @click="updateUserInfo('college',userInfo.school.college)">保存</a>
+              <a href="" class="save" @click="updateUserInfo('college', userInfo.school.college, 'school')">保存</a>
               <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
@@ -68,7 +68,7 @@
               <input type="text" v-model="userInfo.school.major" @click="focusClick('major')" @blur="moveClick">
             </div>
             <div class="edit-btn-group" v-if="type==='major'">
-              <a href="" class="save" @click="updateUserInfo('major',userInfo.school.major)">保存</a>
+              <a href="" class="save" @click="updateUserInfo('major', userInfo.school.major, 'school')">保存</a>
               <a href="" class="cancel" @click="cancel">取消</a>
             </div>
           </div>
@@ -103,38 +103,32 @@
 
 <script>
   import globalStore from '../../store/global-store'
-  import {getUserInfo, updateUserInfo} from '../../http/api'
+  import {updateUserInfo} from '../../http/api'
 
   export default {
     name: 'index',
     computed: {
       editType () {
         return globalStore.state.editType
+      },
+      userInfo () {
+        return globalStore.state.userInfo
       }
     },
     data () {
       return {
         focusInput: false,
-        userInfo: '',
         date: '',
         type: ''
       }
     },
-    onShow: function () {
+    onLoad () {
       wx.setNavigationBarTitle({
         title: '信息修改'
       })
-      this.getUserInfo()
     },
     methods: {
-      getUserInfo () {
-        let _this = this
-        getUserInfo().then(res => {
-          _this.userInfo = res.data
-          globalStore.commit('updateUserInfo', _this.userInfo)
-        })
-      },
-      updateUserInfo (type, val) {
+      updateUserInfo (type, val, otherKey) {
         let _this = this
         let req = {
           type: type,
@@ -142,13 +136,9 @@
         }
         updateUserInfo(req).then(res => {
           if (res.head.code === 0) {
-            _this.getUserInfo()
             _this.type = ''
-            wx.showToast({
-              title: '保存成功',
-              icon: 'none',
-              duration: 1000
-            })
+            globalStore.commit({type: 'updateUserInfoItem', key: type, otherKey: otherKey, value: val})
+            wx.showToast({title: '保存成功', icon: 'none', duration: 1000})
           }
         })
       },
@@ -168,7 +158,7 @@
       },
       bindDateChange (e) {
         this.date = e.target.value
-        this.updateUserInfo('graduationTime', this.date)
+        this.updateUserInfo('graduationTime', this.date, 'school')
       },
       cancel () {
         this.type = ''

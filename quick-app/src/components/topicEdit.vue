@@ -69,17 +69,6 @@
       inputEvent (e) {
         this.hasInputCount = e.mp.detail.cursor
       },
-      throttle (fn, context, delay, text) {
-        clearTimeout(fn.timeoutId)
-        fn.timeoutId = setTimeout(function () {
-          fn.call(context, text)
-        }, delay)
-      },
-      queryData (e) {
-        console.log(e)
-        this.hasInputCount = e.cursor
-        this.$emit('input', e.value)
-      },
       addTopic () {
         let _this = this
         let req = {

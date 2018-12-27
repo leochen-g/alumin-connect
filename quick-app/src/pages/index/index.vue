@@ -41,6 +41,12 @@
         location: ''
       }
     },
+    created () {
+      this.wxLogin()
+      wx.setNavigationBarTitle({
+        title: '校友足迹'
+      })
+    },
     onReady: function (options) {
       const _this = this
       wx.getSetting({
@@ -182,9 +188,6 @@
           url: '../search/main'
         })
       }
-    },
-    created () {
-      this.wxLogin()
     }
   }
 </script>

@@ -55,27 +55,33 @@
     computed: {
       hasAuth () {
         return globalStore.state.hasAuth
+      },
+      userInfo () {
+        return globalStore.state.userInfo
       }
     },
     data () {
       return {
-        userInfo: '',
         msgCount: ''
       }
     },
-    onShow: function () {
+    onLoad () { // 小程序钩子
+      wx.setNavigationBarTitle({
+        title: '个人中心'
+      })
       if (this.hasAuth) {
         this.getUserInfo()
-        this.getUserMessage()
       }
+    },
+    onShow () {
+      this.getUserMessage()
     },
     methods: {
       getUserInfo () {
-        let _this = this
         getUserInfo().then(res => {
           globalStore.commit('updateUserInfo', res.data)
-          _this.userInfo = res.data
-          _this.getUserMessage()
+          wx.setStorageSync('hasAuth', true)
+          globalStore.commit('updateAuth', true)
         })
       },
       getUserMessage () {
@@ -83,8 +89,6 @@
         getUserMessage().then(res => {
           globalStore.commit('updateUserMessage', res.data.list)
           _this.msgCount = res.data.count
-          wx.setStorageSync('hasAuth', true)
-          globalStore.commit('updateAuth', true)
         })
       },
       goPath (val) {

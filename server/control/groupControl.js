@@ -20,7 +20,7 @@ module.exports = {
 	if (results) {
 	  res.send({head: {code: 0, msg: 'ok'}, data: {}})
 	} else {
-	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
+	  res.send({head: {code: 10000, msg: '添加失败，请稍后重试'}, data: {}})
 	}
   },
   //删除话题
@@ -31,7 +31,7 @@ module.exports = {
 	if (results) {
 	  res.json({head: {code: 0, msg: 'ok'}, data: {}})
 	} else {
-	  res.json({head: {code: 10000, msg: '删除失败'}, data: {}})
+	  res.json({head: {code: 10000, msg: '删除失败，请稍后重试'}, data: {}})
 	}
   },
   //获取话题列表
@@ -85,7 +85,7 @@ module.exports = {
 	if (results) {
 	  res.send({head: {code: 0, msg: 'ok'}, data: {}})
 	} else {
-	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
+	  res.send({head: {code: 10000, msg: '添加失败，请稍后重试'}, data: {}})
 	}
 	var topicInfo = await groupService.getSimpleTopicInfo([param.topicId])
 	var msgArr = ['user','comment',param.topicId,param.openId,topicInfo.openId]
@@ -121,7 +121,7 @@ module.exports = {
 	if (results) {
 	  res.send({head: {code: 0, msg: 'ok'}, data: {}})
 	} else {
-	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
+	  res.send({head: {code: 10000, msg: '添加失败，请稍后重试'}, data: {}})
 	}
 	var topicInfo = await groupService.getSimpleTopicInfo([param.topicId])
 	var msgArr = ['user','reply',param.topicId,param.openId,param.toUid] // 添加回复通知
@@ -132,7 +132,6 @@ module.exports = {
 	if(param.openId!==topicInfo.openId){
 	  var msg1 = groupService.addUserMessage(msgArr1)
 	}
-	console.log(await msg,await msg1)
   },
   //删除回复
   deleteReply: async function (req, res) {
@@ -142,7 +141,7 @@ module.exports = {
 	if (results) {
 	  res.json({head: {code: 0, msg: 'ok'}, data: {}})
 	} else {
-	  res.json({head: {code: 10000, msg: '删除失败'}, data: {}})
+	  res.json({head: {code: 10000, msg: '删除失败，请稍后重试'}, data: {}})
 	}
   },
   // 获取选择的用户信息
@@ -192,7 +191,6 @@ module.exports = {
 	    if(param.openId!==topicInfo.openId){
 		  var msg = await groupService.addUserMessage(msgArr)
 		}
-		console.log('点赞',msg)
 	  }else {
 	    console.log('已赞')
 	  }
