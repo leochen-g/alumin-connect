@@ -29,6 +29,7 @@ let userService = {
   decryptUserInfo: async function (arr) {
     let code = arr[0]
 	let obj = await this.getSessionKey(code)
+	console.log('session_key', obj)
 	let session_key = obj.session_key
 	let pc = new WXBizDataCrypt(config.MINI_APPID, session_key)
 	let data = pc.decryptData(arr[1], arr[2])
@@ -38,7 +39,7 @@ let userService = {
 	  let info = [data.nickName, data.avatarUrl, data.country, data.gender, data.unionId, data.openId]
 	  let res = await this.updateUserBaseInfo(info)
 	}
-	return jwt.createJWT({userId:data.openId})
+	return {token: jwt.createJWT({userId:data.openId}), openId:data.openId}
   },
   // 查找用户并返回userID
   findUser: async  function (arr) {

@@ -39,7 +39,7 @@
   export default {
     computed: {
       university () {
-        return globalStore.state.universtity
+        return globalStore.state.university
       },
       userInfo () {
         return globalStore.state.userInfo
@@ -53,6 +53,10 @@
         searchClearBtn: false,
         universityList: []
       }
+    },
+    onShow () {
+      this.chooseIndex = ''
+      this.searchValue = ''
     },
     methods: {
       bindTap (val) {

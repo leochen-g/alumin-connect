@@ -112,7 +112,6 @@
       onGotUserInfo: function (e) {
         let _this = this
         if (e.mp.detail.userInfo) {
-          console.log('信息', e)
           globalStore.commit('updateNickName', e.mp.detail.userInfo.nickName)
           wx.setStorageSync('nickName', e.mp.detail.userInfo.nickName)
           wx.login({

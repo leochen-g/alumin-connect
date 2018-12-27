@@ -32,7 +32,7 @@ module.exports = {
 	var param = req.body
 	var arr = [param.code, param.encryptedData, param.iv]
 	var results = await userService.decryptUserInfo(arr)
-	res.json({head: {code: 0, msg: 'ok'}, data: {token:results}})
+	res.json({head: {code: 0, msg: 'ok'}, data:results})
   },
   //  更新用户学校信息
   updateUserUniversity: async function (req, res) {

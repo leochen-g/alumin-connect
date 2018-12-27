@@ -23,7 +23,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
-  import {getOpenId, getUserLocation, updateUserDeviceInfo} from '../../http/api'
+  import {getOpenId, getUserLocation, updateUserDeviceInfo, login} from '../../http/api'
 
   export default {
     computed: {
@@ -36,7 +36,6 @@
     },
     data () {
       return {
-        userInfo: {},
         city: '',
         location: ''
       }
@@ -45,36 +44,6 @@
       this.wxLogin()
       wx.setNavigationBarTitle({
         title: '校友足迹'
-      })
-    },
-    onReady: function (options) {
-      const _this = this
-      wx.getSetting({
-        success: function (res) {
-          if (res.authSetting['scope.userInfo']) {
-            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-            _this.hasAuth = true
-            globalStore.commit('updateAuth', _this.hasAuth)
-            wx.setStorageSync('hasAuth', true)
-            wx.getUserInfo({
-              success: (res) => {
-                _this.userInfo = res.userInfo
-                globalStore.commit('updateNickName', _this.userInfo.nickName)
-                wx.setStorageSync('nickName', _this.userInfo.nickName)
-              }
-            })
-          } else {
-            _this.hasAuth = false
-            wx.setStorageSync('hasAuth', false)
-            globalStore.commit('updateAuth', _this.hasAuth)
-            _this.userInfo = {
-              nickName: '校友足迹',
-              avatarUrl: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bitmap.png',
-              country: 'China',
-              gender: '1'
-            }
-          }
-        }
       })
     },
     onShareAppMessage (options) {
@@ -91,11 +60,38 @@
       // 调用登录接口
       wxLogin () {
         const _this = this
-        wx.login({
-          success: (resCode) => {
-            _this.code = resCode.code
-            _this.getOpenId(resCode.code)
-            // 获取openid
+        wx.getSetting({
+          success: function (res) {
+            if (res.authSetting['scope.userInfo']) {
+              // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+              wx.login({
+                success: (resCode) => {
+                  wx.getUserInfo({
+                    success: (res) => {
+                      globalStore.commit('updateNickName', res.userInfo.nickName)
+                      wx.setStorageSync('nickName', res.userInfo.nickName)
+                      const {encryptedData, iv} = res
+                      let req = {
+                        code: resCode.code,
+                        encryptedData: encryptedData,
+                        iv: iv
+                      }
+                      login(req).then(res => {
+                        wx.setStorageSync('token', res.data.token)
+                        wx.setStorageSync('openId', res.data.openId)
+                        wx.setStorageSync('hasAuth', true)
+                      })
+                    }
+                  })
+                }
+              })
+            } else {
+              wx.login({
+                success: (resCode) => {
+                  _this.getOpenId(resCode.code)
+                }
+              })
+            }
           }
         })
       },
@@ -125,8 +121,7 @@
           code: val
         }
         getOpenId(obj).then(res => {
-          _this.openId = res.data.openid
-          wx.setStorageSync('openId', _this.openId)
+          wx.setStorageSync('openId', res.data.openid)
           try {
             const deviceInfo = wx.getSystemInfoSync()
             _this.updateUserDeviceInfo(deviceInfo)

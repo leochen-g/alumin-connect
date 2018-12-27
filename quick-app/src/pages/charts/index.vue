@@ -18,6 +18,7 @@
       <cover-view class="floatCover">
         <button hover-class="hover" open-type="share"  class="btn shareBtn ">分享</button>
         <button hover-class="hover" @click ='saveImg'  class="btn downImg ">下载</button>
+        <button hover-class="hover" @click ='goTopic'  class="btn downImg ">聊聊</button>
       </cover-view>
     </div>
     <div class="echarts-hide">
@@ -110,6 +111,11 @@
       this.getStudentCount()
     },
     methods: {
+      goTopic () {
+        wx.switchTab({
+          url: '../topic/main'
+        })
+      },
       initChartBar () {
         var _this = this
         optionBar = {
