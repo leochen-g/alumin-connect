@@ -24,11 +24,9 @@
       wx.setNavigationBarTitle({
         title: '系统通知'
       })
-      wx.setBackgroundColor({
-        backgroundColor: '#123456'
-      })
     },
     async onPullDownRefresh () { // 下拉刷新
+      this.getSystemInfo()
       wx.stopPullDownRefresh()
     },
     data () {
