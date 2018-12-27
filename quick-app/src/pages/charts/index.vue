@@ -159,13 +159,7 @@
               barWidth: 20,
               itemStyle: {
                 normal: {
-                  color: new echarts.graphic.LinearGradient(
-                    0, 0, 0, 1,
-                    [
-                      {offset: 0, color: '#49EAE5'},
-                      {offset: 1, color: '#49EAE5'}
-                    ]
-                  )
+                  color: '#49EAE5'
                 }
               },
               data: this.topVal
