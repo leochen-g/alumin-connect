@@ -22,6 +22,7 @@ export default {
       navigationBarTextStyle: 'white'
     },
     tabBar: {
+      'selectedColor': '#027fff',
       'list': [
         {
           'pagePath': 'pages/index/main',

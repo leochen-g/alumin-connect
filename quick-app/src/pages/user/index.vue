@@ -74,7 +74,9 @@
       }
     },
     onShow () {
-      this.getUserMessage()
+      if (this.hasAuth) {
+        this.getUserMessage()
+      }
     },
     methods: {
       getUserInfo () {

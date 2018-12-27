@@ -18,7 +18,7 @@
             <span v-if="todo.contentType==='liked'">赞了：{{todo.topicInfo.content}}</span>
             <span v-if="todo.contentType==='comment'">评论了你的话题：{{todo.topicInfo.content}}</span>
             <span v-if="todo.contentType==='reply'">回复了你的评论：{{todo.topicInfo.content}}</span>
-            <span v-show="todo.flag" v-bind:class="{'active-msg':todo.flag}" class="aliiconfont">&#xe643;</span>
+            <span v-if="todo.flag" v-bind:class="{'active-msg':todo.flag}" class="aliiconfont">&#xe643;</span>
           </div>
         </div>
       </div>

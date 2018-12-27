@@ -7,14 +7,14 @@
             <div style="width: 100%">
               <input class="search_input" placeholder="搜索" v-model.trim="searchValue"   name="universityName">
             </div>
-            <div v-show="searchClearBtn&&searchValue!==''" @click="clearSearch">
+            <div v-if="searchClearBtn&&searchValue!==''" @click="clearSearch">
               <i class="aliiconfont search_voice">&#xe62b;</i>
             </div>
           </div>
         </div>
       </form>
     </div>
-    <div class="panel" v-show="searchClearBtn&&searchValue!==''">
+    <div class="panel" v-if="searchClearBtn&&searchValue!==''">
       <div class="panel_bg">
         <div class="universityItem" v-for="(item, index) in universityList" :key="index" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver" @click="choose(item.name)">
           <div class="universityItem_icon"><i class="aliiconfont search_btn">&#xe627;</i></div>

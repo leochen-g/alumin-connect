@@ -13,8 +13,8 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button hover-class="hover" v-show="university!=='请选择'" class="finish"  @click="goCharts">出&nbsp;&nbsp;发</button>
-          <button hover-class="hover" v-show="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
+          <button hover-class="hover" v-if="university!=='请选择'" class="finish"  @click="goCharts">出&nbsp;&nbsp;发</button>
+          <button hover-class="hover" v-if="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
         </div>
       </div>
     </div>

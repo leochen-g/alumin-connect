@@ -2,7 +2,9 @@
   <div class="topic-edit">
     <div class="topic-edit-body">
       <div class="topic-edit-content">
-        <textarea maxlength="100" :placeholder="placeholder" class="edit-content edit" v-model="topicContent" @input="inputEvent" ></textarea>
+        <label>
+          <textarea maxlength="100" :placeholder="placeholder" class="edit-content edit" v-model="topicContent" @input="inputEvent"></textarea>
+        </label>
         <span class="word-counter">{{wordCount-hasInputCount}}</span>
       </div>
     </div>
@@ -10,8 +12,8 @@
       <div class="edit-toolbar">
         <div class="tool"></div>
         <div class="submit">
-          <button class="submit-button" v-show="!topicContent">发布</button>
-          <button class="submit-button active" v-show="topicContent" @click="addTopic">发布</button>
+          <button class="submit-button" v-if="!topicContent">发布</button>
+          <button class="submit-button active" v-if="topicContent" @click="addTopic">发布</button>
         </div>
       </div>
     </div>

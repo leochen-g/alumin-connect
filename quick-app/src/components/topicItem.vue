@@ -70,8 +70,8 @@
               </div>
               <div class="comment-action-box">
                 <div class="comment-submit">
-                  <button class="comment-submit-btn" v-show="!commentContent">评论</button>
-                  <button class="comment-submit-btn active" v-show="commentContent" @click="addComment(todo.id)">评论</button>
+                  <button class="comment-submit-btn" v-if="!commentContent">评论</button>
+                  <button class="comment-submit-btn active" v-if="commentContent" @click="addComment(todo.id)">评论</button>
                 </div>
               </div>
             </div>
