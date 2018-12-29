@@ -84,6 +84,10 @@
           globalStore.commit('updateUserInfo', res.data)
           wx.setStorageSync('hasAuth', true)
           globalStore.commit('updateAuth', true)
+          if (res.data.school.university) {
+            wx.setStorageSync('university', res.data.school.university)
+            globalStore.commit('increment', res.data.school.university)
+          }
         })
       },
       getUserMessage () {

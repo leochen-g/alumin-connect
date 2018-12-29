@@ -18,6 +18,7 @@ function filter(req,res,callback) {
 	callback&&callback(req,res)
   }
 }
+//获取banner图
 router.post('/group/getBannerList',function (req,res,next) {
   filter(req,res,control.getBannerList)
 })

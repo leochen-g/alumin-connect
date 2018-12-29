@@ -5,15 +5,36 @@ let until = require('../until')
 let groupService = {
   // 获取banner图
   getBannerList: async function (arr) {
-	let results = await sqlDao.group.getBannerList(arr)
+	let publicBanner = this.getPublicBanner()
+	let locationBanner = this.getLocationBanner([arr[0]])
+	let universityBanner = this.getUniversityBanner([arr[1]])
 	let list = []
-	if (results[1].length > 0) {
-	  list.push(results[0][0])
-	  list = list.concat(results[1])
-	} else {
-	  list.push(results[0][0])
+	bannerp = await publicBanner
+	bannerl = await locationBanner
+	banneru = await universityBanner
+
+	if (bannerp.length>0) {
+	  list = list.concat(bannerp)
+	}
+	if (bannerl.length>0) {
+	  list = list.concat(bannerl)
+	}
+	if (banneru.length>0) {
+	  list = list.concat(banneru)
 	}
 	return list
+  },
+  // 获取公共banner图
+  getPublicBanner: async function (arr) {
+	return await sqlDao.group.getPublicBanner(arr)
+  },
+  // 获取基于位置的banner图
+  getLocationBanner: async function (arr) {
+	return await sqlDao.group.getLocationBanner(arr)
+  },
+  // 获取基于院校的banner图
+  getUniversityBanner: async function (arr) {
+	return await sqlDao.group.getUniversityBanner(arr)
   },
   // 添加话题
   addTopic: async function (arr) {

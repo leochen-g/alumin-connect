@@ -7,8 +7,12 @@
     <lampBanner :systemInfo="systemInfo" />
     <!--话题列表-->
     <topicItem v-for="item in list" :key="item.id" :todo="item" />
-    <div class="init-topic" v-if="list.length<=0">
+    <div class="init-topic" v-if="list.length<=0&&!authLocation">
       <div class="init-tips">你所在城市的圈子里还没小伙伴说话，快来活跃气氛</div>
+    </div>
+    <div class="to-location-setting" v-if="authLocation">
+      <button  class="goSetting" open-type="openSetting" @opensetting="openSetting">打开授权</button>
+      <div class="location-tips">本小程序是基于位置为你提供同城校友话题，请到设置中打开位置授权，谢谢</div>
     </div>
   </div>
 
@@ -56,7 +60,8 @@
         limit: 10,
         currentPage: 1,
         pageNumber: 1,
-        topicCount: ''
+        topicCount: 0,
+        authLocation: false
       }
     },
     onReady: function () {
@@ -74,17 +79,27 @@
       })
       this.start = 0
       this.limit = 10
-      this.validate()
+      if (this.hasAuth) {
+        this.validate()
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '登录后即可查看校友圈子',
+          showCancel: false,
+          success (res) {
+            if (res.confirm) {
+              wx.switchTab({
+                url: '../user/main'
+              })
+            }
+          }
+        })
+      }
     },
     async onPullDownRefresh () { // 下拉刷新
       this.initPage()
       this.getTopicList()
       this.getSwiperList()
-      // wx.showToast({
-      //   title: '刷新成功',
-      //   icon: 'none',
-      //   duration: 2000
-      // })
       wx.stopPullDownRefresh()
     },
     onReachBottom () { // 上拉加载
@@ -122,8 +137,10 @@
           wx.getSetting({
             success: (res) => {
               if (!res.authSetting['scope.userLocation']) {
-                _this.openConfirm()
+                _this.authLocation = true
+                // _this.openConfirm()
               } else {
+                _this.authLocation = false
                 if (!_this.location) {
                   wx.getLocation({
                     success: (res) => {
@@ -161,33 +178,12 @@
       getSwiperList () {
         let _this = this
         let req = {
+          location: _this.location,
           university: _this.university || '无'
         }
         getBannerList(req).then(res => {
           _this.swiperList = []
           _this.swiperList = res.data.list
-        })
-      },
-      openConfirm () {
-        let _this = this
-        wx.showModal({
-          content: '检测到您没打开校友足迹的定位权限，是否去设置打开？',
-          confirmText: '确认',
-          cancelText: '取消',
-          success: function (res) {
-            console.log(res)
-            // 点击“确认”时打开设置页面
-            if (res.confirm) {
-              console.log('用户点击确认')
-              wx.openSetting({
-                success: (res) => {
-                }
-              })
-            } else {
-              _this.validate()
-              console.log('用户点击取消')
-            }
-          }
         })
       },
       // 根据经纬度获取用户位置
@@ -200,7 +196,24 @@
           _this.city = res.data.city
           globalStore.commit('updateLocation', _this.city)
           wx.setStorageSync('location', _this.city)
-          _this.getTopicList()
+          if (_this.hasAuth) {
+            _this.getTopicList()
+            _this.getSystemInfo()
+            _this.getSwiperList()
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: '登录后即可查看校友圈子',
+              showCancel: false,
+              success (res) {
+                if (res.confirm) {
+                  wx.switchTab({
+                    url: '../user/main'
+                  })
+                }
+              }
+            })
+          }
         })
       },
       initPage () {
@@ -263,6 +276,28 @@
     width: 100%;
     justify-content: center;
     background-color: #fff;
+  }
+  .to-location-setting{
+    position: relative;
+    height: 400rpx;
+    width: 100%;
+    background-color: #fff;
+    padding-top 200rpx
+  }
+  .goSetting{
+    display block
+    width 300rpx
+    border-radius 8rpx
+    height 60rpx
+    line-height 60rpx
+    padding 0
+    font-size 24rpx
+  }
+  .location-tips{
+    text-align center
+    width 500rpx
+    margin 20rpx auto
+    color grayColor
   }
   .init-tips{
     font-size: 32rpx;

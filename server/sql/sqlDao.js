@@ -40,11 +40,19 @@ module.exports = {
   },
   //校友圈
   group: {
-	//获取banner图
-	getBannerList: function (req) {
-	  return db.query(sqlMap.group.getBannerList,req)
+	//获取公共banner图
+	getPublicBanner: function (req) {
+	  return db.query(sqlMap.group.getPublicBanner,req)
 	},
-	//添加话题
+	//获取基于位置的banner
+	getLocationBanner: function (req) {
+	  return db.query(sqlMap.group.getLocationBanner,req)
+	},
+	//获取学校banner
+	getUniversityBanner: function (req) {
+	  return db.query(sqlMap.group.getUniversityBanner,req)
+	},
+ 	//添加话题
 	addTopic: function (req) {
 	  return db.query(sqlMap.group.addTopic,req)
 	},

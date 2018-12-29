@@ -126,5 +126,6 @@
   }
   .system-message-detail{
     color grayColor
+    word-break break-all
   }
 </style>

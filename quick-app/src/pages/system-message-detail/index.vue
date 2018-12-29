@@ -7,7 +7,7 @@
         <img class="detail-img" v-bind:src="selectSystemMessage.imgSrc" alt="">
       </div>
       <div class="detail-main">
-        {{selectSystemMessage.detail}}
+        <wxparser :rich-text="selectSystemMessage.detail" />
       </div>
     </div>
   </div>

@@ -8,7 +8,7 @@ module.exports = {
   // 获取轮播图
   getBannerList: async function (req, res) {
 	var param = req.body
-	var arr = [param.university]
+	var arr = [param.location,param.university]
 	var result = await groupService.getBannerList(arr)
 	res.send({head: {code: 0, msg: 'ok'}, data: {list: result}})
   },

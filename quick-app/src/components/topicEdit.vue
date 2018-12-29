@@ -2,9 +2,7 @@
   <div class="topic-edit">
     <div class="topic-edit-body">
       <div class="topic-edit-content">
-        <label>
-          <textarea maxlength="100" :placeholder="placeholder" class="edit-content edit" v-model="topicContent" @input="inputEvent"></textarea>
-        </label>
+          <input maxlength="100" :placeholder="placeholder" class="edit-content edit" v-model="topicContent" @input="inputEvent"/>
         <span class="word-counter">{{wordCount-hasInputCount}}</span>
       </div>
     </div>
