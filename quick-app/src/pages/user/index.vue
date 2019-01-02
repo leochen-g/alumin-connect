@@ -48,7 +48,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
-  import {getUserInfo, getUserMessage, login} from '../../http/api'
+  import {getUserInfo, getUserMessage, getSystemMessage, login} from '../../http/api'
   export default {
     name: 'index',
     components: {},
@@ -76,6 +76,7 @@
     onShow () {
       if (this.hasAuth) {
         this.getUserMessage()
+        this.getSystemInfo()
       }
     },
     methods: {
@@ -97,6 +98,11 @@
           _this.msgCount = res.data.count
         })
       },
+      getSystemInfo () {
+        getSystemMessage().then(res => {
+          globalStore.commit('updateSystemMessage', res.data.list)
+        })
+      },
       goPath (val) {
         let url = '../user-edit/main'
         globalStore.commit('updateEditType', val)
@@ -107,6 +113,7 @@
         wx.navigateTo({ url })
       },
       goUserMessage () {
+        globalStore.commit('updateCurrentTab', '1')
         let url = '../user-message/main'
         wx.navigateTo({ url })
       },

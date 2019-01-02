@@ -88,6 +88,7 @@
 
 <style lang="stylus" scoped>
   .message-main{
+    padding 10rpx
     margin-top 15rpx
     background-color: whiteColor;
     border-radius 8rpx
@@ -130,7 +131,7 @@
   }
 
   .message-user-nickName {
-    font-size: 28rpx;
+    font-size: 26rpx;
     font-weight: bold;
     color: themeColor;
   }

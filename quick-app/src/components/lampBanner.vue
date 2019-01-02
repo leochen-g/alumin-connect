@@ -14,11 +14,17 @@
 </template>
 
 <script>
+  import globalStore from '../store/global-store'
   export default {
     name: 'lampBanner',
     props: {
       systemInfo: {
         required: true
+      }
+    },
+    computed: {
+      currentTab () {
+        return globalStore.state.currentTab
       }
     },
     data () {
@@ -28,11 +34,11 @@
     },
     methods: {
       systemMessage () {
-        const url = '../system-message/main'
+        globalStore.commit('updateCurrentTab', '2')
+        const url = '../user-message/main'
         wx.navigateTo({ url })
       }
     }
-
   }
 </script>
 

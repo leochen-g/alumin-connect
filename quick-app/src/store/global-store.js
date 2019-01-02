@@ -15,7 +15,8 @@ export default new Vuex.Store({
     userMessage: [],
     systemMessage: [],
     selectSystemMessage: {},
-    selectUserId: 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ'
+    selectUserId: 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ',
+    currentTab: '1'
   },
   mutations: {
     increment: (state, n) => {
@@ -61,6 +62,9 @@ export default new Vuex.Store({
     },
     updateSelectUserId: (state, n) => {
       state.selectUserId = n
+    },
+    updateCurrentTab: (state, n) => {
+      state.currentTab = n
     }
   }
 })

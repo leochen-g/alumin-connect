@@ -2,7 +2,7 @@
   <div class="topic-edit">
     <div class="topic-edit-body">
       <div class="topic-edit-content">
-          <input maxlength="100" :placeholder="placeholder" class="edit-content edit" v-model="topicContent" @input="inputEvent"/>
+        <input maxlength="100" :placeholder="placeholder" class="edit-content edit" v-model="topicContent" @input="inputEvent"/>
         <span class="word-counter">{{wordCount-hasInputCount}}</span>
       </div>
     </div>
@@ -42,7 +42,8 @@
         openId: wx.getStorageSync('openId'),
         location: wx.getStorageSync('location'),
         university: wx.getStorageSync('university'),
-        hasAuth: wx.getStorageSync('hasAuth')
+        hasAuth: wx.getStorageSync('hasAuth'),
+        ios: false
       }
     },
     methods: {
