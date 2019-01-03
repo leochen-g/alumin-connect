@@ -5,7 +5,7 @@ var control = require('../control/adminControl')
 //校验参数是否为空
 function isEmpty(body) {
   for (i in body){
-	if(body[i]==''||body[i]==undefined||body==null)
+	if(body[i]===''||body[i]===undefined||body[i]===null||body==null)
 	  return true
   }
   return false
@@ -25,5 +25,8 @@ router.post('/admin/topic/getTipOffs',function (req,res,next) {
 router.post('/admin/topic/addSystemMessage',function (req,res,next) {
   filter(req,res,control.addSystemMessage)
 })
-
+//添加大学图标
+router.post('/admin/addUniversityLogo',function (req,res,next) {
+  filter(req,res,control.addUniversityLogo)
+})
 module.exports = router

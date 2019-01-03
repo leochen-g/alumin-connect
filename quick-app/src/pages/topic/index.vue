@@ -1,7 +1,15 @@
 <template>
   <div class="alumni-main">
     <!--轮播图-->
-    <topicSwiper :list="swiperList"/>
+    <swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="1000" circular="true">
+      <block v-for="(item, index) in swiperList" :index="index" :key="key">
+        <swiper-item  >
+          <image @tap="previewImg" :src="item.screenshot" :data-src="item.screenshot" class="slide-image" mode="aspectFill"/>
+          <div v-if="item.type === 'public'" class="swiper-text">校友来了<br>祝{{university}}全体校友<br>{{item.description}}</div>
+        </swiper-item>
+      </block>
+    </swiper>
+    <!--<topicSwiper :list="swiperList"/>-->
     <!--发布话题-->
     <topicEdit />
     <lampBanner :systemInfo="systemInfo" />
@@ -75,7 +83,7 @@
     },
     onShow: function () {
       wx.setNavigationBarTitle({
-        title: '校友圈子'
+        title: this.university + '圈子'
       })
       this.start = 0
       this.limit = 10
@@ -116,6 +124,14 @@
       this.getTopicList('reach')
     },
     methods: {
+      previewImg (e) { // 图片预览
+        console.log('tupian', e)
+        var current = e.currentTarget.dataset.src
+        wx.previewImage({
+          current: current,
+          urls: [current]
+        })
+      },
       validate () {
         let _this = this
         if (_this.university === '请选择') {
@@ -309,5 +325,42 @@
     position: absolute;
     z-index: 999;
     top: -100rpx;
+  }
+  .scroll-icon{
+    padding-left: 38rpx;
+    background-color: whiteColor;
+    position: relative;
+    z-index: 2;
+    font-size 32rpx
+    padding-right 20rpx
+  }
+  .scroll_view_border{
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    background: whiteColor;
+    height: 40rpx;
+    line-height 40rpx
+    overflow: hidden;
+    margin-bottom: 16rpx;
+    padding: 10rpx 0rpx;
+  }
+    .swiper-text{
+      position absolute
+      top 100rpx
+      color whiteColor
+      width 100%
+      margin 0 auto
+      text-align center
+      word-break break-all
+    }
+  .swiper{
+    flex: 1;
+    color: themeColor;
+  }
+  .slide-image{
+    width: 100%;
+    height: 100%;
   }
 </style>

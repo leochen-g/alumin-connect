@@ -29,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //分发路由到校友足迹
 app.use('/api', user)
+//分发路由到管理员
+app.use('/api', admin)
 //token验证
 app.use(function (req,res,next) {
   var token = req.body.token || req.query.token || req.headers['authorization']
@@ -42,8 +44,6 @@ app.use(function (req,res,next) {
 })
 //分发路由到校友圈
 app.use('/api', group)
-//分发路由到管理员
-app.use('/api', admin)
 //静态文件处理
 app.use('/static', express.static('static'));
 

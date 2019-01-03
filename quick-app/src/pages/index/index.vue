@@ -43,12 +43,12 @@
     created () {
       this.wxLogin()
       wx.setNavigationBarTitle({
-        title: '校友足迹'
+        title: '校友来了'
       })
     },
     onShareAppMessage (options) {
       return {
-        title: '快来看看你的校友在哪里？',
+        title: '校友来了带你看看校友在哪里？',
         path: '/pages/index/main',
         imageUrl: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg.jpeg',
         success: function (res) {

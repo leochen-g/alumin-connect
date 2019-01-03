@@ -158,10 +158,9 @@
     color: themeColor;
   }
   .card-item-icon{
-    font-size: 45rpx;
+    font-size: 38rpx;
   }
   .user-card-item-content{
-    padding-top: 10rpx;
     padding-left: 20rpx;
     flex: 1;
     font-size: 30rpx;

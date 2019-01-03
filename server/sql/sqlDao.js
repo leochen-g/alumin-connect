@@ -183,6 +183,12 @@ module.exports = {
 	  addSystemMessage:function (req) {
 	    console.log(req)
 		return db.query(sqlMap.group.admin.addSystemMessage,req)
+	  },
+	  getUniversityList:function (req) {
+		return db.query(sqlMap.group.admin.getUniversityList,req)
+	  },
+	  updateUniversityBadge:function (req) {
+		return db.query(sqlMap.group.admin.updateUniversityBadge,req)
 	  }
 	}
   }

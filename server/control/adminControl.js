@@ -21,7 +21,16 @@ module.exports = {
 	}else {
 	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
 	}
-
+  },
+  addUniversityLogo: async function (req, res, next) {
+    var param = req.body
+	var arr = [parseInt(param.start), parseInt(param.limit)]
+	var results = await  adminService.addUniversityLogo(arr)
+	if (results) {
+	  res.send({head: {code: 0, msg: 'ok'}, data: {}})
+	}else {
+	  res.send({head: {code: 10000, msg: '添加失败'}, data: {}})
+	}
   }
 
 }

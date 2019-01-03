@@ -8,7 +8,7 @@ var sqlMap = {
   },
   university: {
 	insert: "insert into university(pid,name,website,city,level,usercount,abbreviation) values (?,?,?,?,?,?,?)",
-	search: "select id,name from university where name like concat('%',?,'%') limit 0,10;",
+	search: "select id,name,schoolBadge from university where name like concat('%',?,'%') limit 0,10;",
 	groupBy: "select name,count(name) as value from user join provinces on user.pid=provinces.pid  where university=? GROUP BY name ORDER BY count(name) desc",
 	locationCount: "select count(DISTINCT location) as locationCount,count(openid) as userCount from user where university = ? ;"
   },
@@ -58,7 +58,9 @@ var sqlMap = {
 	},
 	admin:{
 	  getTipOffs: 'select c.id,c.type,b.id as topicId,b.content,b.university,b.location,a.nickName,a.openId,a.avataUrl from (user a inner join tip_off c on a.openId=c.openId) inner join topic b where b.id=c.topicId order by id desc',
-	  addSystemMessage:'insert into message (msgType,contentType,title,imgSrc,detail) values (?,?,?,?,?)'
+	  addSystemMessage: 'insert into message (msgType,contentType,title,imgSrc,detail) values (?,?,?,?,?)',
+	  getUniversityList: 'select * from university limit ?,?',
+	  updateUniversityBadge: 'update university set schoolBadge = ? where id = ?'
 	}
   }
 }

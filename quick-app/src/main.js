@@ -18,7 +18,7 @@ export default {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#000',
-      navigationBarTitleText: '校友足迹',
+      navigationBarTitleText: '校友来了',
       navigationBarTextStyle: 'white'
     },
     tabBar: {

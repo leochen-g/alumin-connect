@@ -10,28 +10,41 @@
             {{userInfo?userInfo.school.university:'学校'}}
           </div>
         </div>
+        <div class="user-edit">
+          编辑 <span class="aliiconfont">&#xe60f;</span>
+        </div>
       </div>
       <div v-if="hasAuth">
-        <div class="user-info-item" @click="goPath('school')">
-          <div class="aliiconfont info-item-icon">&#xe680;</div>
-          <div class="info-item-title">院校</div>
-        </div>
-        <div class="user-info-item" @click="goPath('company')">
-          <div class="aliiconfont info-item-icon">&#xe615;</div>
-          <div class="info-item-title">公司</div>
-        </div>
-        <div class="user-info-item" @click="goUserTopic()">
-          <div class="aliiconfont info-item-icon">&#xe6e8;</div>
-          <div class="info-item-title">话题</div>
-        </div>
-        <div class="user-info-item" @click="goUserMessage()">
-          <div class="aliiconfont info-item-icon">&#xe6a9;</div>
-          <div class="info-item-title">消息 <span class="messageCount" v-if="msgCount">{{msgCount?msgCount:''}}</span>
+        <div class="user-block">
+          <div class="user-info-item" @click="goPath('school')">
+            <div class="aliiconfont info-item-icon">&#xe680;</div>
+            <div class="info-item-title">院校</div>
+            <div class="aliiconfont user-edit-icon">&#xe60f;</div>
+          </div>
+          <div class="user-info-item no-border" @click="goPath('company')">
+            <div class="aliiconfont info-item-icon">&#xe615;</div>
+            <div class="info-item-title">公司</div>
+            <div class="aliiconfont user-edit-icon">&#xe60f;</div>
           </div>
         </div>
-        <div class="user-info-item" @click="goSetting()">
-          <div class="aliiconfont info-item-icon">&#xe642;</div>
-          <div class="info-item-title">设置</div>
+        <div class="user-block">
+          <div class="user-info-item" @click="goUserTopic()">
+            <div class="aliiconfont info-item-icon">&#xe6e8;</div>
+            <div class="info-item-title">话题</div>
+            <div class="aliiconfont user-edit-icon">&#xe60f;</div>
+          </div>
+          <div class="user-info-item no-border" @click="goUserMessage()">
+            <div class="aliiconfont info-item-icon">&#xe6a9;</div>
+            <div class="info-item-title">消息 <span class="messageCount" v-if="msgCount">{{msgCount?msgCount:''}}</span>
+            </div>
+            <div class="aliiconfont user-edit-icon">&#xe60f;</div>
+          </div>
+        </div>
+        <div class="user-block">
+          <div class="user-info-item no-border" @click="goSetting()">
+            <div class="aliiconfont info-item-icon">&#xe642;</div>
+            <div class="info-item-title">设置</div>
+          </div>
         </div>
       </div>
       <div v-if="!hasAuth">
@@ -190,31 +203,48 @@
   .user-avataurl-img{
     width: 120rpx;
     height: 120rpx;
+    border-radius 50%
   }
   .user-base-info{
+    flex 1
     padding: 20rpx;
   }
+  .user-edit{
+    height 120rpx
+    line-height 120rpx
+    color grayColor
+  }
+    .user-edit-icon{
+      color grayColor
+    }
   .user-nick-name{
     font-size: 28rpx;
   }
   .user-school{
     color: grayColor
   }
+  .user-block{
+    margin-top 40rpx
+    background-color whiteColor
+  }
   .user-info-item{
     display: flex;
     justify-content: flex-start;
     padding: 20rpx;
-    margin-top: 40rpx;
-    width: 100%;
     height: 60rpx;
     line-height: 60rpx;
     background-color: whiteColor;
+    border-bottom 2rpx solid #e1e1e1
   }
+    .no-border {
+      border-bottom  none!important
+    }
   .info-item-icon{
     font-size: 40rpx;
     color: themeColor;
   }
   .info-item-title{
+    flex 1
     padding-left: 40rpx;
     font-size: 28rpx;
   }

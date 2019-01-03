@@ -13,6 +13,7 @@
     "async": "^2.6.1",
     "base64-url": "^2.2.0",
     "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
     "cryptojs": "^2.5.3",
