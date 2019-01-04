@@ -12,14 +12,21 @@
         <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initMap" disableTouch=true ref="echarts" canvasId="demo-canvas" >
         </mpvue-echarts>
       </div>
-      <div class="echarts-bar">
-        <mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />
+      <div class="top-location top1" v-if="topName[0]">
+        Top1 {{topName[0]}} {{topVal[0]}}人
       </div>
-      <cover-view class="floatCover">
-        <button hover-class="hover" open-type="share"  class="btn shareBtn ">分享</button>
-        <button hover-class="hover" @click ='saveImg'  class="btn downImg ">下载</button>
-        <button hover-class="hover" @click ='goTopic'  class="btn downImg ">聊聊</button>
-      </cover-view>
+      <div class="top-location top2" v-if="topName[1]">
+        Top2 {{topName[1]}} {{topVal[1]}}人
+      </div>
+      <div class="top-location top3" v-if="topName[2]">
+        Top3 {{topName[2]}} {{topVal[2]}}人
+      </div>
+      <!--<div class="echarts-bar">-->
+        <!--<mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />-->
+      <!--</div>-->
+      <button class="sixedge-share" open-type="share">分享</button>
+      <button class="sixedge-share downLoad"  @click ='saveImg'>下载</button>
+      <button class="sixedge-share say"  @click ='goTopic'>聊聊</button>
     </div>
     <div class="echarts-hide">
       <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initHide" disableTouch=true ref="echartsHide" canvasId="hide-canvas" />
@@ -38,10 +45,10 @@
 
   require('echarts/map/js/china')
   let chart = null
-  let chartBar = null
+  // let chartBar = null
   let chartHide = null
   let option = null
-  let optionBar = null
+  // let optionBar = null
   let optionHide = null
   function handleInitChart (canvas, width, height) {
     chart = echarts.init(canvas, null, {
@@ -52,15 +59,15 @@
     chart.setOption(option)
     return chart // 返回 chart 后可以自动绑定触摸操作
   }
-  function handleInitBarChart (canvas, width, height) {
-    chartBar = echarts.init(canvas, null, {
-      width: width,
-      height: height
-    })
-    canvas.setChart(chartBar)
-    chartBar.setOption(optionBar)
-    return chartBar // 返回 chart 后可以自动绑定触摸操作
-  }
+  // function handleInitBarChart (canvas, width, height) {
+  //   chartBar = echarts.init(canvas, null, {
+  //     width: width,
+  //     height: height
+  //   })
+  //   canvas.setChart(chartBar)
+  //   chartBar.setOption(optionBar)
+  //   return chartBar // 返回 chart 后可以自动绑定触摸操作
+  // }
   function handleInitHideChart (canvas, width, height) {
     chartHide = echarts.init(canvas, null, {
       width: 1100,
@@ -86,7 +93,7 @@
       return {
         echarts,
         initMap: handleInitChart,
-        initBar: handleInitBarChart,
+        // initBar: handleInitBarChart,
         initHide: handleInitHideChart,
         map: [],
         pCount: 0,
@@ -116,65 +123,65 @@
           url: '../topic/main'
         })
       },
-      initChartBar () {
-        var _this = this
-        optionBar = {
-          title: {
-            text: 'TOP5 省份',
-            textStyle: {
-              fontSize: 13,
-              color: '#ffffff'
-            }
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis: {
-            splitLine: false,
-            type: 'value',
-            axisLine: {
-              lineStyle: {
-                color: '#ffffff',
-                width: 1
-              }
-            }
-          },
-          yAxis: {
-            type: 'category',
-            data: this.topName,
-            boundaryGap: [0, 0.01],
-            splitLine: false,
-            nameTextStyle: {
-              color: ['#ffffff']
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#ffffff'
-              }
-            }
-          },
-          series: [
-            {
-              type: 'bar',
-              label: {
-                show: true,
-                position: 'insideTop'
-              },
-              barWidth: 20,
-              itemStyle: {
-                normal: {
-                  color: '#49EAE5'
-                }
-              },
-              data: this.topVal
-            }
-          ]
-        }
-        _this.$refs.echartsBar.init()
-      },
+      // initChartBar () {
+      //   var _this = this
+      //   optionBar = {
+      //     title: {
+      //       text: 'TOP5 省份',
+      //       textStyle: {
+      //         fontSize: 13,
+      //         color: '#ffffff'
+      //       }
+      //     },
+      //     grid: {
+      //       left: '3%',
+      //       right: '4%',
+      //       bottom: '3%',
+      //       containLabel: true
+      //     },
+      //     xAxis: {
+      //       splitLine: false,
+      //       type: 'value',
+      //       axisLine: {
+      //         lineStyle: {
+      //           color: '#ffffff',
+      //           width: 1
+      //         }
+      //       }
+      //     },
+      //     yAxis: {
+      //       type: 'category',
+      //       data: this.topName,
+      //       boundaryGap: [0, 0.01],
+      //       splitLine: false,
+      //       nameTextStyle: {
+      //         color: ['#ffffff']
+      //       },
+      //       axisLine: {
+      //         lineStyle: {
+      //           color: '#ffffff'
+      //         }
+      //       }
+      //     },
+      //     series: [
+      //       {
+      //         type: 'bar',
+      //         label: {
+      //           show: true,
+      //           position: 'insideTop'
+      //         },
+      //         barWidth: 20,
+      //         itemStyle: {
+      //           normal: {
+      //             color: '#49EAE5'
+      //           }
+      //         },
+      //         data: this.topVal
+      //       }
+      //     ]
+      //   }
+      //   _this.$refs.echartsBar.init()
+      // },
       convertData (data) {
         var mapName = 'china'
         var geoCoordMap = {}
@@ -244,8 +251,11 @@
             roam: true,
             itemStyle: {
               normal: {
-                areaColor: '#09283c',
-                borderColor: '#FFFFFF'
+                // areaColor: '#09283c',
+                areaColor: '#151515',
+                borderColor: '#385f98',
+                shadowColor: '#385f98',
+                shadowBlur: 4
               },
               emphasis: {
                 areaColor: '#2B91B7'
@@ -324,8 +334,10 @@
             roam: true,
             itemStyle: {
               normal: {
-                areaColor: '#09283c',
-                borderColor: '#FFFFFF'
+                areaColor: '#151515',
+                borderColor: '#385f98',
+                shadowColor: '#385f98',
+                shadowBlur: 4
               },
               emphasis: {
                 areaColor: '#2B91B7'
@@ -374,7 +386,7 @@
             }
           }
           _this.initChart()
-          _this.initChartBar()
+          // _this.initChartBar()
           _this.initHideChart()
         })
       },
@@ -506,6 +518,12 @@
     }
   }
 </script>
+<style>
+  @keyframes rate {
+    from {transform:perspective(400px) rotateY(0deg)}
+    to {transform:perspective(400px) rotateY(360deg)}
+  }
+</style>
 
 <style lang="stylus" scoped>
   .school-name{
@@ -514,35 +532,50 @@
     margin-bottom: 20rpx;
   }
   .proverb{
+    margin-top 40rpx
     color: #49EAE5;
     font-size: 40rpx;
+    text-align center
   }
   .city-count{
     color: #49EAE5;
   }
   .chartMain{
-    display: flex;
     position: fixed;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-image: url("http://image.bloggeng.com/20181213164314.png");
+    background-image: url("http://image.bloggeng.com/20190104112037.png");
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
   }
   .echarts-wrap {
-    width: 95%;
+    margin-top 86rpx
+    width: 100%;
     height: 480rpx;
     padding: 4rpx 4rpx;
+    animation: rate 10s ease-in-out infinite;
+    margin-bottom 40rpx
   }
   .echarts-bar{
     width: 95%;
     height: 480rpx;
     padding: 4rpx 4rpx;
   }
+  .top-location{
+      text-align center
+      color #ffffff
+      font-weight bold
+      text-shadow:1px 1px 5px themeColor
+    }
+  .top1{
+    font-size 40rpx
+  }
+  .top2{
+    font-size 35rpx
+  }
+  .top3
+    font-size 30rpx
   .title{
     margin-top: 20rpx;
     text-align: center;
@@ -586,6 +619,64 @@
     font-size: 20rpx;
     box-sizing: initial;
     box-shadow: 0 0 10rpx #333333;
+  }
+  .sixedge-share{
+    margin 0
+    padding 0
+    font-size 24rpx
+    border-radius 0
+    overflow: visible
+    height: 86.6rpx;
+    line-height 88.6rpx
+    text-align center
+    color #4efef0
+    width: 50rpx;
+    position:absolute!important;
+    background-color: rgba(16,82,110,0.8);
+    border-top:2rpx solid #4efef0;
+    border-bottom:2rpx solid #4efef0;
+    right 50rpx
+    bottom 244rpx
+    box-sizing border-box!important
+  }
+  .sixedge-share:after{
+    border-radius 0
+    content: '';
+    width: 50rpx;
+    height: 86.6rpx;
+    position: absolute!important;
+    background-color: rgba(16,82,110,0.8);
+    top: -1rpx;
+    left: 50rpx;
+    transform: translate(-50%,-50%)!important;
+    transform: rotate(60deg)!important;
+    border-top: 2rpx solid #4efef0;
+    border-bottom: 2rpx solid #4efef0;
+    z-index -1
+    box-sizing border-box
+  }
+  .sixedge-share:before{
+    content: '';
+    width: 50rpx;
+    height: 86.6rpx;
+    position: absolute!important;
+    background-color: rgba(16,82,110,0.8)
+    top: -1rpx;
+    right: 0rpx;
+    transform: translate(-50%,-50%);
+    transform: rotate(300deg);
+    border-bottom: 2rpx solid #4efef0;
+    border-top: 2rpx solid #4efef0;
+    z-index -1
+    box-sizing border-box
+  }
+  .downLoad{
+    right 50rpx!important
+    bottom 153.4rpx!important
+  }
+  .say{
+    right 130rpx!important
+    bottom 106.4rpx!important
   }
   .shareImg{
     width: 900px;
