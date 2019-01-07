@@ -5,7 +5,7 @@
       <block v-for="(item, index) in swiperList" :index="index" :key="key">
         <swiper-item  >
           <image @tap="previewImg" :src="item.screenshot" :data-src="item.screenshot" class="slide-image" mode="aspectFill"/>
-          <div v-if="item.type === 'public'" class="swiper-text">校友来了<br>祝{{university}}全体校友<br>{{item.description}}</div>
+          <div v-if="item.type === 'public'" class="swiper-text"><span class="swiper-university">《校友来了》</span><br>祝{{university}}全体校友<br>{{item.description}}</div>
         </swiper-item>
       </block>
     </swiper>
@@ -122,6 +122,16 @@
       }
       this.start = (this.currentPage - 1) * this.limit
       this.getTopicList('reach')
+    },
+    onShareAppMessage (options) {
+      return {
+        title: '想要知道同城校友在聊什么？快来看看',
+        path: '/pages/topic/main',
+        imageUrl: 'http://image.bloggeng.com/20190107173746.png',
+        success: function (res) {
+          console.log('分享成功')
+        }
+      }
     },
     methods: {
       previewImg (e) { // 图片预览
@@ -362,5 +372,8 @@
   .slide-image{
     width: 100%;
     height: 100%;
+  }
+  .swiper-university{
+    font-size 28rpx
   }
 </style>

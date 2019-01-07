@@ -23,6 +23,8 @@ export default {
     },
     tabBar: {
       'selectedColor': '#027fff',
+      'backgroundColor': '#ffffff',
+      'borderStyle': 'white',
       'list': [
         {
           'pagePath': 'pages/index/main',

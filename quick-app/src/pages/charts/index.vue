@@ -2,7 +2,7 @@
   <div class="container">
     <div class="chartMain">
       <div class="title">
-        <p class="school-name" :animation="animationData">{{university}}</p>
+        <p class="school-name">{{university}}</p>
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="proverb">
@@ -101,7 +101,8 @@
         topVal: [],
         locationCount: '',
         userCount: '',
-        proverb: ''
+        proverb: '',
+        animationData: {}
       }
     },
     onShareAppMessage (options) {
@@ -450,7 +451,8 @@
       drawPath (path) {
         var _this = this
         wx.getImageInfo({
-          src: 'http://image.bloggeng.com/20181213164400.png',
+          // src: 'http://image.bloggeng.com/20181213164400.png',
+          src: 'http://image.bloggeng.com/20190107150256.png',
           success: function (res) {
             const random = (parseInt(9 * Math.random() + 90))
             const ctx = wx.createCanvasContext('shareCanvas')
@@ -496,6 +498,28 @@
             const mapWidth = 1100
             const mapHeight = 776
             ctx.drawImage(path, -100, 545, mapWidth, mapHeight)
+            // 绘制排名
+            if (_this.topName[0]) {
+              ctx.setTextAlign('center')
+              ctx.setFillStyle('#FFFFFF')
+              ctx.setShadow(1, 1, 5, '#027fff')
+              ctx.setFontSize(40)
+              ctx.fillText('Top1 ' + _this.topName[0] + ' ' + _this.topVal[0] + '人', 900 / 2, 1361)
+            }
+            if (_this.topName[1]) {
+              ctx.setTextAlign('center')
+              ctx.setFillStyle('#FFFFFF')
+              ctx.setShadow(1, 1, 5, '#027fff')
+              ctx.setFontSize(35)
+              ctx.fillText('Top2 ' + _this.topName[1] + ' ' + _this.topVal[1] + '人', 900 / 2, 1416)
+            }
+            if (_this.topName[2]) {
+              ctx.setTextAlign('center')
+              ctx.setFillStyle('#FFFFFF')
+              ctx.setShadow(1, 1, 5, '#027fff')
+              ctx.setFontSize(30)
+              ctx.fillText('Top3 ' + _this.topName[2] + ' ' + _this.topVal[2] + '人', 900 / 2, 1471)
+            }
             ctx.draw()
             setTimeout(function () {
               wx.canvasToTempFilePath({
@@ -504,7 +528,14 @@
                   wx.hideLoading()
                   let tempFilePath = res.tempFilePath
                   wx.saveImageToPhotosAlbum({
-                    filePath: tempFilePath
+                    filePath: tempFilePath,
+                    success: function () {
+                      wx.showModal({
+                        title: '图片保存成功',
+                        content: '您的校友足迹已经保存到相册，您可以手动分享到朋友圈！',
+                        showCancel: false
+                      })
+                    }
                   })
                 },
                 fail: function (res) {
@@ -520,6 +551,14 @@
 </script>
 <style>
   @keyframes rate {
+    from {
+      transform:perspective(400px) rotateY(0deg)
+    }
+    to {
+      transform:perspective(400px) rotateY(360deg)
+    }
+  }
+  @-webkit-keyframes rate {
     from {transform:perspective(400px) rotateY(0deg)}
     to {transform:perspective(400px) rotateY(360deg)}
   }
@@ -527,18 +566,19 @@
 
 <style lang="stylus" scoped>
   .school-name{
-    color: #49EAE5;
+    color: footColor;
     font-weight: bold;
     margin-bottom: 20rpx;
+    font-size 36rpx
   }
   .proverb{
     margin-top 40rpx
-    color: #49EAE5;
+    color: footColor;
     font-size: 40rpx;
     text-align center
   }
   .city-count{
-    color: #49EAE5;
+    color: footColor;
   }
   .chartMain{
     position: fixed;
@@ -552,9 +592,9 @@
   .echarts-wrap {
     margin-top 86rpx
     width: 100%;
-    height: 480rpx;
+    height: 500rpx;
     padding: 4rpx 4rpx;
-    animation: rate 10s ease-in-out infinite;
+    /*animation: rate 10s ease-in-out infinite;*/
     margin-bottom 40rpx
   }
   .echarts-bar{
@@ -566,7 +606,7 @@
       text-align center
       color #ffffff
       font-weight bold
-      text-shadow:1px 1px 5px themeColor
+      text-shadow:1px 1px 5px footColor
     }
   .top1{
     font-size 40rpx
@@ -579,46 +619,11 @@
   .title{
     margin-top: 20rpx;
     text-align: center;
-    color: #5687e7;
   }
   .detail{
     text-align: center;
     font-size: 28rpx;
-    color: #ffffff;
-  }
-  .floatCover{
-    position: fixed;
-    bottom: 35%;
-    width: 90rpx;
-    right: 5%;
-  }
-  .share-cover{
-    height: 90rpx;
-    margin-bottom: 20rpx;
-  }
-  .down-cover{
-    height: 90rpx;
-    margin-bottom: 20rpx;
-  }
-  .feed-cover{
-    height: 90rpx;
-  }
-  .btn{
-    width: 80rpx;
-    height: 80rpx;
-    display: block;
-    border-color: #ffffff;
-    color: #ffffff;
-    border-radius:80rpx;
-    background-color: #49EAE5;
-    position: relative;
-    line-height: 4;
-    margin-bottom: 20rpx;
-    text-align: center;
-    padding: 0;
-    font-size: 20rpx;
-    box-sizing: initial;
-    box-shadow: 0 0 10rpx #333333;
+    color: whiteColor;
   }
   .sixedge-share{
     margin 0
@@ -629,12 +634,12 @@
     height: 86.6rpx;
     line-height 88.6rpx
     text-align center
-    color #4efef0
+    color footColor
     width: 50rpx;
     position:absolute!important;
     background-color: rgba(16,82,110,0.8);
-    border-top:2rpx solid #4efef0;
-    border-bottom:2rpx solid #4efef0;
+    border-top:2rpx solid footColor;
+    border-bottom:2rpx solid footColor;
     right 50rpx
     bottom 244rpx
     box-sizing border-box!important
@@ -650,8 +655,8 @@
     left: 50rpx;
     transform: translate(-50%,-50%)!important;
     transform: rotate(60deg)!important;
-    border-top: 2rpx solid #4efef0;
-    border-bottom: 2rpx solid #4efef0;
+    border-top: 2rpx solid footColor;
+    border-bottom: 2rpx solid footColor;
     z-index -1
     box-sizing border-box
   }
@@ -665,8 +670,8 @@
     right: 0rpx;
     transform: translate(-50%,-50%);
     transform: rotate(300deg);
-    border-bottom: 2rpx solid #4efef0;
-    border-top: 2rpx solid #4efef0;
+    border-bottom: 2rpx solid footColor;
+    border-top: 2rpx solid footColor;
     z-index -1
     box-sizing border-box
   }
@@ -675,7 +680,7 @@
     bottom 153.4rpx!important
   }
   .say{
-    right 130rpx!important
+    right 128rpx!important
     bottom 106.4rpx!important
   }
   .shareImg{
@@ -691,6 +696,6 @@
     right: -300%;
   }
   .hover{
-    background-color: #8EEAE7;
+    background-color: footColor;
   }
 </style>

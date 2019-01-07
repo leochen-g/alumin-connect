@@ -13,8 +13,8 @@
           <input type="text" v-model="university" disabled placeholder="搜索" class="search-input" @click="toSearch">
         </div>
         <div class="button-finish">
-          <button hover-class="hover" v-if="university!=='请选择'" class="finish"  @click="goCharts">出&nbsp;&nbsp;发</button>
-          <button hover-class="hover" v-if="university==='请选择'" class="finish"  @click="saveTips" >出&nbsp;&nbsp;发</button>
+          <button  v-if="university!=='请选择'" class="finish"  @click="goCharts">查看足迹</button>
+          <button  v-if="university==='请选择'" class="finish"  @click="saveTips" >查看足迹</button>
         </div>
       </div>
     </div>
@@ -50,7 +50,7 @@
       return {
         title: '校友来了带你看看校友在哪里？',
         path: '/pages/index/main',
-        imageUrl: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bg.jpeg',
+        imageUrl: 'http://image.bloggeng.com/20190107173746.png',
         success: function (res) {
           console.log('分享成功')
         }
@@ -80,6 +80,7 @@
                         wx.setStorageSync('token', res.data.token)
                         wx.setStorageSync('openId', res.data.openId)
                         wx.setStorageSync('hasAuth', true)
+                        globalStore.commit('updateAuth', true)
                       })
                     }
                   })
@@ -199,7 +200,7 @@
     box-sizing: border-box;
     background-image: url('http://image.bloggeng.com/20181213164522.png');
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
   }
   .title{
     margin-top: 80rpx ;
@@ -209,7 +210,8 @@
   .universityIcon{
     margin-top: 94rpx;
     font-size: 200rpx;
-    color: #FFFFFF;
+    color: whiteColor
+    text-shadow 2rpx 2rpx 10rpx footColor
   }
   .school-info {
     background-color: rgba(0,0,0,0.85);
@@ -225,24 +227,26 @@
     margin-top: 85rpx;
     font-size: 36rpx;
     letter-spacing: 6rpx;
-  }
-  .userinfo-nickname {
-    color: #ffffff;
+    color whiteColor
   }
   .university-input{
     margin: 48rpx auto;
   }
   .button-finish{
-    margin-top:200rpx;
+    margin-top:100rpx;
   }
   .finish {
-    width: 360rpx;
-    height: 70rpx;
-    line-height: 70rpx;
-    color: #FFFFFF;
-    background-color: themeColor;
+    position relative
+    width: 260rpx;
+    height: 60rpx;
+    line-height: 60rpx;
     border-radius: 16rpx;
-    font-size: 32rpx ;
+    font-size: 28rpx;
+    color whiteColor
+    background-color: rgba(04,0e,17,1)
+    border 2rpx solid #6dd7fb
+    text-shadow:1px 1px 5px footColor
+    box-shadow:1px 1px 5px footColor
   }
   .search-input{
     width: 400rpx ;
@@ -252,8 +256,6 @@
     padding: 8rpx 20rpx;
     border-radius: 10rpx;
     color: #aaa;
-  }
-  .hover{
-    background-color: #6DA9E7;
+    box-shadow:1px 1px 5px footColor
   }
 </style>

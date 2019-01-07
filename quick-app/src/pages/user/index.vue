@@ -10,7 +10,7 @@
             {{userInfo?userInfo.school.university:'学校'}}
           </div>
         </div>
-        <div class="user-edit">
+        <div class="user-edit" v-if="hasAuth">
           编辑 <span class="aliiconfont">&#xe60f;</span>
         </div>
       </div>
@@ -117,9 +117,18 @@
         })
       },
       goPath (val) {
-        let url = '../user-edit/main'
-        globalStore.commit('updateEditType', val)
-        wx.navigateTo({ url })
+        if (this.hasAuth) {
+          let url = '../user-edit/main'
+          globalStore.commit('updateEditType', val)
+          wx.navigateTo({ url })
+        } else {
+          wx.showModal({
+            content: '登录后即可查看',
+            confirmText: '确认',
+            success: function (res) {
+            }
+          })
+        }
       },
       goUserTopic () {
         let url = '../user-topic/main'
