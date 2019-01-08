@@ -201,10 +201,17 @@ module.exports = {
 	  }
 	}
   },
+  // 获取用户未读消息数
+  getUserUnReadMessageCount: async function (req, res) {
+	var param = req.body
+	var arr = [param.openId]
+	var result = await groupService.getUnReadMessageCount(arr)
+	res.json({head:{code: 0, msg: 'ok'}, data: result})
+  },
   // 获取用户消息通知
   getUserMessage: async function (req, res) {
 	var param = req.body
-	var arr = [param.openId,param.openId]
+	var arr = [param.openId]
 	var result = await groupService.getUserMessage(arr)
 	res.json({head:{code: 0, msg: 'ok'}, data: result})
   },

@@ -2,7 +2,7 @@
   <div class="user-main">
     <div class="user-content">
       <div class="user-header" @click="goPath('user')">
-        <img :src="userInfo?userInfo.avataUrl:'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/bitmap.png'"
+        <img :src="userInfo?userInfo.avataUrl:'http://image.bloggeng.com/20190108160710.png'"
              class="user-avataurl-img" alt="">
         <div class="user-base-info">
           <div class="user-nick-name">{{userInfo?userInfo.nickName:'昵称'}}</div>
@@ -61,7 +61,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
-  import {getUserInfo, getUserMessage, getSystemMessage, login} from '../../http/api'
+  import {getUserInfo, getUserUnReadMessageCount, login} from '../../http/api'
   export default {
     name: 'index',
     components: {},
@@ -88,8 +88,7 @@
     },
     onShow () {
       if (this.hasAuth) {
-        this.getUserMessage()
-        this.getSystemInfo()
+        this.getUnReadCount()
       }
     },
     methods: {
@@ -104,16 +103,10 @@
           }
         })
       },
-      getUserMessage () {
+      getUnReadCount () {
         let _this = this
-        getUserMessage().then(res => {
-          globalStore.commit('updateUserMessage', res.data.list)
+        getUserUnReadMessageCount().then(res => {
           _this.msgCount = res.data.count
-        })
-      },
-      getSystemInfo () {
-        getSystemMessage().then(res => {
-          globalStore.commit('updateSystemMessage', res.data.list)
         })
       },
       goPath (val) {
@@ -162,7 +155,7 @@
               login(req).then(res => {
                 wx.setStorageSync('token', res.data.token)
                 _this.getUserInfo()
-                _this.getUserMessage()
+                _this.getUnReadCount()
               })
             }
           })

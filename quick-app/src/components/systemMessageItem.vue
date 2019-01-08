@@ -38,7 +38,7 @@
     },
     computed: {
       createTime () {
-        let tempDate = new Date(this.todo.updateAt)
+        let tempDate = new Date(this.todo.updatedAt)
         let year = tempDate.getFullYear()
         let month = tempDate.getMonth() + 1
         let day = tempDate.getDate()

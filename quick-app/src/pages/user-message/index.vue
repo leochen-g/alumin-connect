@@ -51,7 +51,7 @@
         title: '消息通知'
       })
       this.getUserMessage()
-      this.getSystemInfo()
+      this.getSystemMessage()
     },
     async onPullDownRefresh () { // 下拉刷新
       this.getUserMessage()
@@ -64,11 +64,13 @@
     methods: {
       getUserMessage () {
         getUserMessage().then(res => {
+          globalStore.commit('updateUserMessage', [])
           globalStore.commit('updateUserMessage', res.data.list)
         })
       },
-      getSystemInfo () {
+      getSystemMessage () {
         getSystemMessage().then(res => {
+          globalStore.commit('updateSystemMessage', [])
           globalStore.commit('updateSystemMessage', res.data.list)
         })
       },

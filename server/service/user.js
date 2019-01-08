@@ -29,11 +29,9 @@ let userService = {
   decryptUserInfo: async function (arr) {
     let code = arr[0]
 	let obj = await this.getSessionKey(code)
-	console.log('session_key', obj)
 	let session_key = obj.session_key
 	let pc = new WXBizDataCrypt(config.MINI_APPID, session_key)
 	let data = pc.decryptData(arr[1], arr[2])
-	console.log('解密',data)
 	let userId = await this.findUser([data.unionId])
 	if(!userId){
 	  let info = [data.nickName, data.avatarUrl, data.country, data.gender, data.unionId, data.openId]

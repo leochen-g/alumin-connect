@@ -23,7 +23,7 @@
         return globalStore.state.selectSystemMessage
       },
       updatedTime () {
-        let tempDate = new Date(this.selectSystemMessage.updateAt)
+        let tempDate = new Date(this.selectSystemMessage.updatedAt)
         let year = tempDate.getFullYear()
         let month = tempDate.getMonth() + 1
         let day = tempDate.getDate()

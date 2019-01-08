@@ -162,6 +162,10 @@ module.exports = {
 	  addUserMessage:function (req) {
 	    return db.query(sqlMap.group.user.addUserMessage,req)
 	  },
+	  //获取用户消息未读总数
+	  getUnReadMessageCount: function (req) {
+		return db.query(sqlMap.group.user.getUnReadMessageCount,req)
+	  },
 	  //获取用户消息通知
 	  getUserMessage:function (req) {
 		return db.query(sqlMap.group.user.getMessage,req)

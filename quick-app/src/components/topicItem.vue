@@ -80,13 +80,13 @@
           <div class="comment-list"  v-if="commentList.targetId==todo.id">
             <div class="comment-item" v-for="(item,index) in commentList.comments" :key="item.id">
               <div class="comment">
-                <div class="user-popover-box" @click="toUserDetail(item.userInfo.openId)">
+                <div class="user-popover-box" @click="toUserDetail(item.userInfo.openid)">
                   <img class="user-avataUrl comment-user-avataUrl" v-bind:src="item.userInfo.avataUrl" alt="">
                 </div>
                 <div class="comment-content-box">
                   <div class="comment-meta-box">
                     <div class="comment-user-info ellipsis">
-                      <span class="user-nickName" @click="toUserDetail(item.userInfo.openId)">{{item.userInfo.nickName}}<span class="comment-user-college"> {{item.userInfo.graduationTime?item.userInfo.graduationTime:'毕业时间'}} @ {{item.userInfo.college?item.userInfo.college:'院系'}}</span></span>
+                      <span class="user-nickName" @click="toUserDetail(item.userInfo.openid)">{{item.userInfo.nickName}}<span class="comment-user-college"> {{item.userInfo.graduationTime?item.userInfo.graduationTime:'毕业时间'}} @ {{item.userInfo.college?item.userInfo.college:'院系'}}</span></span>
                     </div>
                   </div>
                   <div class="comment-content">
@@ -120,15 +120,15 @@
                         <div class="sub-comment">
                           <div class="sub-comment-content-row">
                             <div class="sub-comment-content-box">
-                              <div class="user-popover-box" @click="toUserDetail(replyItem.userInfo.openId)">
+                              <div class="user-popover-box" @click="toUserDetail(replyItem.userInfo.openid)">
                                 <img class="user-avataUrl comment-user-avataUrl" v-bind:src="replyItem.userInfo.avataUrl" alt="">
                               </div>
                                 <div class="user-content-box">
                                   <div class="comment-user-info ellipsis">
-                                    <span class="user-nickName" @click="toUserDetail(replyItem.userInfo.openId)">{{replyItem.userInfo.nickName}}<span class="comment-user-college"> {{replyItem.userInfo.graduationTime}} @ {{replyItem.userInfo.college}}</span></span>
+                                    <span class="user-nickName" @click="toUserDetail(replyItem.userInfo.openid)">{{replyItem.userInfo.nickName}}<span class="comment-user-college"> {{replyItem.userInfo.graduationTime}} @ {{replyItem.userInfo.college}}</span></span>
                                   </div>
                                   <div class="comment-content">
-                                    回复 <span class="reply-user">{{replyItem.respUserInfo.nickName}}</span>:{{replyItem.content}}
+                                    回复 <span class="reply-user" @click="toUserDetail(replyItem.respUserInfo.openid)">{{replyItem.respUserInfo.nickName}}</span>:{{replyItem.content}}
                                   </div>
                                   <div class="sub-comment-stat-box">
                                     <div class="sub-comment-action-box" @click="replyCommentClick(item.cid,replyItem.id,replyItem.userInfo.nickName)">
@@ -285,6 +285,8 @@
         this.showCommentId = id
         if (this.showCommentBox) {
           this.getCommentList(id)
+        } else {
+          this.initPageSize()
         }
       },
       replyCommentClick (cid, rid, name) { // 点击回复图标
@@ -340,10 +342,8 @@
           cid: cid
         }
         getReplyList(req).then(res => {
-          console.log('回复列表', res.data)
           _this.fetchAll = false
           _this.fetchReply = true
-          console.log(index, res.data.topComment)
           _this.commentList.comments[index].topComment = res.data.topComment
         })
       },

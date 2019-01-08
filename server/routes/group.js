@@ -85,6 +85,10 @@ router.post('/group/getReplyListByUserId',function (req,res,next) {
 router.post('/group/addLiked',function (req,res,next) {
   filter(req,res,control.addLikedByTopicId)
 })
+//获取用户未读消息数
+router.post('/group/user/getUserUnReadMessageCount',function (req,res,next) {
+  filter(req,res,control.getUserUnReadMessageCount)
+})
 //获取用户通知
 router.post('/group/user/getUserMessage',function (req,res,next) {
   filter(req,res,control.getUserMessage)

@@ -28,7 +28,6 @@
 
 <script>
   import topicEdit from '../../components/topicEdit'
-  import topicSwiper from '../../components/topicSwiper'
   import topicItem from '../../components/topicItem'
   import lampBanner from '../../components/lampBanner'
   import globalStore from '../../store/global-store'
@@ -37,7 +36,7 @@
   export default {
     name: 'index',
     components: {
-      topicSwiper, topicEdit, topicItem, lampBanner
+      topicEdit, topicItem, lampBanner
     },
     computed: {
       university () {
@@ -127,7 +126,7 @@
       return {
         title: '想要知道同城校友在聊什么？快来看看',
         path: '/pages/topic/main',
-        imageUrl: 'http://image.bloggeng.com/20190107173746.png',
+        imageUrl: 'https://wechat.xkboke.com/static/img/share-logo.png',
         success: function (res) {
           console.log('分享成功')
         }

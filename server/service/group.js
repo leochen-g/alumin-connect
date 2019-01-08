@@ -52,18 +52,25 @@ let groupService = {
 	let res = {}
 	let list = []
 	let count = results[0][0].count
-	for (item in results[1]) {
-	  item = results[1][item]
+	for (item of results[1]) {
 	  let obj = {userInfo: {}};
 	  obj.id = item.id
 	  obj.content = item.content
 	  obj.commentCount = item.commentCount
 	  obj.updatedAt = item.updatedAt
 	  obj.location = item.location
-	  userInfo = this.getUserBaseInfo([item.openId])
+	  obj.userInfo ={
+		avataUrl: item.avataUrl,
+		college: item.college,
+		graduationTime: item.graduationTime,
+		location: item.location,
+		major: item.major,
+		nickName: item.nickName,
+		openid: item.openId,
+		university: item.university
+	  }
 	  likeCount =  topicService.getLikedCountByTid(item.id)
 	  hasLiked =  topicService.hasUserLikedByTid(item.id,uid)
-	  obj.userInfo = await userInfo
 	  obj.likeCount = await likeCount
 	  obj.hasLiked = await hasLiked===null?false:true
 	  list.push(obj)
@@ -76,10 +83,8 @@ let groupService = {
   getTopicListByUserId: async function (arr) {
 	let results = await  sqlDao.group.getTopicListByUserId(arr)
 	let list = []
-	for (item in results) {
-	  item = results[item]
+	for (item of results) {
 	  let obj = {userInfo: {}};
-	  let userInfo,likeCount,hasLiked
 	  obj.id = item.id
 	  obj.content = item.content
 	  obj.commentCount = item.commentCount
@@ -87,10 +92,18 @@ let groupService = {
 	  obj.location = item.location
 	  likeCount = topicService.getLikedCountByTid(item.id)
 	  hasLiked = topicService.hasUserLikedByTid(item.id,arr[0])
-	  userInfo = this.getUserBaseInfo([item.openId])
+	  obj.userInfo ={
+		avataUrl: item.avataUrl,
+		college: item.college,
+		graduationTime: item.graduationTime,
+		location: item.location,
+		major: item.major,
+		nickName: item.nickName,
+		openid: item.openId,
+		university: item.university
+	  }
 	  obj.likeCount = await likeCount
 	  obj.hasLiked = await hasLiked===null?false:true
-	  obj.userInfo = await userInfo
 	  list.push(obj)
 	}
 	return list
@@ -100,7 +113,6 @@ let groupService = {
 	let results = await sqlDao.group.getTopicById(arr)
 	if (results.length > 0) {
 	  let obj = {userInfo: {}};
-	  let userInfo,likeCount,hasLiked
 	  var item = results[0]
 	  obj.id = item.id
 	  obj.content = item.content
@@ -108,21 +120,24 @@ let groupService = {
 	  obj.likeCount = item.likeCount
 	  obj.updatedAt = item.updatedAt
 	  obj.location = item.location
-	  userInfo = this.getUserBaseInfo([item.openId])
+	  obj.userInfo ={
+		avataUrl: item.avataUrl,
+		college: item.college,
+		graduationTime: item.graduationTime,
+		location: item.location,
+		major: item.major,
+		nickName: item.nickName,
+		openid: item.openId,
+		university: item.university
+	  }
 	  likeCount = topicService.getLikedCountByTid(item.id)
 	  hasLiked =  topicService.hasUserLikedByTid(item.id,uid)
-	  obj.userInfo = await userInfo
 	  obj.likeCount = await likeCount
 	  obj.hasLiked = await hasLiked===null?false:true
 	  return obj
 	} else {
 	  return null
 	}
-  },
-  //获取简单的话题详情
-  getSimpleTopicInfo: async function (arr) {
-	let results = await sqlDao.group.getTopicById(arr)
-	return results[0]
   },
   // 举报话题
   addTipOffs: async function (arr) {
@@ -147,19 +162,25 @@ let groupService = {
 	  count: commentList[1][0].count,
 	  comments: []
 	}
-	for (item in commentList[0]) {
+	for (item of commentList[0]) {
 	  var com = {topComment: []};
-	  let userInfo,reply
-	  item = commentList[0][item]
 	  com.id = item.id
 	  com.cid = item.cid
 	  com.content = item.content
 	  com.topicId = item.topicId
 	  com.updatedAt = item.updatedAt
-	  userInfo = this.getUserBaseInfo([item.openId])
+	  com.userInfo ={
+		avataUrl: item.avataUrl,
+		college: item.college,
+		graduationTime: item.graduationTime,
+		location: item.location,
+		major: item.major,
+		nickName: item.nickName,
+		openid: item.openId,
+		university: item.university
+	  }
 	  reply = this.getReplyList([item.cid, item.cid])
 	  replyObj = await reply
-	  com.userInfo = await userInfo
 	  com.replyCount = replyObj.count
 	  com.topComment =  replyObj.list
 	  obj.comments.push(com)
@@ -173,18 +194,28 @@ let groupService = {
 	  count: results[0][0].count,
 	  list: []
 	}
-	for (item in results[1]) {
-	  let ite = results[1][item]
+	for (item of results[1]) {
+	  let ite = item
 	  let replyObj = {}
 	  replyObj.id = ite.id
-	  replyObj.reply_id = ite.replyId
-	  replyObj.reply_type = ite.replyType
+	  replyObj.replyId = ite.replyId
+	  replyObj.replyType = ite.replyType
 	  replyObj.cid = ite.cid
 	  replyObj.content = ite.content
-	  replyObj.respUserId = ite.replyId
-	  replyObj.userId = ite.toUid
-	  replyObj.respUserInfo = await this.getUserBaseInfo([ite.toUid])
-	  replyObj.userInfo = await this.getUserBaseInfo([ite.openId])
+	  replyObj.respUserInfo = {
+	    nickName: ite.respNickName,
+		openid: ite.toUid
+	  }
+	  replyObj.userInfo = {
+		avataUrl: ite.avataUrl,
+		college: ite.college,
+		graduationTime: ite.graduationTime,
+		location: ite.location,
+		major: ite.major,
+		nickName: ite.nickName,
+		openid: ite.openId,
+		university: ite.university
+	  }
 	  obj.list.push(replyObj)
 	}
 	return obj
@@ -196,8 +227,8 @@ let groupService = {
 	  count: results[0][0].count,
 	  topComment: []
 	}
-	for (item in results[1]) {
-	  let ite = results[1][item]
+	for (item of results[1]) {
+	  let ite = item
 	  let replyObj = {}
 	  replyObj.id = ite.id
 	  replyObj.reply_id = ite.replyId
@@ -206,8 +237,20 @@ let groupService = {
 	  replyObj.content = ite.content
 	  replyObj.respUserId = ite.replyId
 	  replyObj.userId = ite.toUid
-	  replyObj.respUserInfo = await this.getUserBaseInfo([ite.toUid])
-	  replyObj.userInfo = await this.getUserBaseInfo([ite.openId])
+	  replyObj.respUserInfo = {
+		nickName: ite.respNickName,
+		openid: ite.toUid
+	  }
+	  replyObj.userInfo = {
+		avataUrl: ite.avataUrl,
+		college: ite.college,
+		graduationTime: ite.graduationTime,
+		location: ite.location,
+		major: ite.major,
+		nickName: ite.nickName,
+		openid: ite.openId,
+		university: ite.university
+	  }
 	  obj.topComment.push(replyObj)
 	}
 	return obj
@@ -248,27 +291,35 @@ let groupService = {
 	let result = await sqlDao.group.user.addUserMessage(arr)
 	return result.affectedRows
   },
-  //获取用户通知
+  // 获取用户未读消息数
+  getUnReadMessageCount: async function (arr) {
+    let result = await sqlDao.group.user.getUnReadMessageCount(arr)
+	return {count: result[0].count}
+  },
+  //获取用户消息通知
   getUserMessage: async function (arr) {
 	let result = await sqlDao.group.user.getUserMessage(arr)
 	let list = []
-	let time1 = new Date()
-	for (item in  result[1]) {
+	for (item of  result) {
 	  let msg = {}
-	  var ite = result[1][item]
+	  var ite = item
 	  msg.id = ite.id
 	  msg.updateAt = ite.updatedAt
 	  msg.contentType = ite.contentType
 	  msg.flag = ite.flag
-	  producer = this.getUserBaseInfo(ite.producer)
-	  topicInfo = this.getTopicById(ite.topicId)
-	  msg.producer = await producer
-	  msg.topicInfo = await topicInfo
+	  msg.topicInfo = {
+		id:ite.topicId,
+		content:ite.content,
+		flag:ite.topicFlag
+	  }
+	  msg.producer ={
+	    openId: ite.producer,
+	    nickName:ite.nickName,
+		avataUrl:ite.avataUrl
+	  }
 	  list.push(msg)
 	}
-	let time2 = new Date()
-	console.log('耗时',time2.getTime()-time1.getTime())
-	return {count: result[0][0].count, list: list}
+	return {list: list}
   },
   //获取系统通知
   getSystemMessage: async function (arr) {
@@ -278,12 +329,12 @@ let groupService = {
 	  let msg = {}
 	  var ite = result[1][item]
 	  msg.id = ite.id
-	  msg.updateAt = ite.updatedAt
-	  msg.contentType = ite.contentType
+	  msg.type = ite.type
+	  msg.imgSrc = ite.thumbnailUrl
 	  msg.title = ite.title
-	  msg.flag = ite.flag
-	  msg.imgSrc = ite.imgSrc
 	  msg.detail = ite.detail
+	  msg.updatedAt = ite.updatedAt
+	  msg.flag = ite.flag
 	  list.push(msg)
 	}
 	return {count: result[0][0].count, list: list}
@@ -317,7 +368,10 @@ let groupService = {
   },
   // 获取基础信息，不含敏感信息
   getUserBaseInfo: async function (arr) {
+	let start = new Date()
 	let results = await sqlDao.group.user.getUserInfo(arr)
+	let end = new Date()
+	console.log('用户信息查询耗时', end.getTime()-start.getTime())
 	if (results[0]) {
 	  delete  results[0].phone
 	  delete  results[0].gender

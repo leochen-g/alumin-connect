@@ -138,9 +138,10 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2rpx solid #1FD927;
+    border-bottom: 2rpx solid themeColor;
   }
   .search_input{
+    height 50rpx
     padding:10rpx 20rpx ;
     font-size 28rpx
     color:#888888 ;

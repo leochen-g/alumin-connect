@@ -214,7 +214,7 @@
     width: 100%;
     height: auto;
     box-sizing: border-box;
-    background-image: url('http://image.bloggeng.com/20181213164522.png');
+    background-image: url('https://wechat.xkboke.com/static/img/index-bg.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }
