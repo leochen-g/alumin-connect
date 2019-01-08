@@ -6,9 +6,21 @@
     </div>
     <div class="message" v-if="currentTab === '1'">
       <messageItem v-for="(item,index) in userMessage" :key="item.id" :todo="item" :index="index"/>
+      <div class="no-message" v-if="userMessage.length < 1">
+        <div class="no-message-main">
+          <div class="aliiconfont no-message-icon">&#xe637;</div>
+          <span>暂无消息</span>
+        </div>
+      </div>
     </div>
     <div class="message" v-if="currentTab === '2'">
       <systemMessageItem v-for="(item,index) in systemMessage" :key="item.id" :todo="item" :index="index"/>
+      <div class="no-message" v-if="systemMessage.length < 1">
+        <div class="no-message-main">
+          <div class="aliiconfont no-message-icon">&#xe637;</div>
+          <span>暂无消息</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +82,20 @@
 <style lang="stylus" scoped>
   .message{
     padding 100rpx 30rpx 10rpx 30rpx
+  }
+  .no-message{
+    width 100%
+    height 400rpx
+    vertical-align middle
+  }
+  .no-message-main{
+    margin 0 auto
+    padding-top 180rpx
+    text-align center
+    color grayColor
+  }
+  .no-message-icon{
+    font-size 100rpx
   }
   .switch-tab
     position fixed

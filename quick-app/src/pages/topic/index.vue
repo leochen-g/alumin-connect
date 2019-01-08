@@ -12,14 +12,14 @@
     <!--<topicSwiper :list="swiperList"/>-->
     <!--发布话题-->
     <topicEdit />
-    <lampBanner :systemInfo="systemInfo" />
+    <lampBanner :systemInfo="systemInfo"/>
     <!--话题列表-->
     <topicItem v-for="item in list" :key="item.id" :todo="item" />
     <div class="init-topic" v-if="list.length<=0&&!authLocation">
       <div class="init-tips">你所在城市的圈子里还没小伙伴说话，快来活跃气氛</div>
     </div>
     <div class="to-location-setting" v-if="authLocation">
-      <button  class="goSetting" open-type="openSetting" @opensetting="openSetting">打开授权</button>
+      <button  class="goSetting" open-type="openSetting">前往授权</button>
       <div class="location-tips">本小程序是基于位置为你提供同城校友话题，请到设置中打开位置授权，谢谢</div>
     </div>
   </div>

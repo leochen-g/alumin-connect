@@ -25,7 +25,6 @@ module.exports = {
 	var arr = [param, oid]
 	var results = await userService.getUserLocation(arr)
 	res.json({head: {code: 0, msg: 'ok'}, data: results})
-
   },
   // 登录，签发JWT
   login: async function (req, res) {

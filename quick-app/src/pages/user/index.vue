@@ -162,6 +162,7 @@
               login(req).then(res => {
                 wx.setStorageSync('token', res.data.token)
                 _this.getUserInfo()
+                _this.getUserMessage()
               })
             }
           })

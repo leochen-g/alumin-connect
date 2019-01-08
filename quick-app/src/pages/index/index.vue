@@ -50,11 +50,15 @@
       return {
         title: '校友来了带你看看校友在哪里？',
         path: '/pages/index/main',
-        imageUrl: 'http://image.bloggeng.com/20190107173746.png',
+        // imageUrl: 'http://image.bloggeng.com/20190107173746.png',
+        imageUrl: 'https://wechat.xkboke.com/static/img/share-logo.png',
         success: function (res) {
           console.log('分享成功')
         }
       }
+    },
+    onShow () {
+      this.updateLocation()
     },
     methods: {
       // 调用登录接口
@@ -105,13 +109,25 @@
             console.log(res)
             // 点击“确认”时打开设置页面
             if (res.confirm) {
-              console.log('用户点击确认')
               wx.openSetting({
                 success: (res) => { }
               })
             } else {
               console.log('用户点击取消')
             }
+          }
+        })
+      },
+      // 更新位置信息
+      updateLocation () {
+        let _this = this
+        wx.getLocation({
+          success: (res) => {
+            _this.location = res.latitude + ',' + res.longitude
+            _this.getUserLocation(_this.location, wx.getStorageSync('openId'))
+          },
+          fail: () => {
+            _this.openConfirm()
           }
         })
       },

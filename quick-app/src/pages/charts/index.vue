@@ -452,7 +452,7 @@
         var _this = this
         wx.getImageInfo({
           // src: 'http://image.bloggeng.com/20181213164400.png',
-          src: 'http://image.bloggeng.com/20190107150256.png',
+          src: 'https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/share3.jpg',
           success: function (res) {
             const random = (parseInt(9 * Math.random() + 90))
             const ctx = wx.createCanvasContext('shareCanvas')
@@ -585,7 +585,8 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-image: url("http://image.bloggeng.com/20190104112037.png");
+    /*background-image: url("http://image.bloggeng.com/20190104112037.png");*/
+    background-image: url("https://lg-me0h2lia-1256919187.cos.ap-shanghai.myqcloud.com/chart_bg.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }
