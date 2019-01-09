@@ -94,17 +94,29 @@ module.exports = {
 	getCommentListByUserId: function (req) {
 	  return db.query(sqlMap.group.getCommentListByUserId,req)
 	},
-	//更新评论总数
+	//更新评论总数+1
 	updateCommentCount: function (req) {
 	  return db.query(sqlMap.group.updateCommentCount,req)
 	},
-	//更新评论总数
+	//更新评论总数-1
 	reduceCommentCount: function (req) {
 	  return db.query(sqlMap.group.reduceCommentCount,req)
+	},
+	//更新评论的回复总数+1
+	updateReplyCount: function (req) {
+	  return db.query(sqlMap.group.updateReplyCount,req)
+	},
+	//更新评论的回复总数-1
+	reduceReplyCount: function (req) {
+	  return db.query(sqlMap.group.reduceReplyCount,req)
 	},
 	//添加回复
 	addReply: function (req) {
 	  return db.query(sqlMap.group.addReply,req)
+	},
+	//查找指定Id回复
+	getReplyById: function (req) {
+	  return db.query(sqlMap.group.getReplyById,req)
 	},
 	//删除回复
 	deleteReply: function (req) {

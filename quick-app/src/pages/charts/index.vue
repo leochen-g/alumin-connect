@@ -24,9 +24,11 @@
       <!--<div class="echarts-bar">-->
         <!--<mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />-->
       <!--</div>-->
-      <button class="sixedge-share" open-type="share">分享</button>
-      <button class="sixedge-share downLoad"  @click ='saveImg'>下载</button>
-      <button class="sixedge-share say"  @click ='goTopic'>聊聊</button>
+      <cover-view>
+        <button class="sixedge-share" open-type="share">分享</button>
+        <button class="sixedge-share downLoad"  @click ='saveImg'>下载</button>
+        <button class="sixedge-share say"  @click ='goTopic'>聊聊</button>
+      </cover-view>
     </div>
     <div class="echarts-hide">
       <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initHide" disableTouch=true ref="echartsHide" canvasId="hide-canvas" />
@@ -529,19 +531,22 @@
                   wx.saveImageToPhotosAlbum({
                     filePath: tempFilePath,
                     success: function () {
-                      wx.showModal({
-                        title: '图片保存成功',
-                        content: '您的校友足迹已经保存到相册，您可以手动分享到朋友圈！',
-                        showCancel: false
+                      wx.showToast({
+                        title: '保存成功',
+                        icon: 'success',
+                        duration: 2000
                       })
                     }
                   })
                 },
-                fail: function (res) {
-                  console.log('生成错误', res)
+                fail: function () {
+                  console.log('保存失败')
                 }
               })
             }, 500)
+          },
+          fail: function () {
+            console.log('图片获取失败')
           }
         })
       }

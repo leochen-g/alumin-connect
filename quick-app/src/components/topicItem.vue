@@ -109,7 +109,7 @@
                       <div class="reply-action-box">
                         <div class="submit">
                           <button class="comment-submit-btn" v-if="!replyContent">评论</button>
-                          <button class="comment-submit-btn active" @click="addReply(item.cid, item.cid, 'comment', item.userInfo.openid, item.topicId, index)" v-if="replyContent">评论</button>
+                          <button class="comment-submit-btn active" @click="addReply(item.cid, item.cid, 'comment', item.userInfo.openid,item.userInfo.nickName, item.topicId, index)" v-if="replyContent">评论</button>
                         </div>
                       </div>
                     </div>
@@ -146,7 +146,7 @@
                                       <div class="reply-action-box">
                                         <div class="submit">
                                           <button class="comment-submit-btn" v-if="!replyContent">评论</button>
-                                          <button class="comment-submit-btn active" @click="addReply(item.cid, replyItem.id, 'reply', replyItem.userInfo.openid, item.topicId,index)" v-if="replyContent">评论</button>
+                                          <button class="comment-submit-btn active" @click="addReply(item.cid, replyItem.id, 'reply', replyItem.userInfo.openid, replyItem.userInfo.nickName, item.topicId,index)" v-if="replyContent">评论</button>
                                         </div>
                                       </div>
                                     </div>
@@ -156,7 +156,7 @@
                           </div>
                         </div>
                       </div>
-                    <a @click="gteReplyListByCommentId(item.cid, index)" v-if="item.replyCount>2&&(!fetchReply)" class="fetch-more-comment" >加载更多</a>
+                    <a @click="gteReplyListByCommentId(item.cid, index)" v-if="item.topComment.length < item.replyCount" class="fetch-more-comment" >加载更多</a>
                     <a  class="fetch-more-comment fetch-active" v-if="fetchAll">加载更多</a>
                   </div>
                 </div>
@@ -185,7 +185,7 @@
       return {
         commentList: '', // 评论列表
         commentCount: 0,
-        showCommentBox: false, // 显示评论框
+        shcowCommentBox: false, // 显示评论框
         showCommentId: '', // 评论的topicId
         replyCommentShow: false, // 显示回复框
         replyCommentId: '', // 回复的评论Id
@@ -202,6 +202,7 @@
         limit: 5,
         fetchAll: false,
         fetchReply: false,
+        fetchReplyId: '',
         actionId: '',
         showHeaderAction: false,
         likedAnimate: false,
@@ -310,7 +311,7 @@
           }
         })
       },
-      addReply (cid, rid, rType, toUid, topicId, index) { // 添加回复
+      addReply (cid, rid, rType, toUid, toNickName, topicId, index) { // 添加回复
         let _this = this
         let req = {
           cid: cid,
@@ -318,7 +319,8 @@
           replyId: rid,
           replyType: rType,
           toUid: toUid,
-          topicId: topicId
+          topicId: topicId,
+          toNickName: toNickName
         }
         addReply(req).then(res => {
           if (res.head.code === 0) {
@@ -341,6 +343,7 @@
         let req = {
           cid: cid
         }
+        _this.fetchReplyId = cid
         getReplyList(req).then(res => {
           _this.fetchAll = false
           _this.fetchReply = true

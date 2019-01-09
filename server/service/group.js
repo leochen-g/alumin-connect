@@ -139,6 +139,11 @@ let groupService = {
 	  return null
 	}
   },
+  //获取简单的话题详情
+  getSimpleTopicInfo: async function (arr) {
+	let results = await sqlDao.group.getTopicById(arr)
+	return results[0]
+  },
   // 举报话题
   addTipOffs: async function (arr) {
 	let results = await sqlDao.group.addTipOffs(arr)
@@ -179,10 +184,23 @@ let groupService = {
 		openid: item.openId,
 		university: item.university
 	  }
-	  reply = this.getReplyList([item.cid, item.cid])
-	  replyObj = await reply
-	  com.replyCount = replyObj.count
-	  com.topComment =  replyObj.list
+	  com.replyCount = item.replyCount
+	  reply = await topicService.getReplyList(item.cid)
+	  if (reply.length){
+	    console.log('取redis')
+		com.topComment =  reply.map(function (current,index) {
+		  return JSON.parse(current)
+		})
+	  }else {
+		console.log('查mysql')
+	    replyList = await this.getReplyList([item.cid,item.cid])
+		com.topComment = replyList.list
+		if(com.topComment.length){
+		  console.log('更新到redis')
+		  topicService.addReplyObj(com.topComment[1].cid,JSON.stringify(com.topComment[1]))
+		  topicService.addReplyObj(com.topComment[0].cid,JSON.stringify(com.topComment[0]))
+		}
+	  }
 	  obj.comments.push(com)
 	}
 	return obj
@@ -203,7 +221,7 @@ let groupService = {
 	  replyObj.cid = ite.cid
 	  replyObj.content = ite.content
 	  replyObj.respUserInfo = {
-	    nickName: ite.respNickName,
+	    nickName: ite.toNickName,
 		openid: ite.toUid
 	  }
 	  replyObj.userInfo = {
@@ -238,7 +256,7 @@ let groupService = {
 	  replyObj.respUserId = ite.replyId
 	  replyObj.userId = ite.toUid
 	  replyObj.respUserInfo = {
-		nickName: ite.respNickName,
+		nickName: ite.toNickName,
 		openid: ite.toUid
 	  }
 	  replyObj.userInfo = {
@@ -247,7 +265,7 @@ let groupService = {
 		graduationTime: ite.graduationTime,
 		location: ite.location,
 		major: ite.major,
-		nickName: ite.nickName,
+		nickName: ite.toNickName,
 		openid: ite.openId,
 		university: ite.university
 	  }
@@ -259,11 +277,40 @@ let groupService = {
   addReply: async function (arr) {
 	let results = await sqlDao.group.addReply(arr)
 	if(results.affectedRows) {
-	  let res = await sqlDao.group.updateCommentCount([arr[6]]) // 评论数加1
-	  return res.affectedRows
+	  sqlDao.group.updateReplyCount(arr[1]) // 评论的回复数加1
+	  sqlDao.group.updateCommentCount([arr[7]]) // 评论数加1
+	  return results.insertId
 	}else {
 	  return false
 	}
+  },
+  // 获取指定Id的回复详情
+  getReplyById: async function (arr) {
+    let results = await sqlDao.group.getReplyById(arr)
+	ite = results[0]
+	let replyObj = {}
+	replyObj.id = ite.id
+	replyObj.reply_id = ite.replyId
+	replyObj.reply_type = ite.replyType
+	replyObj.cid = ite.cid
+	replyObj.content = ite.content
+	replyObj.respUserId = ite.replyId
+	replyObj.userId = ite.toUid
+	replyObj.respUserInfo = {
+	  nickName: ite.toNickName,
+	  openid: ite.toUid
+	}
+	replyObj.userInfo = {
+	  avataUrl: ite.avataUrl,
+	  college: ite.college,
+	  graduationTime: ite.graduationTime,
+	  location: ite.location,
+	  major: ite.major,
+	  nickName: ite.nickName,
+	  openid: ite.openId,
+	  university: ite.university
+	}
+	return replyObj
   },
   // 删除回复
   deleteReply: async function (arr) {

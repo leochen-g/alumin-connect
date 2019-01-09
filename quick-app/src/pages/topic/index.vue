@@ -14,7 +14,7 @@
     <topicEdit />
     <lampBanner :systemInfo="systemInfo"/>
     <!--话题列表-->
-    <topicItem v-for="item in list" :key="item.id" :todo="item" />
+    <topiItem v-for="item in list" :key="item.id" :todo="item" />
     <div class="init-topic" v-if="list.length<=0&&!authLocation">
       <div class="init-tips">你所在城市的圈子里还没小伙伴说话，快来活跃气氛</div>
     </div>
@@ -367,6 +367,7 @@
   .swiper{
     flex: 1;
     color: themeColor;
+    min-height 300rpx
   }
   .slide-image{
     width: 100%;

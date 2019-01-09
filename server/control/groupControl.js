@@ -116,10 +116,13 @@ module.exports = {
   //添加回复
   addReply: async function (req, res) {
 	var param = req.body
-	var arr = [param.openId, param.cid, param.replyId, param.replyType, param.content, param.toUid, param.topicId]
+	var arr = [param.openId, param.cid, param.replyId, param.replyType, param.content, param.toUid,param.toNickName, param.topicId]
 	var results = await groupService.addReply(arr)
 	if (results) {
 	  res.send({head: {code: 0, msg: 'ok'}, data: {}})
+	  let insertId = [results]
+	  let replyObj = await groupService.getReplyById(insertId) //获取插入的回复详情
+	  topicService.addReplyObj(arr[1],JSON.stringify(replyObj)) // 把回复详情添加到redis
 	} else {
 	  res.send({head: {code: 10000, msg: '添加失败，请稍后重试'}, data: {}})
 	}

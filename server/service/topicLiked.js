@@ -30,8 +30,29 @@ var topicService = {
   // 取消指定周期内的点赞
   removeLikedByRangeTime: async function (tid, start, end) {
 	return await redis.zremrangebyscore('t:'+tid+':liked',start,end)
+  },
+  // 往序列中添加回复
+  addReplyObj: async function(cid,str) {
+    let len = await this.getReplyLength(cid)
+    if(len>=2){
+      await this.popReplyLast(cid)
+	  return await redis.lpush('r:'+cid+':reply',str)
+	}else {
+	  return await redis.lpush('r:'+cid+':reply',str)
+	}
+  },
+  // 查询序列长度
+  getReplyLength: async function(cid) {
+    return await redis.llen('r:'+cid+':reply')
+  },
+  // 序列出栈
+  popReplyLast: async function (cid) {
+	return await redis.rpop('r:'+cid+':reply')
+  },
+  // 查询序列内元素
+  getReplyList: async function (cid) {
+	return await redis.lrange('r:'+cid+':reply',0,-1)
   }
-
 }
 
 module.exports = topicService
