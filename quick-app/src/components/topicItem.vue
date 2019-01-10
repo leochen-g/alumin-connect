@@ -37,6 +37,9 @@
         </div>
         <div class="content-location">
           <div class="location-title-box">
+            <div class="location-content">{{updatedTime}}</div>
+          </div>
+          <div class="location-title-box">
             <i class="aliiconfont location-icon">&#xe64a;</i>
             <div class="location-content">{{todo.location}}</div>
           </div>
@@ -185,7 +188,7 @@
       return {
         commentList: '', // 评论列表
         commentCount: 0,
-        shcowCommentBox: false, // 显示评论框
+        showCommentBox: false, // 显示评论框
         showCommentId: '', // 评论的topicId
         replyCommentShow: false, // 显示回复框
         replyCommentId: '', // 回复的评论Id
@@ -212,6 +215,39 @@
     props: {
       todo: {
         required: true
+      }
+    },
+    computed: {
+      updatedTime () {
+        let today = new Date()
+        let tempDate = new Date(this.todo.updatedAt)
+        let month = tempDate.getMonth() + 1
+        let day = tempDate.getDate()
+        let hour = tempDate.getHours()
+        let min = tempDate.getMinutes()
+        let second = tempDate.getSeconds()
+        let todayYear = today.getFullYear()
+        let todayMonth = today.getMonth() + 1
+        let todayDay = today.getDate()
+        let todayDate = todayYear + '/' + (todayMonth > 9 ? todayMonth : '0' + todayMonth) + '/' + (todayDay > 9 ? todayDay : '0' + todayDay) + ' 00:00:00'
+        let todayTime = new Date(todayDate)
+        let derta = todayTime.getTime() - tempDate.getTime()
+        if (hour < 10) {
+          hour = '0' + hour
+        }
+        if (min < 10) {
+          min = '0' + min
+        }
+        if (second < 10) {
+          second = '0' + second
+        }
+        if (derta <= 0) {
+          return '今天 '
+        } else if (derta < 86400000) {
+          return '昨天 '
+        } else {
+          return (month > 9 ? month : '0' + month) + '/' + (day > 9 ? day : '0' + day)
+        }
       }
     },
     methods: {
@@ -522,7 +558,7 @@
   }
 
   .alumni-topic-content-row {
-    margin-top: 40rpx;
+    margin-top: 20rpx;
     margin-bottom: 10rpx;
     margin-left: 0.38rem;
     margin-right: 0.38rem;
@@ -536,8 +572,9 @@
   }
 
   .content-location{
+    margin-top 10rpx
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .location-title-box {

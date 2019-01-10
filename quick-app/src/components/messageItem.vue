@@ -14,12 +14,15 @@
             <div class="message-user-nickName">{{todo.producer.nickName}}</div>
             <div class="message-time">{{createTime}}</div>
           </div>
-          <div class="message-content-main ellipsis">
-            <span v-if="todo.contentType==='liked'">赞了：{{todo.topicInfo.content}}</span>
-            <span v-if="todo.contentType==='comment'">评论了你的话题：{{todo.topicInfo.content}}</span>
-            <span v-if="todo.contentType==='reply'">回复了你的评论：{{todo.topicInfo.content}}</span>
+          <div class="message-content-main ">
+            <div class="ellipsis">
+              <span v-if="todo.contentType==='liked'">赞了：{{todo.topicInfo.content}}</span>
+              <span v-if="todo.contentType==='comment'">评论了你的话题：{{todo.topicInfo.content}}</span>
+              <span v-if="todo.contentType==='reply'">回复了你的评论：{{todo.topicInfo.content}}</span>
+            </div>
             <span v-if="todo.flag" v-bind:class="{'active-msg':todo.flag}" class="aliiconfont">&#xe643;</span>
           </div>
+
         </div>
       </div>
     </div>
@@ -116,7 +119,8 @@
   }
 
   .message-right{
-    flex: 1;
+    flex 1
+    width 50%
     padding: 8rpx 10rpx 12rpx 10rpx;
   }
 

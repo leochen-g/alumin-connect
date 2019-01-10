@@ -82,6 +82,7 @@
           addTopic(req).then(res => {
             if (res.head.code === 0) {
               _this.topicContent = ''
+              _this.hasInputCount = 0
               Bus.$emit('getTopicList')
             }
           })

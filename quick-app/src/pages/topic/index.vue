@@ -14,7 +14,7 @@
     <topicEdit />
     <lampBanner :systemInfo="systemInfo"/>
     <!--话题列表-->
-    <topiItem v-for="item in list" :key="item.id" :todo="item" />
+    <topicItem v-for="item in list" :key="item.id" :todo="item" />
     <div class="init-topic" v-if="list.length<=0&&!authLocation">
       <div class="init-tips">你所在城市的圈子里还没小伙伴说话，快来活跃气氛</div>
     </div>

@@ -24,11 +24,9 @@
       <!--<div class="echarts-bar">-->
         <!--<mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />-->
       <!--</div>-->
-      <cover-view>
         <button class="sixedge-share" open-type="share">分享</button>
         <button class="sixedge-share downLoad"  @click ='saveImg'>下载</button>
         <button class="sixedge-share say"  @click ='goTopic'>聊聊</button>
-      </cover-view>
     </div>
     <div class="echarts-hide">
       <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initHide" disableTouch=true ref="echartsHide" canvasId="hide-canvas" />
@@ -590,7 +588,7 @@
     height: 100%;
     box-sizing: border-box;
     /*background-image: url("http://image.bloggeng.com/20190104112037.png");*/
-    background-image: url("https://wechat.xkboke.com/static/img/chart_bg.jpg");
+    background-image: url("http://image.bloggeng.com/chart_bg.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }

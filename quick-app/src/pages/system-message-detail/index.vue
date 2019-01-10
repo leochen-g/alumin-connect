@@ -51,6 +51,16 @@
       return {
       }
     },
+    onShareAppMessage (options) {
+      return {
+        title: '同城校友都来了！就差你了',
+        path: '/pages/index/main',
+        imageUrl: 'https://wechat.xkboke.com/static/img/share-logo.png',
+        success: function (res) {
+          console.log('分享成功')
+        }
+      }
+    },
     methods: {
     }
   }
