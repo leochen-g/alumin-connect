@@ -541,7 +541,7 @@
                   console.log('保存失败')
                 }
               })
-            }, 500)
+            }, 50)
           },
           fail: function () {
             console.log('图片获取失败')

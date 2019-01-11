@@ -25,7 +25,7 @@
 
 <script>
   import globalStore from '../store/global-store'
-
+  import {readSystemMessage} from '../http/api'
   export default {
     name: 'systemMessageItem',
     props: {
@@ -59,6 +59,12 @@
     },
     methods: {
       systemDetail (obj) {
+        let req = {
+          id: obj.id
+        }
+        readSystemMessage(req).then(res => {
+          console.log('阅读成功')
+        })
         globalStore.commit('updateSelectSystemMessage', obj)
         const url = '../system-message-detail/main'
         wx.navigateTo({ url })

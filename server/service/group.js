@@ -372,19 +372,25 @@ let groupService = {
   getSystemMessage: async function (arr) {
     let result =  await sqlDao.group.user.getSystemMessage(arr)
 	let list = []
-	for (item in  result[1]) {
+	for (item of  result[1]) {
 	  let msg = {}
-	  var ite = result[1][item]
+	  var ite = item
 	  msg.id = ite.id
 	  msg.type = ite.type
 	  msg.imgSrc = ite.thumbnailUrl
 	  msg.title = ite.title
 	  msg.detail = ite.detail
+	  msg.readCount = ite.readCount
 	  msg.updatedAt = ite.updatedAt
 	  msg.flag = ite.flag
 	  list.push(msg)
 	}
 	return {count: result[0][0].count, list: list}
+  },
+  // 添加系统消息阅读数
+  systemMessageRead: async function (arr) {
+    let result = await sqlDao.group.user.systemMessageRead(arr)
+	return result.affectedRows
   },
   // 标记消息已读
   readMessage: async function (arr) {

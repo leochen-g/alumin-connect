@@ -225,6 +225,12 @@ module.exports = {
 	var result = await groupService.getSystemMessage(arr)
 	res.json({head:{code: 0, msg: 'ok'}, data: result})
   },
+  systemMessageRead: async function (req, res) {
+    var param = req.body
+	var arr = [param.id]
+	var result =  groupService.systemMessageRead(arr)
+	res.json({head:{code: 0, msg: 'ok'}, data: {}})
+  },
   // 读取消息
   readMessage: async function (req, res) {
 	var param = req.body

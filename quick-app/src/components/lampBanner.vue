@@ -1,7 +1,7 @@
 <template>
   <div class="scroll_view_border">
     <div class="scroll-icon">
-      <span class="aliiconfont">&#xe617;</span>
+      <span class="aliiconfont">&#xe617;</span><span>公告</span>
     </div>
     <swiper @click="systemMessage()" class="swiper" vertical indicator-dots="true" autoplay="true" interval="5000" duration="1000" circular="true">
       <block v-for="(item, index) in systemInfo" :index="index" :key="key">
@@ -48,7 +48,6 @@
     background-color: whiteColor;
     position: relative;
     z-index: 2;
-    font-size 32rpx
     padding-right 20rpx
   }
   .scroll_view_border{

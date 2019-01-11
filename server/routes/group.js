@@ -97,6 +97,10 @@ router.post('/group/user/getUserMessage',function (req,res,next) {
 router.post('/group/user/getSystemMessage',function (req,res,next) {
   filter(req,res,control.getSystemMessage)
 })
+//系统通知添加阅读数
+router.post('/group/user/systemMessageRead',function (req,res,next) {
+  filter(req,res,control.systemMessageRead)
+})
 //已读通知
 router.post('/group/user/readMessage',function (req,res,next) {
   filter(req,res,control.readMessage)

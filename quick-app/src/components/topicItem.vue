@@ -457,10 +457,12 @@
     padding: 32rpx 0.48rem 0 40rpx;
   }
   .header-action{
+    display: flex;
     position: relative;
     margin-left: 32rpx;
   }
   .more-btn{
+    padding-left 20rpx
     cursor: pointer;
   }
 
@@ -536,11 +538,6 @@
     position: relative;
     background-position: 50%;
   }
-
-  .header-action {
-    display: flex;
-  }
-
   .user-meta-box {
     display: flex;
     align-items: center;

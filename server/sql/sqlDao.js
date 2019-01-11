@@ -186,6 +186,10 @@ module.exports = {
 	  getSystemMessage:function (req) {
 		return db.query(sqlMap.group.user.getSystemMessage,req)
 	  },
+	  // 添加系统消息阅读数
+	  systemMessageRead:function (req) {
+	    return db.query(sqlMap.group.user.systemMessageRead,req)
+	  },
 	  //标记消息已读
 	  readMessage:function (req) {
 		return db.query(sqlMap.group.user.readMessage,req)

@@ -9,6 +9,16 @@
       <div class="detail-main">
         <wxparser :rich-text="selectSystemMessage.detail" />
       </div>
+      <div class="detail-footer">
+        <div class="footer-item">
+          <div class="reader">
+            阅读 {{selectSystemMessage.readCount}}
+          </div>
+        </div>
+      </div>
+      <div class="share-message">
+          <button class="share-btn" open-type="share">分享</button>
+      </div>
     </div>
   </div>
 </template>
@@ -55,7 +65,6 @@
       return {
         title: '同城校友都来了！就差你了',
         path: '/pages/index/main',
-        imageUrl: 'https://wechat.xkboke.com/static/img/share-logo.png',
         success: function (res) {
           console.log('分享成功')
         }
@@ -86,11 +95,11 @@
   }
   .detail-banner{
     width 100%
-    height 400rpx
+    height 50%
   }
   .detail-img{
     width 100%
-    height 100%
+    height 360rpx
   }
   .detail-main{
     padding 20rpx 0
@@ -100,4 +109,13 @@
     min-height 500rpx
     color textColor
   }
+  .detail-footer
+    display flex
+    justify-content space-between
+    margin 10rpx
+  .reader
+    color grayColor
+  .share-btn
+    background-color themeColor
+    color whiteColor
 </style>

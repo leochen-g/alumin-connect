@@ -50,6 +50,8 @@ export const getUserUnReadMessageCount = (params) => { return fly.post('/api/gro
 export const getUserMessage = (params) => { return fly.post('/api/group/user/getUserMessage', params) }
 // 获取系统通知
 export const getSystemMessage = (params) => { return fly.post('/api/group/user/getSystemMessage', params) }
+// 阅读系统消息
+export const readSystemMessage = (params) => { return fly.post('/api/group/user/systemMessageRead', params) }
 // 已读消息
 export const readMessage = (params) => { return fly.post('/api/group/user/readMessage', params) }
 

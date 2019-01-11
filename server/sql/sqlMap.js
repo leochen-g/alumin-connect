@@ -58,6 +58,7 @@ var sqlMap = {
 	  getUnReadMessageCount: 'select count(id) as count from message where msgType = "user" and consumer = ? and flag = 1;',
 	  getMessage:'select a.*, b.id as topicId,b.content,b.flag as topicFlag, c.nickName, c.avataUrl from message a inner join topic b on a.topicId = b.id inner join user c on a.producer = c.openid where msgType = "user" and consumer = ? order by flag desc, updatedAt desc',
 	  getSystemMessage:'select count(id) as count from bulletin;select * from bulletin order by flag desc, updatedAt desc',
+	  systemMessageRead: 'update bulletin set readCount=readCount+1 where id = ?',
 	  readMessage:'update message set flag = 0 where id = ? and consumer = ?'
 	},
 	admin:{

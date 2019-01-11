@@ -5,7 +5,7 @@
       <block v-for="(item, index) in swiperList" :index="index" :key="key">
         <swiper-item  >
           <image @tap="previewImg" :src="item.screenshot" :data-src="item.screenshot" class="slide-image" mode="aspectFill"/>
-          <div v-if="item.type === 'public'" class="swiper-text"><span class="swiper-university">《校友来了》</span><br>祝{{university}}全体校友<br>{{item.description}}</div>
+          <div v-if="item.type === 'public'&&item.position === 'top'" class="swiper-text"><span class="swiper-university">《校友来了》</span><br>祝{{university}}全体校友<br>{{item.description}}</div>
         </swiper-item>
       </block>
     </swiper>
@@ -16,7 +16,7 @@
     <!--话题列表-->
     <topicItem v-for="item in list" :key="item.id" :todo="item" />
     <div class="init-topic" v-if="list.length<=0&&!authLocation">
-      <div class="init-tips">你所在城市的圈子里还没小伙伴说话，快来活跃气氛</div>
+      <div class="init-tips">你所在城市的圈子里还没校友说话<br>快来活跃气氛</div>
     </div>
     <div class="to-location-setting" v-if="authLocation">
       <button  class="goSetting" open-type="openSetting">前往授权</button>
@@ -297,7 +297,6 @@
     position: relative;
     display: flex;
     height: 400rpx;
-    line-height: 400rpx;
     width: 100%;
     justify-content: center;
     background-color: #fff;
@@ -325,7 +324,9 @@
     color grayColor
   }
   .init-tips{
-    font-size: 32rpx;
+    font-size: 28rpx;
+    text-align center
+    padding 20rpx 40rpx
     color: #c8c8c8;
   }
   .love{
@@ -357,8 +358,9 @@
   }
     .swiper-text{
       position absolute
-      top 100rpx
+      top 35rpx
       color whiteColor
+      letter-spacing 6rpx
       width 100%
       margin 0 auto
       text-align center
