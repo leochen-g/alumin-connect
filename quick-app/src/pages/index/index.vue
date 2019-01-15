@@ -32,6 +32,12 @@
       },
       nickName () {
         return globalStore.state.nickName
+      },
+      shareImg () {
+        return globalStore.state.shareImg
+      },
+      shareDetail () {
+        return globalStore.state.shareDetail
       }
     },
     data () {
@@ -48,10 +54,9 @@
     },
     onShareAppMessage (options) {
       return {
-        title: '校友来了带你看看校友在哪里？',
+        title: this.shareDetail,
         path: '/pages/index/main',
-        // imageUrl: 'http://image.bloggeng.com/20190107173746.png',
-        imageUrl: 'https://wechat.xkboke.com/static/img/share-logo.png',
+        imageUrl: this.shareImg,
         success: function (res) {
           console.log('分享成功')
         }

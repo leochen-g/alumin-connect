@@ -23,9 +23,9 @@
         <div class="user-card-item-icon"><span class="aliiconfont card-item-icon">&#xe744;</span></div>
         <div class="user-card-item-content">{{userInfo.phone?userInfo.phone:'暂无'}} <span class="user-card-more-action" v-if="userInfo.phone">保存到通讯录</span></div>
       </div>
-      <div class="user-card-item" @click="clickToCopy()">
+      <div class="user-card-item" >
         <div class="user-card-item-icon"><span class="aliiconfont card-item-icon">&#xe616;</span></div>
-        <div class="user-card-item-content">{{userInfo.wechat?userInfo.wechat:'暂无'}} <span class="user-card-more-action" v-if="userInfo.wechat">点击复制</span></div>
+        <div class="user-card-item-content">{{userInfo.wechat?userInfo.wechat:'暂无'}} <span class="user-card-more-action" v-if="userInfo.wechat"  @click="clickToCopy()">点击复制</span></div>
       </div>
     </div>
     <!--工作信息-->

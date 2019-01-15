@@ -53,6 +53,12 @@
       },
       systemInfo () {
         return globalStore.state.systemMessage
+      },
+      shareImg () {
+        return globalStore.state.shareImg
+      },
+      shareDetail () {
+        return globalStore.state.shareDetail
       }
     },
     data () {
@@ -124,9 +130,9 @@
     },
     onShareAppMessage (options) {
       return {
-        title: '想要知道同城校友在聊什么？快来看看',
-        path: '/pages/topic/main',
-        imageUrl: 'https://wechat.xkboke.com/static/img/share-logo.png',
+        title: this.shareDetail,
+        path: '/pages/user/main',
+        imageUrl: this.shareImg,
         success: function (res) {
           console.log('分享成功')
         }

@@ -15,6 +15,11 @@
             阅读 {{selectSystemMessage.readCount}}
           </div>
         </div>
+        <div class="footer-item">
+          <div class="addWechat" @click="clickToCopy()">
+            添加校友小助手(点击即可复制微信号)
+          </div>
+        </div>
       </div>
       <div class="share-message">
           <button class="share-btn" open-type="share">分享</button>
@@ -63,7 +68,7 @@
     },
     onShareAppMessage (options) {
       return {
-        title: '同城校友都来了！就差你了',
+        title: '知否，知否，同城校友就差你了!',
         path: '/pages/index/main',
         success: function (res) {
           console.log('分享成功')
@@ -71,6 +76,16 @@
       }
     },
     methods: {
+      clickToCopy () {
+        wx.setClipboardData({
+          data: 'CG1210441033',
+          success: function (res) {
+            wx.showToast({
+              title: '复制成功'
+            })
+          }
+        })
+      }
     }
   }
 </script>
@@ -112,10 +127,12 @@
   .detail-footer
     display flex
     justify-content space-between
-    margin 10rpx
+    margin 30rpx
   .reader
     color grayColor
   .share-btn
     background-color themeColor
     color whiteColor
+  .addWechat
+    color themeColor
 </style>

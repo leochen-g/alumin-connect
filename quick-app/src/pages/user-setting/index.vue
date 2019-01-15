@@ -2,15 +2,24 @@
   <div class="alumni-main">
     <div class="setting-main">
       <div class="setting-content">
-          <div class="setting-info-item" >
-            <button class="setting-item-title alumni-btn" open-type="contact">帮助</button>
-          </div>
-          <div class="setting-info-item" >
-            <button class="setting-item-title alumni-btn" open-type="feedback">反馈</button>
-          </div>
-          <div class="setting-info-item" @click="goAbout()">
-            <div class="setting-item-title">关于校友足迹</div>
-          </div>
+        <div class="setting-info-item">
+          <button class="setting-item-title alumni-btn" open-type="contact">帮助</button>
+        </div>
+        <div class="setting-info-item">
+          <button class="setting-item-title alumni-btn" open-type="feedback">反馈</button>
+        </div>
+        <div class="setting-info-item">
+          <button class="setting-item-title alumni-btn" open-type="share">分享给好友</button>
+        </div>
+        <div class="setting-info-item" @click="goAuthAbout()">
+          <div class="setting-item-title">关于开发者</div>
+        </div>
+        <div class="setting-info-item" @click="goAbout()">
+          <div class="setting-item-title">关于校友来了</div>
+        </div>
+        <div class="setting-info-item">
+          <button class="setting-item-title alumni-btn" @click="clickToCopy()">校友助手微信号</button>
+        </div>
       </div>
     </div>
   </div>
@@ -24,6 +33,12 @@
     computed: {
       location () {
         return globalStore.state.location
+      },
+      shareImg () {
+        return globalStore.state.shareImg
+      },
+      shareDetail () {
+        return globalStore.state.shareDetail
       }
     },
     data () {
@@ -36,10 +51,34 @@
         title: '设置'
       })
     },
+    onShareAppMessage (options) {
+      return {
+        title: this.shareDetail,
+        path: '/pages/user/main',
+        imageUrl: this.shareImg,
+        success: function (res) {
+          console.log('分享成功')
+        }
+      }
+    },
     methods: {
       goAbout () {
         let url = '../about-alumni/main'
         wx.navigateTo({ url })
+      },
+      goAuthAbout () {
+        let url = '../about-auth/main'
+        wx.navigateTo({ url })
+      },
+      clickToCopy () {
+        wx.setClipboardData({
+          data: 'CG1210441033',
+          success: function (res) {
+            wx.showToast({
+              title: '微信号复制成功'
+            })
+          }
+        })
       }
     }
   }

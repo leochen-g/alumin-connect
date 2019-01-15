@@ -16,7 +16,9 @@ export default new Vuex.Store({
     systemMessage: [],
     selectSystemMessage: {},
     selectUserId: 'oGT8a0ThGwJOhXcd-eNFC-bl4drQ',
-    currentTab: '1'
+    currentTab: '1',
+    shareImg: 'http://image.bloggeng.com/share-img.jpeg',
+    shareDetail: '校友来了带你看看同城校友在聊什么？'
   },
   mutations: {
     increment: (state, n) => {
