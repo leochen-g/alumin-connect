@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/search/main",
+    "pages/charts/main",
+    "pages/topic/main",
+    "pages/user/main",
+    "pages/user-edit/main",
+    "pages/user-topic/main",
+    "pages/user-message/main",
+    "pages/user-info-card/main",
+    "pages/topic-detail/main",
+    "pages/user-setting/main",
+    "pages/about-alumni/main",
+    "pages/about-auth/main",
+    "pages/system-message-detail/main"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置将用于显示当前城市校友的话题"
+    }
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#000",
+    "navigationBarTitleText": "校友来了",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "backgroundColor": "#ffffff",
+    "selectedColor": "#027fff",
+
+    "list": [{
+      "text": "校友足迹",
+      "pagePath": "pages/index/main",
+      "iconPath": "static/img/foot.png",
+      "selectedIconPath": "static/img/foot-active.png"
+    }, {
+      "text": "校友圈子",
+      "pagePath": "pages/topic/main",
+      "iconPath": "static/img/topic.png",
+      "selectedIconPath": "static/img/topic-active.png"
+    }, {
+        "text": "个人中心",
+        "pagePath": "pages/user/main",
+        "iconPath": "static/img/user.png",
+        "selectedIconPath": "static/img/user-active.png"
+      }],
+    "position": "bottom"
+  },
+  "plugins": {
+    "wxparserPlugin": {
+      "version": "0.2.1",
+      "provider": "wx9d4d4ffa781ff3ac"
+    }
+  }
+}
