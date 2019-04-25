@@ -13,6 +13,4 @@
 */node_modules
 */log
 .env
-*.jpeg
-*.jpg
-*.png
+/server/static/img/

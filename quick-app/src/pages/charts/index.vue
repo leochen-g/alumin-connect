@@ -2,7 +2,7 @@
   <div class="container">
     <div class="chartMain">
       <div class="title">
-        <p class="school-name" :animation="animationData">{{university}}</p>
+        <p class="school-name">{{university}}</p>
         <p class="detail">你的<span class="city-count">{{userCount}}</span>名校友遍布全国<span class="city-count">{{pCount}}</span>个省区,<span class="city-count">{{locationCount}}</span>个城市</p>
       </div>
       <div class="proverb">
@@ -12,14 +12,21 @@
         <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initMap" disableTouch=true ref="echarts" canvasId="demo-canvas" >
         </mpvue-echarts>
       </div>
-      <div class="echarts-bar">
-        <mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />
+      <div class="top-location top1" v-if="topName[0]">
+        Top1 {{topName[0]}} {{topVal[0]}}人
       </div>
-      <cover-view class="floatCover">
-        <button hover-class="hover" open-type="share"  class="btn shareBtn ">分享</button>
-        <button hover-class="hover" @click ='saveImg'  class="btn downImg ">下载</button>
-        <button hover-class="hover" open-type="feedback" class="btn feedback">反馈</button>
-      </cover-view>
+      <div class="top-location top2" v-if="topName[1]">
+        Top2 {{topName[1]}} {{topVal[1]}}人
+      </div>
+      <div class="top-location top3" v-if="topName[2]">
+        Top3 {{topName[2]}} {{topVal[2]}}人
+      </div>
+      <!--<div class="echarts-bar">-->
+        <!--<mpvue-echarts lazyLoad=false :echarts="echarts"  :onInit="initBar" disableTouch=true ref="echartsBar" canvasId="canvas-bar" />-->
+      <!--</div>-->
+        <button class="sixedge-share" open-type="share">分享</button>
+        <button class="sixedge-share downLoad"  @click ='saveImg'>下载</button>
+        <button class="sixedge-share say"  @click ='goTopic'>聊聊</button>
     </div>
     <div class="echarts-hide">
       <mpvue-echarts lazyLoad :echarts="echarts"  :onInit="initHide" disableTouch=true ref="echartsHide" canvasId="hide-canvas" />
@@ -34,12 +41,14 @@
   import echarts from 'echarts'
   import mpvueEcharts from 'mpvue-echarts'
   import globalStore from '../../store/global-store'
+  import {getMapData, getUserAndLocation} from '../../http/api'
+
   require('echarts/map/js/china')
   let chart = null
-  let chartBar = null
+  // let chartBar = null
   let chartHide = null
   let option = null
-  let optionBar = null
+  // let optionBar = null
   let optionHide = null
   function handleInitChart (canvas, width, height) {
     chart = echarts.init(canvas, null, {
@@ -50,15 +59,15 @@
     chart.setOption(option)
     return chart // 返回 chart 后可以自动绑定触摸操作
   }
-  function handleInitBarChart (canvas, width, height) {
-    chartBar = echarts.init(canvas, null, {
-      width: width,
-      height: height
-    })
-    canvas.setChart(chartBar)
-    chartBar.setOption(optionBar)
-    return chartBar // 返回 chart 后可以自动绑定触摸操作
-  }
+  // function handleInitBarChart (canvas, width, height) {
+  //   chartBar = echarts.init(canvas, null, {
+  //     width: width,
+  //     height: height
+  //   })
+  //   canvas.setChart(chartBar)
+  //   chartBar.setOption(optionBar)
+  //   return chartBar // 返回 chart 后可以自动绑定触摸操作
+  // }
   function handleInitHideChart (canvas, width, height) {
     chartHide = echarts.init(canvas, null, {
       width: 1100,
@@ -84,7 +93,7 @@
       return {
         echarts,
         initMap: handleInitChart,
-        initBar: handleInitBarChart,
+        // initBar: handleInitBarChart,
         initHide: handleInitHideChart,
         map: [],
         pCount: 0,
@@ -92,7 +101,8 @@
         topVal: [],
         locationCount: '',
         userCount: '',
-        proverb: ''
+        proverb: '',
+        animationData: {}
       }
     },
     onShareAppMessage (options) {
@@ -109,65 +119,70 @@
       this.getStudentCount()
     },
     methods: {
-      initChartBar () {
-        var _this = this
-        optionBar = {
-          title: {
-            text: 'TOP5 省份',
-            textStyle: {
-              fontSize: 13,
-              color: '#ffffff'
-            }
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis: {
-            splitLine: false,
-            type: 'value',
-            axisLine: {
-              lineStyle: {
-                color: '#ffffff',
-                width: 1
-              }
-            }
-          },
-          yAxis: {
-            type: 'category',
-            data: this.topName,
-            boundaryGap: [0, 0.01],
-            splitLine: false,
-            nameTextStyle: {
-              color: ['#ffffff']
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#ffffff'
-              }
-            }
-          },
-          series: [
-            {
-              type: 'bar',
-              label: {
-                show: true,
-                position: 'insideTop'
-              },
-              barWidth: 20,
-              itemStyle: {
-                normal: {
-                  color: '#49EAE5'
-                }
-              },
-              data: this.topVal
-            }
-          ]
-        }
-        _this.$refs.echartsBar.init()
+      goTopic () {
+        wx.switchTab({
+          url: '../topic/main'
+        })
       },
+      // initChartBar () {
+      //   var _this = this
+      //   optionBar = {
+      //     title: {
+      //       text: 'TOP5 省份',
+      //       textStyle: {
+      //         fontSize: 13,
+      //         color: '#ffffff'
+      //       }
+      //     },
+      //     grid: {
+      //       left: '3%',
+      //       right: '4%',
+      //       bottom: '3%',
+      //       containLabel: true
+      //     },
+      //     xAxis: {
+      //       splitLine: false,
+      //       type: 'value',
+      //       axisLine: {
+      //         lineStyle: {
+      //           color: '#ffffff',
+      //           width: 1
+      //         }
+      //       }
+      //     },
+      //     yAxis: {
+      //       type: 'category',
+      //       data: this.topName,
+      //       boundaryGap: [0, 0.01],
+      //       splitLine: false,
+      //       nameTextStyle: {
+      //         color: ['#ffffff']
+      //       },
+      //       axisLine: {
+      //         lineStyle: {
+      //           color: '#ffffff'
+      //         }
+      //       }
+      //     },
+      //     series: [
+      //       {
+      //         type: 'bar',
+      //         label: {
+      //           show: true,
+      //           position: 'insideTop'
+      //         },
+      //         barWidth: 20,
+      //         itemStyle: {
+      //           normal: {
+      //             color: '#49EAE5'
+      //           }
+      //         },
+      //         data: this.topVal
+      //       }
+      //     ]
+      //   }
+      //   _this.$refs.echartsBar.init()
+      // },
       convertData (data) {
         var mapName = 'china'
         var geoCoordMap = {}
@@ -237,8 +252,11 @@
             roam: true,
             itemStyle: {
               normal: {
-                areaColor: '#09283c',
-                borderColor: '#FFFFFF'
+                // areaColor: '#09283c',
+                areaColor: '#151515',
+                borderColor: '#385f98',
+                shadowColor: '#385f98',
+                shadowBlur: 4
               },
               emphasis: {
                 areaColor: '#2B91B7'
@@ -317,8 +335,10 @@
             roam: true,
             itemStyle: {
               normal: {
-                areaColor: '#09283c',
-                borderColor: '#FFFFFF'
+                areaColor: '#151515',
+                borderColor: '#385f98',
+                shadowColor: '#385f98',
+                shadowBlur: 4
               },
               emphasis: {
                 areaColor: '#2B91B7'
@@ -349,71 +369,55 @@
         var val = _this.university
         _this.topName = []
         _this.topVal = []
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/getMapData',
-          method: 'GET',
-          data: {
-            university: val
-          },
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            _this.map = res.data.data.list
-            _this.pCount = res.data.data.list.length
-            if (_this.pCount >= 5) {
-              for (var i = 0; i < 5; i++) {
-                _this.topName.push(_this.map[i].name)
-                _this.topVal.push(_this.map[i].value)
-              }
-            } else {
-              for (var j = 0; j < _this.pCount; j++) {
-                _this.topName.push(_this.map[j].name)
-                _this.topVal.push(_this.map[j].value)
-              }
+        const req = {
+          university: val
+        }
+        getMapData(req).then(res => {
+          _this.map = res.data.list
+          _this.pCount = res.data.list.length
+          if (_this.pCount >= 5) {
+            for (var i = 0; i < 5; i++) {
+              _this.topName.push(_this.map[i].name)
+              _this.topVal.push(_this.map[i].value)
             }
-            _this.initChart()
-            _this.initChartBar()
-            _this.initHideChart()
-            // _this.locationCity = res.data.data[1]
+          } else {
+            for (var j = 0; j < _this.pCount; j++) {
+              _this.topName.push(_this.map[j].name)
+              _this.topVal.push(_this.map[j].value)
+            }
           }
+          _this.initChart()
+          // _this.initChartBar()
+          _this.initHideChart()
         })
       },
       getStudentCount () {
         var _this = this
         var val = _this.university
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/getUserAndLocation',
-          method: 'GET',
-          data: {
-            university: val
-          },
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            console.log(res)
-            _this.userCount = res.data.data.userCount
-            _this.locationCount = res.data.data.locationCount
-            if (_this.locationCount < 2) {
-              _this.proverb = '寥若晨星'
-            } else if (_this.locationCount < 10) {
-              _this.proverb = '寥寥可数'
-            } else if (_this.locationCount < 20) {
-              _this.proverb = '风流云散'
-            } else if (_this.locationCount < 30) {
-              _this.proverb = '百川归海'
-            } else if (_this.locationCount < 50) {
-              _this.proverb = '星罗棋布'
-            } else if (_this.locationCount < 90) {
-              _this.proverb = '浩如烟海'
-            } else if (_this.locationCount < 150) {
-              _this.proverb = '不计其数'
-            } else if (_this.locationCount < 250) {
-              _this.proverb = '人才辈出'
-            } else if (_this.locationCount < 500) {
-              _this.proverb = '四海八荒'
-            }
+        const req = {
+          university: val
+        }
+        getUserAndLocation(req).then(res => {
+          _this.userCount = res.data.userCount
+          _this.locationCount = res.data.locationCount
+          if (_this.locationCount < 2) {
+            _this.proverb = '寥若晨星'
+          } else if (_this.locationCount < 10) {
+            _this.proverb = '寥寥可数'
+          } else if (_this.locationCount < 20) {
+            _this.proverb = '风流云散'
+          } else if (_this.locationCount < 30) {
+            _this.proverb = '百川归海'
+          } else if (_this.locationCount < 50) {
+            _this.proverb = '星罗棋布'
+          } else if (_this.locationCount < 90) {
+            _this.proverb = '浩如烟海'
+          } else if (_this.locationCount < 150) {
+            _this.proverb = '不计其数'
+          } else if (_this.locationCount < 250) {
+            _this.proverb = '人才辈出'
+          } else if (_this.locationCount < 500) {
+            _this.proverb = '四海八荒'
           }
         })
       },
@@ -447,7 +451,7 @@
       drawPath (path) {
         var _this = this
         wx.getImageInfo({
-          src: 'https://alumni.xkboke.com/static/img/wechat_bg.jpg',
+          src: 'https://wechat.xkboke.com/static/img/share-img.jpg',
           success: function (res) {
             const random = (parseInt(9 * Math.random() + 90))
             const ctx = wx.createCanvasContext('shareCanvas')
@@ -493,6 +497,28 @@
             const mapWidth = 1100
             const mapHeight = 776
             ctx.drawImage(path, -100, 545, mapWidth, mapHeight)
+            // 绘制排名
+            if (_this.topName[0]) {
+              ctx.setTextAlign('center')
+              ctx.setFillStyle('#FFFFFF')
+              ctx.setShadow(1, 1, 5, '#027fff')
+              ctx.setFontSize(40)
+              ctx.fillText('Top1 ' + _this.topName[0] + ' ' + _this.topVal[0] + '人', 900 / 2, 1361)
+            }
+            if (_this.topName[1]) {
+              ctx.setTextAlign('center')
+              ctx.setFillStyle('#FFFFFF')
+              ctx.setShadow(1, 1, 5, '#027fff')
+              ctx.setFontSize(35)
+              ctx.fillText('Top2 ' + _this.topName[1] + ' ' + _this.topVal[1] + '人', 900 / 2, 1416)
+            }
+            if (_this.topName[2]) {
+              ctx.setTextAlign('center')
+              ctx.setFillStyle('#FFFFFF')
+              ctx.setShadow(1, 1, 5, '#027fff')
+              ctx.setFontSize(30)
+              ctx.fillText('Top3 ' + _this.topName[2] + ' ' + _this.topVal[2] + '人', 900 / 2, 1471)
+            }
             ctx.draw()
             setTimeout(function () {
               wx.canvasToTempFilePath({
@@ -501,105 +527,164 @@
                   wx.hideLoading()
                   let tempFilePath = res.tempFilePath
                   wx.saveImageToPhotosAlbum({
-                    filePath: tempFilePath
+                    filePath: tempFilePath,
+                    success: function () {
+                      wx.showToast({
+                        title: '保存成功',
+                        icon: 'success',
+                        duration: 2000
+                      })
+                    }
                   })
                 },
-                fail: function (res) {
-                  console.log('生成错误', res)
+                fail: function () {
+                  console.log('保存失败')
                 }
               })
-            }, 500)
+            }, 50)
+          },
+          fail: function () {
+            console.log('图片获取失败')
           }
-        })
-      },
-      feedBack () {
-        wx.navigateTo({
-          url: '../feedback/main'
         })
       }
     }
   }
 </script>
+<style>
+  @keyframes rate {
+    from {
+      transform:perspective(400px) rotateY(0deg)
+    }
+    to {
+      transform:perspective(400px) rotateY(360deg)
+    }
+  }
+  @-webkit-keyframes rate {
+    from {transform:perspective(400px) rotateY(0deg)}
+    to {transform:perspective(400px) rotateY(360deg)}
+  }
+</style>
 
-<style scoped>
+<style lang="stylus" scoped>
   .school-name{
-    color: #49EAE5;
+    color: footColor;
     font-weight: bold;
     margin-bottom: 20rpx;
+    font-size 36rpx
   }
   .proverb{
-    color: #49EAE5;
+    margin-top 40rpx
+    color: footColor;
     font-size: 40rpx;
+    text-align center
   }
   .city-count{
-    color: #49EAE5;
+    color: footColor;
   }
   .chartMain{
-    display: flex;
     position: fixed;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-image: url("https://alumni.xkboke.com/static/img/chart-bg.jpg");
+    /*background-image: url("http://image.bloggeng.com/20190104112037.png");*/
+    background-image: url("http://image.bloggeng.com/chart_bg.jpg");
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
   }
   .echarts-wrap {
-    width: 95%;
-    height: 480rpx;
+    margin-top 86rpx
+    width: 100%;
+    height: 500rpx;
     padding: 4rpx 4rpx;
+    /*animation: rate 10s ease-in-out infinite;*/
+    margin-bottom 40rpx
   }
   .echarts-bar{
     width: 95%;
     height: 480rpx;
     padding: 4rpx 4rpx;
   }
+  .top-location{
+      text-align center
+      color #ffffff
+      font-weight bold
+      text-shadow:1px 1px 5px footColor
+    }
+  .top1{
+    font-size 40rpx
+  }
+  .top2{
+    font-size 35rpx
+  }
+  .top3
+    font-size 30rpx
   .title{
     margin-top: 20rpx;
     text-align: center;
-    color: #5687e7;
   }
   .detail{
     text-align: center;
     font-size: 28rpx;
-    color: #ffffff;
+    color: whiteColor;
   }
-  .floatCover{
-    position: fixed;
-    bottom: 35%;
-    width: 90rpx;
-    right: 5%;
+  .sixedge-share{
+    margin 0
+    padding 0
+    font-size 24rpx
+    border-radius 0
+    overflow: visible
+    height: 86.6rpx;
+    line-height 88.6rpx
+    text-align center
+    color footColor
+    width: 50rpx;
+    position:absolute!important;
+    background-color: rgba(16,82,110,0.8);
+    border-top:2rpx solid footColor;
+    border-bottom:2rpx solid footColor;
+    right 50rpx
+    bottom 244rpx
+    box-sizing border-box!important
   }
-  .share-cover{
-    height: 90rpx;
-    margin-bottom: 20rpx;
+  .sixedge-share:after{
+    border-radius 0
+    content: '';
+    width: 50rpx;
+    height: 86.6rpx;
+    position: absolute!important;
+    background-color: rgba(16,82,110,0.8);
+    top: -1rpx;
+    left: 50rpx;
+    transform: translate(-50%,-50%)!important;
+    transform: rotate(60deg)!important;
+    border-top: 2rpx solid footColor;
+    border-bottom: 2rpx solid footColor;
+    z-index -1
+    box-sizing border-box
   }
-  .down-cover{
-    height: 90rpx;
-    margin-bottom: 20rpx;
+  .sixedge-share:before{
+    content: '';
+    width: 50rpx;
+    height: 86.6rpx;
+    position: absolute!important;
+    background-color: rgba(16,82,110,0.8)
+    top: -1rpx;
+    right: 0rpx;
+    transform: translate(-50%,-50%);
+    transform: rotate(300deg);
+    border-bottom: 2rpx solid footColor;
+    border-top: 2rpx solid footColor;
+    z-index -1
+    box-sizing border-box
   }
-  .feed-cover{
-    height: 90rpx;
+  .downLoad{
+    right 50rpx!important
+    bottom 153.4rpx!important
   }
-  .btn{
-    width: 80rpx;
-    height: 80rpx;
-    display: block;
-    border-color: #ffffff;
-    color: #ffffff;
-    border-radius:80rpx;
-    background-color: #49EAE5;
-    position: relative;
-    line-height: 4;
-    margin-bottom: 20rpx;
-    text-align: center;
-    padding: 0;
-    font-size: 20rpx;
-    box-sizing: initial;
-    box-shadow: 0 0 10rpx #333333;
+  .say{
+    right 128rpx!important
+    bottom 106.4rpx!important
   }
   .shareImg{
     width: 900px;
@@ -614,6 +699,6 @@
     right: -300%;
   }
   .hover{
-    background-color: #8EEAE7;
+    background-color: footColor;
   }
 </style>

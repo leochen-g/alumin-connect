@@ -7,17 +7,17 @@
             <div style="width: 100%">
               <input class="search_input" placeholder="搜索" v-model.trim="searchValue"   name="universityName">
             </div>
-            <div v-show="searchClearBtn&&searchValue!==''" @click="clearSearch">
-              <i class="iconfont search_voice">&#xe62b;</i>
+            <div v-if="searchClearBtn&&searchValue!==''" @click="clearSearch">
+              <i class="aliiconfont search_voice">&#xe62b;</i>
             </div>
           </div>
         </div>
       </form>
     </div>
-    <div class="panel" v-show="searchClearBtn&&searchValue!==''">
+    <div class="panel" v-if="searchClearBtn&&searchValue!==''">
       <div class="panel_bg">
         <div class="universityItem" v-for="(item, index) in universityList" :key="index" v-bind:style="{ backgroundColor:chooseIndex === index ? '#999999': '#ffffff'}" @touchstart="bindTap(index)" @touchend="tapOver" @click="choose(item.name)">
-          <div class="universityItem_icon"><i class="iconfont search_btn">&#xe627;</i></div>
+          <div class="universityItem_icon"><i class="aliiconfont search_btn">&#xe627;</i></div>
           <div class="universityItem_name">{{item.name}}</div>
         </div>
       </div>
@@ -28,6 +28,7 @@
 
 <script>
   import globalStore from '../../store/global-store'
+  import {getUniversity, updateUserUniversity} from '../../http/api'
   const delay = (function () {
     let timer = 0
     return function (callback, ms) {
@@ -39,6 +40,9 @@
     computed: {
       university () {
         return globalStore.state.university
+      },
+      userInfo () {
+        return globalStore.state.userInfo
       }
     },
     data () {
@@ -49,6 +53,10 @@
         searchClearBtn: false,
         universityList: []
       }
+    },
+    onShow () {
+      this.chooseIndex = ''
+      this.searchValue = ''
     },
     methods: {
       bindTap (val) {
@@ -65,25 +73,30 @@
         this.searchValue = val
         wx.setStorageSync('university', val)
         globalStore.commit('increment', val)
-        wx.navigateBack({
-          delta: 1
+        const req = {
+          university: val
+        }
+        updateUserUniversity(req).then(res => {
+          if (this.userInfo) {
+            globalStore.commit({
+              type: 'updateUserInfoItem',
+              key: 'university',
+              otherKey: 'school',
+              value: val
+            })
+          }
+          wx.navigateBack({
+            delta: 1
+          })
         })
-        // wx.redirectTo({url: '../index/main'})
       },
       fetchData (val) {
-        var _this = this
-        wx.request({
-          url: _this.GLOBAL.serverPath + '/api/user/getUniversity',
-          method: 'GET',
-          data: {
-            wd: val
-          },
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            _this.universityList = res.data.data
-          }
+        const _this = this
+        const req = {
+          wd: val
+        }
+        getUniversity(req).then(res => {
+          _this.universityList = res.data
         })
       }
     },
@@ -99,7 +112,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
   .searchMain{
     position: fixed;
     background-color:#E5E5E5 ;
@@ -125,12 +138,13 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2rpx solid #1FD927;
+    border-bottom: 2rpx solid themeColor;
   }
   .search_input{
+    height 50rpx
     padding:10rpx 20rpx ;
+    font-size 28rpx
     color:#888888 ;
-    font-size: 14pt;
   }
   .universityItem{
     display: flex;

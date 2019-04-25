@@ -12,9 +12,8 @@ export default {
     const updateManager = wx.getUpdateManager()
     updateManager.onCheckForUpdate(function (res) {
       // 请求完新版本信息的回调
-      console.log(res.hasUpdate)
+      console.log('是否有新更新', res.hasUpdate)
     })
-
     updateManager.onUpdateReady(function () {
       wx.showModal({
         title: '更新提示',
@@ -28,7 +27,6 @@ export default {
         }
       })
     })
-
     updateManager.onUpdateFailed(function () {
       // 新的版本下载失败
       wx.showModal({
@@ -40,36 +38,12 @@ export default {
   }
 }
 </script>
-
 <style>
-  @font-face {
-    font-family: 'iconfont';  /* project id 709721 */
-    src: url('//at.alicdn.com/t/font_709721_xotb8djxfo.eot');
-    src: url('//at.alicdn.com/t/font_709721_xotb8djxfo.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_709721_xotb8djxfo.woff') format('woff'),
-    url('//at.alicdn.com/t/font_709721_xotb8djxfo.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_709721_xotb8djxfo.svg#iconfont') format('svg');
+  page {
+    background-color: #f4f5f5;
   }
-  .iconfont {
-    font-family: "iconfont" !important;
-    font-size: 32rpx;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-/* this rule will be remove */
-* {
-  transition: width 2s;
-  -moz-transition: width 2s;
-  -webkit-transition: width 2s;
-  -o-transition: width 2s;
-}
+</style>
+<style lang="stylus" type="text/stylus" rel="stylesheet/stylus">
+  @import "stylus/index.styl"
+
 </style>

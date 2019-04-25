@@ -1,6 +1,10 @@
 var path = require('path')
+var fs = require('fs')
 var config = require('../config')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var mpvueInfo = require('../node_modules/mpvue/package.json')
+var packageInfo = require('../package.json')
+var mkdirp = require('mkdirp')
 
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'
@@ -58,7 +62,10 @@ exports.cssLoaders = function (options) {
       return ['vue-style-loader'].concat(loaders)
     }
   }
-
+  const stylusOptions = {
+    import: [path.join(__dirname, "../src/stylus/variables.styl")],  //你公共样式存放的位置
+    paths: [path.join(__dirname, '../src/stylus'), path.join(__dirname, '../')]  //公共样式文件位置
+  }
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
@@ -67,7 +74,7 @@ exports.cssLoaders = function (options) {
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),
-    stylus: generateLoaders('stylus'),
+    stylus: generateLoaders('stylus', stylusOptions),
     styl: generateLoaders('stylus')
   }
 }
@@ -84,4 +91,30 @@ exports.styleLoaders = function (options) {
     })
   }
   return output
+}
+
+const writeFile = async (filePath, content) => {
+  let dir = path.dirname(filePath)
+  let exist = fs.existsSync(dir)
+  if (!exist) {
+    await mkdirp(dir)
+  }
+  await fs.writeFileSync(filePath, content, 'utf8')
+}
+
+exports.writeFrameworkinfo = function () {
+  var buildInfo = {
+    'toolName': mpvueInfo.name,
+    'toolFrameWorkVersion': mpvueInfo.version,
+    'toolCliVersion': packageInfo.mpvueTemplateProjectVersion || '',
+    'createTime': Date.now()
+  }
+
+  var content = JSON.stringify(buildInfo)
+  var fileName = '.frameworkinfo'
+  var rootDir = path.resolve(__dirname, `../${fileName}`)
+  var distDir = path.resolve(config.build.assetsRoot, `./${fileName}`)
+
+  writeFile(rootDir, content)
+  writeFile(distDir, content)
 }
