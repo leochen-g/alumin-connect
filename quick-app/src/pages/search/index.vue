@@ -71,8 +71,7 @@
       },
       choose (val) {
         this.searchValue = val
-        wx.setStorageSync('university', val)
-        globalStore.commit('increment', val)
+        this.$store.commit('SET_UNIVERSITY', val)
         const req = {
           university: val
         }

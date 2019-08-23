@@ -1,5 +1,7 @@
+import store from '@/store'
 const Fly = require('flyio/dist/npm/wx')
 const fly = new Fly()
+// const host = 'https://wechat.xkboke.com'
 const host = 'http://127.0.0.1:4000'
 // 添加请求拦截器
 fly.config.baseURL = host
@@ -18,7 +20,7 @@ fly.interceptors.request.use((request) => {
 
   let authParams = {
     // 公共参数
-    'openId': wx.getStorageSync('openId') || ''
+    'openId': store.getters.openId || ''
   }
   // 去除值为空的参数
   // request.body && Object.keys(request.body).forEach((val) => {

@@ -20,7 +20,7 @@
     "dev": "node build/dev-server.js wx",
     "start": "npm run dev",
     "build": "node build/build.js wx",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --fix --ext .js,.vue src"
   },
   "dependencies": {
     "flyio": "^0.6.6",
@@ -31,6 +31,7 @@
     "postcss-mpvue-wxss": "^1.0.2",
     "qs": "^6.6.0",
     "vuex": "^3.0.1",
+    "vuex-persistedstate": "^2.5.4",
     "webpack-dev-middleware-hard-disk": "^1.12.1"
   },
   "devDependencies": {
