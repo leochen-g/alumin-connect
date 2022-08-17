@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "echarts": "^4.1.0",
+    "echarts": "^5.3.3",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "engines": {
