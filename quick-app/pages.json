@@ -1,0 +1,77 @@
+{
+	"pages": [{
+			"path": "pages/index/main",
+			"style": {}
+		},
+		{
+			"path": "pages/search/main"
+		},
+		{
+			"path": "pages/charts/main"
+		},
+		{
+			"path": "pages/topic/main",
+			"config": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/user/main"
+		},
+		{
+			"path": "pages/user-edit/main"
+		},
+		{
+			"path": "pages/user-topic/main",
+			"config": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/user-message/main",
+			"config": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/user-info-card/main"
+		},
+		{
+			"path": "pages/topic-detail/main"
+		},
+		{
+			"path": "pages/user-setting/main"
+		},
+		{
+			"path": "pages/about-alumni/main"
+		},
+		{
+			"path": "pages/about-auth/main"
+		},
+		{
+			"path": "pages/system-message-detail/main",
+			"config": {
+				"usingComponents": {
+					"wxparser": "plugin://wxparserPlugin/wxparser"
+				}
+			}
+		}
+	],
+	"permission": {
+		"scope.userLocation": {
+			"desc": "您的位置将用于显示当前城市校友的话题"
+		}
+	},
+	"window": {
+		"backgroundTextStyle": "light",
+		"navigationBarBackgroundColor": "#000",
+		"navigationBarTitleText": "校友来了",
+		"navigationBarTextStyle": "white"
+	},
+	"plugins": {
+		"wxparserPlugin": {
+			"version": "0.2.1",
+			"provider": "wx9d4d4ffa781ff3ac"
+		}
+	}
+}

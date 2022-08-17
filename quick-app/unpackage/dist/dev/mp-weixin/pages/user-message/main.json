@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "message-item": "/components/messageItem",
+    "system-message-item": "/components/systemMessageItem"
+  }
+}

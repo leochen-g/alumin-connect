@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "topic-edit": "/components/topicEdit",
+    "topic-item": "/components/topicItem",
+    "lamp-banner": "/components/lampBanner"
+  }
+}

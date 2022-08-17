@@ -1,0 +1,1 @@
+<view class="alumni-main _div data-v-bbf46d20"><block wx:for="{{list}}" wx:for-item="item" wx:for-index="__i0__" wx:key="id"><topic-item vue-id="{{'c29834d4-1-'+__i0__}}" todo="{{item}}" class="data-v-bbf46d20" bind:__l="__l"></topic-item></block></view>

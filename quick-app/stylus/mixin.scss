@@ -1,0 +1,23 @@
+// 单行显示省略号
+@mixin no-wrap() {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	word-break:break-all;
+}
+ 
+
+// 多行显示省略号
+@mixin no-wrap-more($col) {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: $col;
+	overflow: hidden;
+}
+  
+
+//rem转换 $px / 75 *1rem
+
+@function px2rem($px) {
+	@return $px * 1rpx;
+}

@@ -1,0 +1,27 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/search/main",
+    "pages/charts/main",
+    "pages/topic/main",
+    "pages/user/main",
+    "pages/user-edit/main",
+    "pages/user-topic/main",
+    "pages/user-message/main",
+    "pages/user-info-card/main",
+    "pages/topic-detail/main",
+    "pages/user-setting/main",
+    "pages/about-alumni/main",
+    "pages/about-auth/main",
+    "pages/system-message-detail/main"
+  ],
+  "subPackages": [],
+  "plugins": {
+    "wxparserPlugin": {
+      "version": "0.2.1",
+      "provider": "wx9d4d4ffa781ff3ac"
+    }
+  },
+  "permission": {},
+  "usingComponents": {}
+}
